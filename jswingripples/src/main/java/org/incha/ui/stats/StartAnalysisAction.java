@@ -55,17 +55,17 @@ public class StartAnalysisAction implements ActionListener {
             //Incremental change
             module = (String) dialog.incrementalChange.getSelectedItem();
             if (JRipplesDefaultModulesConstants.MODULE_IMPACT_ANALYSIS_TITLE.equals(module)) {
-                config.setIncremantalChange(ModuleConfiguration.MODULE_IMPACT_ANALYSIS);
+                config.setIncrementalChange(ModuleConfiguration.MODULE_IMPACT_ANALYSIS);
             } else if (JRipplesDefaultModulesConstants.MODULE_IMPACT_ANALYSIS_RELAXED_TITLE.equals(module)) {
-                config.setIncremantalChange(ModuleConfiguration.MODULE_IMPACT_ANALYSIS_RELAXED);
+                config.setIncrementalChange(ModuleConfiguration.MODULE_IMPACT_ANALYSIS_RELAXED);
             } else if (JRipplesDefaultModulesConstants.MODULE_CHANGE_PROPAGATION_RELAXED_TITLE.equals(module)) {
-                config.setIncremantalChange(ModuleConfiguration.MODULE_CHANGE_PROPAGATION_RELAXED);
+                config.setIncrementalChange(ModuleConfiguration.MODULE_CHANGE_PROPAGATION_RELAXED);
             } else if (JRipplesDefaultModulesConstants.MODULE_CHANGE_PROPAGATION_TITLE.equals(module)) {
-                config.setIncremantalChange(ModuleConfiguration.MODULE_CHANGE_PROPAGATION);
+                config.setIncrementalChange(ModuleConfiguration.MODULE_CHANGE_PROPAGATION);
             } else if (JRipplesDefaultModulesConstants.MODULE_CONCEPT_LOCATION_TITLE.equals(module)) {
-                config.setIncremantalChange(ModuleConfiguration.MODULE_CONCEPT_LOCATION);
+                config.setIncrementalChange(ModuleConfiguration.MODULE_CONCEPT_LOCATION);
             } else if (JRipplesDefaultModulesConstants.MODULE_CONCEPT_LOCATION_RELAXED_TITLE.equals(module)) {
-                config.setIncremantalChange(ModuleConfiguration.MODULE_CONCEPT_LOCATION_RELAXED);
+                config.setIncrementalChange(ModuleConfiguration.MODULE_CONCEPT_LOCATION_RELAXED);
             }
 
 //            //presentation

@@ -36,7 +36,7 @@ public class ModuleConfiguration {
     public static final int MODULE_VIEW_TREE = 1;
 
     private int dependencyGraphModule;
-    private int incremantealChange = MODULE_CONCEPT_LOCATION;
+    private int incrementalChange = MODULE_CONCEPT_LOCATION;
     private int analysis;
 
     /**
@@ -61,14 +61,14 @@ public class ModuleConfiguration {
     /**
      * @param moduleImpactAnalysisTitle
      */
-    public void setIncremantalChange(final int type) {
-        this.incremantealChange = type;
+    public void setIncrementalChange(final int type) {
+        this.incrementalChange = type;
     }
     /**
      * @return the incremantealChange
      */
-    public int getIncremantealChange() {
-        return incremantealChange;
+    public int getIncrementalChange() {
+        return incrementalChange;
     }
 
     /**
@@ -89,7 +89,7 @@ public class ModuleConfiguration {
         final List<JRipplesModuleInterface> modules = new LinkedList<JRipplesModuleInterface>();
 
         modules.add(createDependencyBuilderModule(eig));
-        modules.add(createIncremantealChangeModule(eig));
+        modules.add(createIncrementalChangeModule(eig));
 
         //analysis
         if (isAnalysisDefaultImpactSetConnections()) {
@@ -104,16 +104,16 @@ public class ModuleConfiguration {
      * @return
      */
     public boolean isAnalysisDefaultImpactSetConnections() {
-        return getIncremantealChange() != MODULE_CONCEPT_LOCATION;
+        return getIncrementalChange() != MODULE_CONCEPT_LOCATION;
     }
 
     /**
      * @param eig
      * @return
      */
-    public JRipplesICModuleInterface createIncremantealChangeModule(
+    public JRipplesICModuleInterface createIncrementalChangeModule(
             final JSwingRipplesEIG eig) {
-        return createIncremantealChangeModule(getIncremantealChange(), eig);
+        return createIncrementalChangeModule(getIncrementalChange(), eig);
     }
 
     /**
@@ -144,7 +144,7 @@ public class ModuleConfiguration {
      * @param eig
      * @return
      */
-    public static JRipplesICModuleInterface createIncremantealChangeModule(
+    public static JRipplesICModuleInterface createIncrementalChangeModule(
             final int type, final JSwingRipplesEIG eig) {
         switch (type) {
             case MODULE_IMPACT_ANALYSIS:
