@@ -137,7 +137,7 @@ public class StartAnalysisDialog extends JDialog {
             }
 
             //Incremental change
-            switch (cfg.getIncremantealChange()) {
+            switch (cfg.getIncrementalChange()) {
                 case ModuleConfiguration.MODULE_IMPACT_ANALYSIS:
                     incrementalChange.setSelectedItem(
                             JRipplesDefaultModulesConstants.MODULE_IMPACT_ANALYSIS_TITLE);

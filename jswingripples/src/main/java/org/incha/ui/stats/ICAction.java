@@ -75,7 +75,7 @@ class ICAction extends AbstractAction {
     public void actionPerformed(final ActionEvent e) {
         if (fromNode != null) {
             final ModuleConfiguration cfg = fromNode.getEig().getJavaProject().getModuleConfiguration();
-            final JRipplesICModuleInterface module = cfg.createIncremantealChangeModule(fromNode.getEig());
+            final JRipplesICModuleInterface module = cfg.createIncrementalChangeModule(fromNode.getEig());
 
             final UndoActionsBuilder undoCreater = new UndoActionsBuilder();
             fromNode.getEig().addJRipplesEIGListener(undoCreater);
