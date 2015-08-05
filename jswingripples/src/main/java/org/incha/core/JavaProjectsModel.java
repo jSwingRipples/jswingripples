@@ -69,7 +69,7 @@ public class JavaProjectsModel {
      * @param name project name.
      * @return project by given name.
      */
-    private JavaProject getProjectByName(final String name) {
+    public JavaProject getProjectByName(final String name) {
         for (final JavaProject p : projects) {
             if (name.equals(p.getName())) {
                 return p;

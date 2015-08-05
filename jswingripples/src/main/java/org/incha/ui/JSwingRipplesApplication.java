@@ -7,6 +7,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.LinkedList;
 
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
@@ -21,6 +22,7 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.commons.logging.LogFactory;
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.StatisticsManager;
@@ -216,6 +218,11 @@ public class JSwingRipplesApplication extends JFrame {
         final Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(size.width / 2, size.height / 2);
         f.setLocationByPlatform(true);
+        LogFactory.getLog(JSwingRipplesApplication.class).debug("Prueba uno");
+        
+        // If called with the protocol args
+        processArgs(args);
+        
 
         //show frame
         SwingUtilities.invokeLater(new Runnable() {
@@ -224,6 +231,20 @@ public class JSwingRipplesApplication extends JFrame {
                 f.setVisible(true);
             }
         });
+    }
+    
+    private static void processArgs(final String[] args) {
+    	if (args.length != 0) {
+    		JavaProjectsModel javaProjectsModel = JavaProjectsModel.getInstance();
+    		JavaProject project = javaProjectsModel.getProjectByName(args[0]);
+    		if (project == null) {
+    			project = new JavaProject(args[0]);
+    			javaProjectsModel.addProject(project);
+    		}
+    		for (int argNumber = 1; argNumber < args.length; argNumber++) {
+    			project.getBuildPath().addSource(new File(args[argNumber]));
+    		}
+    	}
     }
 
     /**
