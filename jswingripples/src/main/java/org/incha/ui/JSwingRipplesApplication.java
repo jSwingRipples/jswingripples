@@ -248,9 +248,13 @@ public class JSwingRipplesApplication extends JFrame {
     }
 
     /**
+     * Get function using singleton.
      * @return shared application window.
      */
     public static JSwingRipplesApplication getInstance() {
+    	if(instance==null){
+    		instance=new JSwingRipplesApplication();
+    	}
         return instance;
     }
 
