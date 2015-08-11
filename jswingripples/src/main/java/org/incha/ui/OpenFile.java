@@ -1,26 +1,51 @@
 package org.incha.ui;
 
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class OpenFile {
 	
-	public static void main (final String args[]){
+	boolean isAlreadyOneClick;
+
+	public void mouseClicked(MouseEvent mouseEvent) {
+	    if (isAlreadyOneClick) {
+	    	
+	        System.out.println("double click");
+	        isAlreadyOneClick = false;
+	    } else {
+	        isAlreadyOneClick = true;
+	        Timer t = new Timer("doubleclickTimer", false);
+	        t.schedule(new TimerTask() {
+
+	            @Override
+	            public void run() {
+	                isAlreadyOneClick = false;
+	            }
+	        }, 500);
+	    }
+	}
+	
+	public static void openFile(String dir){
 		try{
-
-	        if ((new File("c:\Users\The Clansman\Desktop\5447730409670.pdf")).exists()) {
-
+	        if ((new File(dir)).exists()) {
 	            Process p = Runtime
 	               .getRuntime()
-	               .exec("rundll32 url.dll,FileProtocolHandler c:\Users\The Clansman\Desktop\5447730409670.pdf");
+	               .exec(dir);
 	            p.waitFor();
 
 	        } else {
-
 	            System.out.println("File does not exist");
-
 	        }
-
 	      } catch (Exception ex) {
 	        ex.printStackTrace();
 	      }
+		
+	}
+	
+	public static void main (final String args[]){
+		openFile(args[0]);	
 	}
 
 }
