@@ -1,13 +1,18 @@
 package org.incha.ui.stats;
 
+import java.awt.Desktop;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.SwingUtilities;
 
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.JavaModelException;
 import org.incha.core.JavaProject;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 import org.incha.ui.classview.ClassTreeView;
@@ -23,31 +28,24 @@ public class HierarchicalView extends ClassTreeView {
         setData(nodes);
     	
         addMouseListener(new MouseAdapter() {
-        	
-        	private boolean isAlreadyOneClick;
+
             /* (non-Javadoc)
              * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
              */
             @Override
             public void mouseClicked(final MouseEvent e) {
-            	JSwingRipplesEIGNode node = getSelectedItem(e.getX(), e.getY());
                 if (SwingUtilities.isRightMouseButton(e)) {
                     showPopupMenu(e.getX(), e.getY());
+                } else if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e)) {
+                	final ICompilationUnit unit = getSelectedItem(e.getX(), e.getY()).getNodeIMember().getCompilationUnit();
+                	final File fileToOpen = new File(unit.getPath().toString());
+                	try {
+						Desktop.getDesktop().open(fileToOpen);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
                 }
-           	    if (isAlreadyOneClick) {
-           	    	System.out.println("double click");
-            	        isAlreadyOneClick = false;
-            	    } else {
-            	        isAlreadyOneClick = true;
-            	        Timer t = new Timer("doubleclickTimer", false);
-            	        t.schedule(new TimerTask() {
-
-            	            @Override
-            	            public void run() {
-            	                isAlreadyOneClick = false;
-            	            }
-            	        }, 500);
-            	    }
+                
             }
             
         });
