@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import org.incha.core.JavaProject;
-import org.incha.ui.buildpath.ClassPathEditor;
 
 public class ProjectSettingsEditor extends JTabbedPane {
     private static final long serialVersionUID = 6521933918476824719L;
@@ -48,7 +47,6 @@ public class ProjectSettingsEditor extends JTabbedPane {
     private JTabbedPane createBuildPathTab() {
         final JTabbedPane tp = new JTabbedPane(TOP, WRAP_TAB_LAYOUT);
         tp.addTab("Sources", new SourcesEditor(project));
-        tp.addTab("Class Path", new ClassPathEditor(project));
         return tp;
     }
 }

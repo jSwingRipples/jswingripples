@@ -27,10 +27,6 @@ public class ProjectsView extends JPanel {
     private static final long serialVersionUID = -7945996533262500375L;
 
     /**
-     * The class path node.
-     */
-    public static final String CLASSPATH = "classpath";
-    /**
      * The sources node.
      */
     public static final String SOURCES = "sources";
@@ -224,14 +220,6 @@ public class ProjectsView extends JPanel {
             src.add(new DefaultMutableTreeNode(f));
         }
 
-        //create class path node.
-        final DefaultMutableTreeNode cp = new DefaultMutableTreeNode(CLASSPATH);
-        projectNode.add(cp);
-        //add class path items to source node
-        for (final File f : project.getBuildPath().getClassPath()) {
-            cp.add(new DefaultMutableTreeNode(f));
-        }
-
         //add project node to view
         final DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
         model.insertNodeInto(projectNode, (DefaultMutableTreeNode) model.getRoot(),
@@ -274,8 +262,7 @@ public class ProjectsView extends JPanel {
             final DefaultMutableTreeNode projectNode, final String propertyName) {
         final DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
         final int count = model.getChildCount(projectNode);
-        final String label = BuildPath.SOURCES.equals(propertyName) ? SOURCES : CLASSPATH;
-
+        final String label = SOURCES;
         for (int i = 0; i < count; i++) {
             final DefaultMutableTreeNode child = (DefaultMutableTreeNode) model.getChild(
                     projectNode, i);

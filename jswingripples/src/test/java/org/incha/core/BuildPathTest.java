@@ -92,60 +92,6 @@ public class BuildPathTest extends TestCase implements PropertyChangeListener {
         assertEquals(1, buildPath.getSources().size());
         assertNull(propertyChangeEvent);
     }
-    public void testAddClassPathEntry() {
-        final File f = new File("/a/b/c/d");
-
-        buildPath.addClassPath(f);
-
-        //check class path entry added.
-        assertEquals(1, buildPath.getClassPath().size());
-        //check property changed event has sent
-        assertNotNull(propertyChangeEvent);
-        //check the event name is correct
-        assertEquals(BuildPath.CLASSPATH, propertyChangeEvent.getPropertyName());
-        //check old value is correct
-        assertEquals(0, ((List<?>) propertyChangeEvent.getOldValue()).size());
-        //check new value is correct
-        assertEquals(1, ((List<?>) propertyChangeEvent.getNewValue()).size());
-
-        //clear property change event
-        propertyChangeEvent = null;
-        //check can't add duplicate
-        buildPath.addClassPath(f);
-
-        assertEquals(1, buildPath.getClassPath().size());
-        assertNull(propertyChangeEvent);
-
-    }
-    public void testDeleteClassPathEntry() {
-        final File f1 = new File("/a/b/c/d");
-        final File f2 = new File("/a/b/c/e");
-
-        buildPath.addClassPath(f1);
-        buildPath.addClassPath(f2);
-
-        //run test
-        buildPath.deleteClassPath(f2);
-
-        //check class path entry added.
-        assertEquals(1, buildPath.getClassPath().size());
-        //check property changed event has sent
-        assertNotNull(propertyChangeEvent);
-        //check the event name is correct
-        assertEquals(BuildPath.CLASSPATH, propertyChangeEvent.getPropertyName());
-        //check old value is correct
-        assertEquals(2, ((List<?>) propertyChangeEvent.getOldValue()).size());
-        //check new value is correct
-        assertEquals(1, ((List<?>) propertyChangeEvent.getNewValue()).size());
-
-        //clear property change event
-        propertyChangeEvent = null;
-        //check can't add duplicate
-        buildPath.deleteClassPath(f2);
-
-        assertEquals(1, buildPath.getClassPath().size());
-        assertNull(propertyChangeEvent);
-    }
 
     /* (non-Javadoc)
      * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)

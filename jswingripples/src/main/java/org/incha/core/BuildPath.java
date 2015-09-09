@@ -9,23 +9,16 @@ import java.util.List;
 import org.incha.utils.CollectionUtils;
 
 /**
- * Stores directories of project like Classpath and Sources, with ArrayList for the folders
+ * Stores the Sources of the project, with ArrayList for the folders
  *
  */
 public class BuildPath {
-    /**
-     * The class path property name.
-     */
-    public static final String CLASSPATH = "classpath";
+
     /**
      * The source files property name.
      */
     public static final String SOURCES = "sources";
 
-    /**
-     * Class path folders
-     */
-    private final List<File> classPath = new ArrayList<File>();
     /**
      * The list of java source folders.
      */
@@ -48,12 +41,6 @@ public class BuildPath {
         pcs = new PropertyChangeSupport(project);
     }
 
-    /**
-     * @return the classFolders
-     */
-    public List<File> getClassPath() {
-        return new ArrayList<File>(classPath);
-    }
     /**
      * @return the sourceFolders
      */
@@ -82,28 +69,7 @@ public class BuildPath {
             firePropertyChange(SOURCES, old, sources);
         }
     }
-    /**
-     * @param file class path folder or jar file
-     */
-    public void addClassPath(final File file) {
-        final File equals = CollectionUtils.getEquals(classPath, file);
-        if (equals == null) {
-            final List<File> old = new ArrayList<File>(classPath);
-            classPath.add(file);
-            firePropertyChange(CLASSPATH, old, classPath);
-        }
-    }
-    /**
-     * @param file class path folder or jar file
-     */
-    public void deleteClassPath(final File file) {
-        final File equals = CollectionUtils.getEquals(classPath, file);
-        if (equals != null) {
-            final List<File> old = new ArrayList<File>(classPath);
-            classPath.remove(file);
-            firePropertyChange(CLASSPATH, old, classPath);
-        }
-    }
+
     /**
      * @param property property name.
      * @param oldValue old property value.

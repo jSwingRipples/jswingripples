@@ -14,7 +14,7 @@ public class JavaProject {
     /**
      * The list of class path.
      */
-    private final BuildPath classPath = new BuildPath(this);
+    private final BuildPath buildPath = new BuildPath(this);
     /**
      * Map of user objects
      */
@@ -38,7 +38,7 @@ public class JavaProject {
      * @return the class path.
      */
     public BuildPath getBuildPath() {
-        return classPath;
+        return buildPath;
     }
     /**
      * @return the project name.

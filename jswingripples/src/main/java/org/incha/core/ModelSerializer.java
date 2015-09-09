@@ -33,10 +33,6 @@ public class ModelSerializer {
      */
     private static final String NAME_ATTR = "name";
     /**
-     * XML element 'classpath'.
-     */
-    private static final String CLASSPATH = "classpath";
-    /**
      * XML element 'file'.
      */
     private static final String FILE = "file";
@@ -87,13 +83,6 @@ public class ModelSerializer {
             project.getBuildPath().addSource(new File(e.getTextContent()));
         }
 
-        //process class path
-        final Element classPath = getFirstChildElement(projectItem, CLASSPATH);
-
-        files = getChildElements(classPath, FILE);
-        for (final Element e : files) {
-            project.getBuildPath().addClassPath(new File(e.getTextContent()));
-        }
     }
 
     /**
@@ -153,14 +142,6 @@ public class ModelSerializer {
                 src.appendChild(dom.createTextNode(f.getPath()));
             }
 
-            //add class path
-            final Element classPath = dom.createElement(CLASSPATH);
-            project.appendChild(classPath);
-            for (final File f : p.getBuildPath().getClassPath()) {
-                final Element src = dom.createElement(FILE);
-                classPath.appendChild(src);
-                src.appendChild(dom.createTextNode(f.getPath()));
-            }
         }
 
         saveDom(dom, out);
