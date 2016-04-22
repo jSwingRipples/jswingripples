@@ -172,14 +172,14 @@ public class JSwingRipplesApplication extends JFrame {
         file.add(newProject);
 
         //Import Project option.
-        final JMenuItem ImportProject = new JMenuItem("Import Project");
-        newProject.addActionListener(new ActionListener() {
+        final JMenuItem importProject = new JMenuItem("Import Project");
+        importProject.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 importProject();
             }
         });
-        file.add(ImportProject);
+        file.add(importProject);
 
         //JRipples menu
         final JMenu jRipples = new JMenu("JRipples");
@@ -220,7 +220,9 @@ public class JSwingRipplesApplication extends JFrame {
         final JavaProject project = NewProjectWizard.showDialog(this);
         if (project != null) {
             JavaProjectsModel.getInstance().addProject(project);
+            new ImportSource(project);
         }
+
 
     }
     /**
