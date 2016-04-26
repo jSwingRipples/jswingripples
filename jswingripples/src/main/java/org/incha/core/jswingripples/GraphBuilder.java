@@ -45,14 +45,21 @@ public class GraphBuilder {
         JSwingRipplesEIGEdge[] eigEdges = eig.getAllEdges();
 
         for ( JSwingRipplesEIGNode node : eigNodes )
-            graph.addNode(node.getShortName());
+            if ( graph.getNode(node.getFullName()) == null )
+                graph.addNode(node.getFullName());
 
         for ( JSwingRipplesEIGEdge edge : eigEdges )
         {
-            String eid = edge.getFromNode().getShortName() + " -> " + edge.getToNode().getShortName();
-            graph.addEdge(eid, edge.getFromNode().getShortName(), edge.getToNode().getShortName());
+            String eid = edge.getFromNode().getFullName() + " -> " + edge.getToNode().getFullName();
+            if ( graph.getEdge(eid) == null)
+                graph.addEdge(eid, edge.getFromNode().getFullName(), edge.getToNode().getFullName());
         }
 
+    }
+
+    public void showGraph()
+    {
+        graph.display(true);
     }
 
 

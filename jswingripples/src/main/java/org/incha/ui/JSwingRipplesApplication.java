@@ -82,9 +82,6 @@ public class JSwingRipplesApplication extends JFrame {
         //create model saver, this class will watch for model
         //and save it when model state changed
         new ModelSaver(JavaProjectsModel.getInstance(), JavaProjectsModel.getModelFile());
-
-        Thread t = new Thread(new GraphTest());
-        t.start();
     }
 
     /**
@@ -314,23 +311,5 @@ public class JSwingRipplesApplication extends JFrame {
      */
     public JDesktopPane getViewArea() {
         return viewArea;
-    }
-
-
-    class GraphTest implements Runnable
-    {
-        public void run()
-        {
-            Graph graph = new SingleGraph("Tutorial 1");
-
-            graph.addNode("A");
-            graph.addNode("B");
-            graph.addNode("C");
-            graph.addEdge("AB", "A", "B");
-            graph.addEdge("BC", "B", "C");
-            graph.addEdge("CA", "C", "A");
-
-            graph.display();
-        }
     }
 }
