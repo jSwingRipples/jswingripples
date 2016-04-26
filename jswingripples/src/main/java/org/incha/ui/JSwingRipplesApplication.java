@@ -27,6 +27,8 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.implementations.SingleGraph;
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.StatisticsManager;
@@ -80,6 +82,9 @@ public class JSwingRipplesApplication extends JFrame {
         //create model saver, this class will watch for model
         //and save it when model state changed
         new ModelSaver(JavaProjectsModel.getInstance(), JavaProjectsModel.getModelFile());
+
+        Thread t = new Thread(new GraphTest());
+        t.start();
     }
 
     /**
@@ -263,7 +268,6 @@ public class JSwingRipplesApplication extends JFrame {
         
         // If called with the protocol args
         processArgs(args);
-        
 
         //show frame
         SwingUtilities.invokeLater(new Runnable() {
@@ -310,5 +314,23 @@ public class JSwingRipplesApplication extends JFrame {
      */
     public JDesktopPane getViewArea() {
         return viewArea;
+    }
+
+
+    class GraphTest implements Runnable
+    {
+        public void run()
+        {
+            Graph graph = new SingleGraph("Tutorial 1");
+
+            graph.addNode("A");
+            graph.addNode("B");
+            graph.addNode("C");
+            graph.addEdge("AB", "A", "B");
+            graph.addEdge("BC", "B", "C");
+            graph.addEdge("CA", "C", "A");
+
+            graph.display();
+        }
     }
 }
