@@ -6,9 +6,6 @@ import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGEdge;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Manuel Olguín (molguin@dcc.uchile.cl) on 4/26/2016.
  * Part of org.incha.core.jswingripples.
@@ -22,7 +19,9 @@ public class GraphBuilder {
     private Graph graph;
     private GraphBuilder()
     {
+
         graph = new SingleGraph("Dependencies");
+        graph.addAttribute("ui.stylesheet", "url(file://" + GraphBuilder.class.getClassLoader().getResource("graph.css").toString().substring(5) + ")");
     }
 
     public static GraphBuilder getInstance() {

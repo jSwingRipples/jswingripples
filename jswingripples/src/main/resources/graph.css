@@ -1,0 +1,13 @@
+node {
+    size: 10px, 15px;
+    shape: circle;
+    fill-color: black;
+    stroke-mode: plain;
+    stroke-color: yellow;
+    text-mode: normal;
+    text-background-mode: plain;
+}
+
+node:clicked {
+    fill-color: red;
+}

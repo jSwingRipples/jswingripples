@@ -236,6 +236,7 @@ public class JSwingRipplesApplication extends JFrame {
     }
 
     public static void main(final String[] args) {
+        System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
         //init logging
         getHome().mkdirs();
 
