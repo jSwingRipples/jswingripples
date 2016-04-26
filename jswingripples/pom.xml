@@ -35,6 +35,14 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Graphs -->
+		<dependency>
+			<artifactId>gs-core</artifactId>
+			<groupId>org.graphstream</groupId>
+			<version>1.3</version>
+			<optional>false</optional>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
