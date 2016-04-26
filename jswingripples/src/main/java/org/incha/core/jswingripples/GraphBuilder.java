@@ -1,7 +1,8 @@
 package org.incha.core.jswingripples;
 
 import org.graphstream.graph.Graph;
-import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.graph.implementations.DefaultGraph;
+import org.graphstream.ui.view.Viewer;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGEdge;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
@@ -19,8 +20,7 @@ public class GraphBuilder {
     private Graph graph;
     private GraphBuilder()
     {
-
-        graph = new SingleGraph("Dependencies");
+        graph = new DefaultGraph("Dependencies");
         graph.addAttribute("ui.stylesheet", "url(file://" + GraphBuilder.class.getClassLoader().getResource("graph.css").toString().substring(5) + ")");
     }
 
@@ -58,7 +58,7 @@ public class GraphBuilder {
 
     public void showGraph()
     {
-        graph.display(true);
+        Viewer v = graph.display(true);
     }
 
 
