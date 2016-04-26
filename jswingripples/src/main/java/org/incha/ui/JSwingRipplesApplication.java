@@ -219,8 +219,9 @@ public class JSwingRipplesApplication extends JFrame {
     protected void importProject(){
         final JavaProject project = NewProjectWizard.showDialog(this);
         if (project != null) {
-            JavaProjectsModel.getInstance().addProject(project);
-            new ImportSource(project);
+            if(JavaProjectsModel.getInstance().addProject(project)) {
+                new ImportSource(project);
+            }
         }
 
 
