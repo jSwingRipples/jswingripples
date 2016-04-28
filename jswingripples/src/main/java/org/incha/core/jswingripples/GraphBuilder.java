@@ -2,7 +2,6 @@ package org.incha.core.jswingripples;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.DefaultGraph;
-import org.graphstream.ui.view.Viewer;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGEdge;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
@@ -55,12 +54,5 @@ public class GraphBuilder {
         }
 
     }
-
-    public void showGraph()
-    {
-        Viewer v = graph.display(true);
-    }
-
-
 
 }

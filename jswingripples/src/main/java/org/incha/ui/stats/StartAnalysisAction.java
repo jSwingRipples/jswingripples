@@ -93,7 +93,6 @@ public class StartAnalysisAction implements ActionListener {
             GraphBuilder gb = GraphBuilder.getInstance();
             gb.addEIG(eig);
             gb.prepareGraph();
-            gb.showGraph();
         }
     }
 }
