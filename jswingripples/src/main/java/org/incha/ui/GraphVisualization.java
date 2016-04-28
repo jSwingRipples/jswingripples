@@ -3,6 +3,7 @@ package org.incha.ui;
 import org.graphstream.graph.Graph;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
+import org.incha.core.jswingripples.GraphBuilder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,8 +14,9 @@ import java.awt.*;
  */
 public class GraphVisualization {
 
-    public void showGraph(Graph graph)
+    public void showGraph()
     {
+        Graph graph = GraphBuilder.getInstance().getGraph();
 
         Viewer v = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         v.enableAutoLayout();
