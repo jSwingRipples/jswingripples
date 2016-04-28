@@ -55,4 +55,9 @@ public class GraphBuilder {
 
     }
 
+    public Graph getGraph()
+    {
+        return graph;
+    }
+
 }
