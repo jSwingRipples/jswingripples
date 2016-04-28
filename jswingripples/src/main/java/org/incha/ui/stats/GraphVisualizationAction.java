@@ -1,18 +1,23 @@
-package org.incha.ui;
+package org.incha.ui.stats;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.incha.core.jswingripples.GraphBuilder;
+import org.incha.ui.JSwingRipplesApplication;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by Manuel Olguín (molguin@dcc.uchile.cl) on 4/28/16.
  * Part of org.incha.ui.
  */
-public class GraphVisualization {
+public class GraphVisualizationAction implements ActionListener{
+
+    public GraphVisualizationAction() { super(); }
 
     public void showGraph()
     {
@@ -36,5 +41,9 @@ public class GraphVisualization {
 
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        showGraph();
+    }
 }
 

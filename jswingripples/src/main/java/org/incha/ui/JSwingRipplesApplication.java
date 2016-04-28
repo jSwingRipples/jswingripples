@@ -28,6 +28,7 @@ import org.graphstream.graph.implementations.SingleGraph;
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.StatisticsManager;
+import org.incha.ui.stats.GraphVisualizationAction;
 import org.incha.ui.stats.ShowCurrentStateAction;
 import org.incha.ui.stats.StartAnalysisAction;
 
@@ -184,6 +185,10 @@ public class JSwingRipplesApplication extends JFrame {
         final JMenuItem currentState = new JMenuItem("Current state - statistics");
         currentState.addActionListener(new ShowCurrentStateAction());
         jRipples.add(currentState);
+
+        final JMenuItem currentGraph = new JMenuItem("Current Graph");
+        currentGraph.addActionListener(new GraphVisualizationAction());
+        jRipples.add(currentGraph);
 //        final JMenuItem manageStates = new JMenuItem("Manage Statess");
 //        jRipples.add(manageStates);
 //        final JMenuItem saveState = new JMenuItem("Save State");
