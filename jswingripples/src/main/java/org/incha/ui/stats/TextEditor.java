@@ -26,8 +26,8 @@ public class TextEditor extends JFrame implements ActionListener
     private RSyntaxTextArea text = new RSyntaxTextArea();
 
     private JMenu fileMenu = new JMenu( "File" );
-    private JMenuItem fileOpen = new JMenuItem( "Open" );
-    private JMenuItem fileExit = new JMenuItem( "Exit" );
+    private JMenuItem fileOpen = new JMenuItem( "Save" );
+    private JMenu syntax = new JMenu( "Syntax" );
 
     private Map<String,String> extensionMap = new HashMap<String,String>();
 
@@ -52,14 +52,23 @@ public class TextEditor extends JFrame implements ActionListener
         // Build a simple menu
         JMenuBar menubar = new JMenuBar();
         fileMenu.add( fileOpen );
-        fileMenu.add( fileExit );
+        fileMenu.add( syntax );
         menubar.add( fileMenu );
         add( menubar, BorderLayout.NORTH );
 
         // Add ourself as an action listener (don't do this in a production app,
         // instead use Actions
         fileOpen.addActionListener( this );
-        fileExit.addActionListener( this );
+        for (final String s : extensionMap.keySet()){
+            JMenuItem extension = new JMenuItem(s);
+            syntax.add(extension);
+            extension.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    text.setSyntaxEditingStyle(extensionMap.get(s));
+                }
+            });
+        }
 
         // Add our text control to the center of the Frame's border layout
         add( new RTextScrollPane( text ) );
@@ -118,9 +127,8 @@ public class TextEditor extends JFrame implements ActionListener
                 openFile( chooser.getSelectedFile().getAbsolutePath() );
             }
         }
-        else if( e.getSource() == fileExit )
-        {
-            System.exit( 0 );
+        else if(e.getSource() == syntax){
+            text.setSyntaxEditingStyle(extensionMap.get("c"));
         }
     }
 
