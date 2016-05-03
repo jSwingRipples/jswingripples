@@ -240,6 +240,7 @@ public class JSwingRipplesApplication extends JFrame {
             System.exit(1);
         }
         final JFrame f = new JSwingRipplesApplication();
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //set frame location
         final Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
