@@ -1,5 +1,6 @@
 package org.incha.core.jswingripples;
 
+import org.apache.commons.logging.LogFactory;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.DefaultGraph;
@@ -27,7 +28,7 @@ public class GraphBuilder {
         }
         catch (NullPointerException e)
         {
-            System.err.println("Missing graph stylesheet! - graph.css");
+            LogFactory.getLog(this.getClass()).error("Missing graph stylesheet! - graph.css");
             System.exit(1);
         }
     }
