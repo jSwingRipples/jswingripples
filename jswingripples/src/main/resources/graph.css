@@ -1,10 +1,11 @@
 node {
-    size: 10px, 15px;
+    size: 20px, 20px;
     shape: circle;
     fill-color: black;
     text-mode: normal;
     text-background-mode: rounded-box;
     text-visibility-mode: normal;
+    text-alignment: at-right;
 }
 
 node:clicked {
