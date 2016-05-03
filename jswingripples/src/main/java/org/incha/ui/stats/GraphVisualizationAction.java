@@ -5,7 +5,6 @@ import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.incha.core.jswingripples.GraphBuilder;
 import org.incha.ui.JSwingRipplesApplication;
-import scala.collection.concurrent.Debug;
 
 import javax.swing.*;
 import java.awt.*;
