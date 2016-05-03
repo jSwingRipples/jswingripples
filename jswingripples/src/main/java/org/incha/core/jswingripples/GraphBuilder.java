@@ -1,6 +1,7 @@
 package org.incha.core.jswingripples;
 
 import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.DefaultGraph;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGEdge;
@@ -43,8 +44,10 @@ public class GraphBuilder {
         JSwingRipplesEIGEdge[] eigEdges = eig.getAllEdges();
 
         for ( JSwingRipplesEIGNode node : eigNodes )
-            if ( graph.getNode(node.getFullName()) == null )
-                graph.addNode(node.getFullName());
+            if ( graph.getNode(node.getFullName()) == null ) {
+                Node n = graph.addNode(node.getFullName());
+                n.addAttribute("label", node.getShortName());
+            }
 
         for ( JSwingRipplesEIGEdge edge : eigEdges )
         {
