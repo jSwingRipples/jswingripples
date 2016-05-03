@@ -21,7 +21,15 @@ public class GraphBuilder {
     private GraphBuilder()
     {
         graph = new DefaultGraph("Dependencies");
-        graph.addAttribute("ui.stylesheet", "url(file://" + GraphBuilder.class.getClassLoader().getResource("graph.css").toString().substring(5) + ")");
+        try {
+            graph.addAttribute("ui.stylesheet", "url(file://" + GraphBuilder.class.getClassLoader()
+                    .getResource("graph.css").toString().substring(5) + ")");
+        }
+        catch (NullPointerException e)
+        {
+            System.err.println("Missing graph stylesheet! - graph.css");
+            System.exit(1);
+        }
     }
 
     public static GraphBuilder getInstance() {
