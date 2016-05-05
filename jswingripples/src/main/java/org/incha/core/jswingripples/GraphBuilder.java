@@ -30,9 +30,10 @@ public class GraphBuilder {
     }
 
     /**
-     * Private function for resetting the internal graph.
+     * Resets the internal graph and returns it.
+     * @return Graph object.
      */
-    private void resetGraph()
+    public Graph resetGraph()
     {
         graph = new DefaultGraph("Dependencies");
         try {
@@ -43,6 +44,8 @@ public class GraphBuilder {
             LogFactory.getLog(this.getClass()).error("Missing graph stylesheet! - graph.css");
             System.exit(1);
         }
+
+        return graph;
     }
 
     /**
@@ -71,22 +74,23 @@ public class GraphBuilder {
      * Constructs a Graph object from the previously provided EIG instance and returns it.
      * @return Graph object representing the EIG model, or null if no EIG instance has been provided.
      */
-    public Graph prepareGraph()
+    public void prepareGraph()
     {
 
         if ( eig == null )
-            return null;
+            return;
 
-        resetGraph();
+        //resetGraph();
 
         JSwingRipplesEIGNode[] eigNodes = eig.getAllNodes();
         JSwingRipplesEIGEdge[] eigEdges = eig.getAllEdges();
 
-        for ( JSwingRipplesEIGNode node : eigNodes )
-            if ( graph.getNode(node.getFullName()) == null ) {
+        for ( JSwingRipplesEIGNode node : eigNodes ) {
+            if (graph.getNode(node.getFullName()) == null) {
                 Node n = graph.addNode(node.getFullName());
                 n.addAttribute("label", node.getShortName());
             }
+        }
 
         for ( JSwingRipplesEIGEdge edge : eigEdges )
         {
@@ -94,7 +98,7 @@ public class GraphBuilder {
             if ( graph.getEdge(eid) == null)
                 graph.addEdge(eid, edge.getFromNode().getFullName(), edge.getToNode().getFullName());
         }
-
-        return graph;
     }
+
+    public Graph getGraph() { return graph; }
 }
