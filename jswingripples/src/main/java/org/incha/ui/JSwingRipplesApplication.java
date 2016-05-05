@@ -7,7 +7,10 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedList;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
@@ -22,6 +25,7 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
@@ -237,13 +241,25 @@ public class JSwingRipplesApplication extends JFrame {
         //init logging
         getHome().mkdirs();
 
+        //Properties
+        Properties prop = new Properties();
+        try
+        {
+            InputStream in = JSwingRipplesApplication.class.getClassLoader().getResourceAsStream("project.properties");
+            prop.load(in);
+        } catch (IOException e) {
+            LogFactory.getLog(JSwingRipplesApplication.class).error("Missing properties file!");
+            System.exit(1);
+        }
         final JFrame f = new JSwingRipplesApplication();
 
         //set frame location
         final Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(size.width / 2, size.height / 2);
         f.setLocationByPlatform(true);
-        LogFactory.getLog(JSwingRipplesApplication.class).debug("Prueba uno");
+        //LogFactory.getLog(JSwingRipplesApplication.class).debug("Prueba uno");
+        String info = prop.getProperty("project_name") + " version " + prop.getProperty("project_version");
+        LogFactory.getLog(JSwingRipplesApplication.class).info(info);
         
         // If called with the protocol args
         processArgs(args);
