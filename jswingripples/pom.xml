@@ -38,9 +38,9 @@
 
 		<!-- Search -->
 		<dependency>
-			<groupId>lucene</groupId>
-			<artifactId>lucene</artifactId>
-			<version>1.4.3</version>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>3.6.2</version>
 		</dependency>
 	</dependencies>
 	<build>
