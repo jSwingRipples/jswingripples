@@ -21,7 +21,7 @@ public class GraphVisualizationAction implements ActionListener{
 
     public void showGraph()
     {
-        Graph graph = GraphBuilder.getInstance().getGraph();
+        Graph graph = GraphBuilder.getInstance().prepareGraph();
 
         Viewer v = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         v.enableAutoLayout();

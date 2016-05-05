@@ -25,14 +25,21 @@ public class GraphBuilder {
      */
     private GraphBuilder()
     {
-        graph = new DefaultGraph("Dependencies");
         eig = null;
+        resetGraph();
+    }
+
+    /**
+     * Private function for resetting the internal graph.
+     */
+    private void resetGraph()
+    {
+        graph = new DefaultGraph("Dependencies");
         try {
             graph.addAttribute("ui.stylesheet", "url(file://" + GraphBuilder.class.getClassLoader()
                     .getResource("graph.css").toString().substring(5) + ")");
         }
-        catch (NullPointerException e)
-        {
+        catch (NullPointerException e) {
             LogFactory.getLog(this.getClass()).error("Missing graph stylesheet! - graph.css");
             System.exit(1);
         }
@@ -70,6 +77,8 @@ public class GraphBuilder {
         if ( eig == null )
             return null;
 
+        resetGraph();
+
         JSwingRipplesEIGNode[] eigNodes = eig.getAllNodes();
         JSwingRipplesEIGEdge[] eigEdges = eig.getAllEdges();
 
@@ -86,5 +95,6 @@ public class GraphBuilder {
                 graph.addEdge(eid, edge.getFromNode().getFullName(), edge.getToNode().getFullName());
         }
 
+        return graph;
     }
 }

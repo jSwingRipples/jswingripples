@@ -90,9 +90,7 @@ public class StartAnalysisAction implements ActionListener {
 
             StatisticsManager.getInstance().addStatistics(config, eig);
 
-            GraphBuilder gb = GraphBuilder.getInstance();
-            gb.addEIG(eig);
-            gb.prepareGraph();
+            GraphBuilder.getInstance().addEIG(eig);
         }
     }
 }
