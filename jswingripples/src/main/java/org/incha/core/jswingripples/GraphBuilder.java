@@ -7,6 +7,8 @@ import org.graphstream.graph.implementations.DefaultGraph;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGEdge;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
+import org.incha.ui.JSwingRipplesApplication;
+import org.incha.ui.TaskProgressMonitor;
 
 /**
  * Created by Manuel Olguín (molguin@dcc.uchile.cl) on 4/26/2016.
@@ -85,19 +87,30 @@ public class GraphBuilder {
         JSwingRipplesEIGNode[] eigNodes = eig.getAllNodes();
         JSwingRipplesEIGEdge[] eigEdges = eig.getAllEdges();
 
-        for ( JSwingRipplesEIGNode node : eigNodes ) {
+        final TaskProgressMonitor monitor = JSwingRipplesApplication.getInstance().getProgressMonitor();
+        monitor.beginTask("Building graph: Adding nodes.", eigNodes.length);
+        for ( int i = 0; i < eigNodes.length; i++ ) {
+            JSwingRipplesEIGNode node = eigNodes[i];
+            monitor.worked(i);
+            monitor.setTaskName("Adding node " + node.getShortName());
             if (graph.getNode(node.getFullName()) == null) {
                 Node n = graph.addNode(node.getFullName());
                 n.addAttribute("label", node.getShortName());
             }
         }
+        monitor.done();
 
-        for ( JSwingRipplesEIGEdge edge : eigEdges )
+        monitor.beginTask("Building graph: Adding edges.", eigEdges.length);
+        for ( int i = 0; i < eigEdges.length; i++ )
         {
+            JSwingRipplesEIGEdge edge = eigEdges[i];
+            monitor.worked(i);
             String eid = edge.getFromNode().getFullName() + " -> " + edge.getToNode().getFullName();
+            monitor.setTaskName("Adding edge " + eid);
             if ( graph.getEdge(eid) == null)
                 graph.addEdge(eid, edge.getFromNode().getFullName(), edge.getToNode().getFullName());
         }
+        monitor.done();
     }
 
     public Graph getGraph() { return graph; }

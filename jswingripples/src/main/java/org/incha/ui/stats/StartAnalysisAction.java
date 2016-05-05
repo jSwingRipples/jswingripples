@@ -92,6 +92,17 @@ public class StartAnalysisAction implements ActionListener {
 
             GraphBuilder.getInstance().addEIG(eig);
             GraphBuilder.getInstance().resetGraph();
+            //GraphBuilder.getInstance().prepareGraph();
+            Thread t = new Thread(new GraphBuild());
+            t.start();
+        }
+    }
+
+    private class GraphBuild implements Runnable
+    {
+
+        @Override
+        public void run() {
             GraphBuilder.getInstance().prepareGraph();
         }
     }
