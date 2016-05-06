@@ -1,17 +1,21 @@
 package org.incha.core.texteditor;
 
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+
 import java.io.*;
 
 /**
  * Created by rodrigo on 05-05-2016.
  */
 public class FileOpen {
+    private RSyntaxTextArea text;
     private String path;
     private String extension;
     private String content;
 
     public FileOpen( String absolutePath ) {
         path = absolutePath;
+        text = new RSyntaxTextArea();
     }
 
     public boolean open() {
@@ -32,6 +36,7 @@ public class FileOpen {
                 extension = "";
             }
             content = sb.toString();
+            text.setText(content);
             return true;
 
         } catch ( Exception e ) {
@@ -39,11 +44,11 @@ public class FileOpen {
             return false;
         }
     }
-    public void save( String text ) {
+    public void save( ) {
         BufferedWriter output = null;
         try{
             output = new BufferedWriter( new FileWriter( path ) );
-            output.write( text );
+            output.write( text.getText() );
 
         } catch( IOException e ){
             e.printStackTrace();
@@ -61,6 +66,14 @@ public class FileOpen {
 
     public String getExtension() {
         return extension;
+    }
+
+    public void setSyntax(String syntax) {
+        text.setSyntaxEditingStyle(syntax);
+    }
+
+    public RSyntaxTextArea getText() {
+        return text;
     }
 }
 

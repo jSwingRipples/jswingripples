@@ -5,17 +5,15 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
+import javax.swing.*;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
@@ -24,10 +22,11 @@ import org.incha.core.texteditor.FileOpen;
 import org.incha.ui.JSwingRipplesApplication;
 
 public class TextEditor extends JFrame {
-    private RSyntaxTextArea text;
+
     private ArrayList<FileOpen> openFiles;
     private static TextEditor instance;
     private int tab;
+    private JTabbedPane jTabbedPane;
 
     private JMenu fileMenu = new JMenu( "File" );
     private JMenuItem fileSave = new JMenuItem( "Save" );
@@ -58,7 +57,7 @@ public class TextEditor extends JFrame {
         fileSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                openFiles.get(tab).save(text.getText());
+                openFiles.get(tab).save( );
             }
         });
         //add listener to the syntax menu.
@@ -68,7 +67,7 @@ public class TextEditor extends JFrame {
             extension.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    text.setSyntaxEditingStyle(extensionMap.get(s));
+                    openFiles.get(tab).setSyntax(extensionMap.get(s));
                 }
             });
         }
@@ -79,7 +78,8 @@ public class TextEditor extends JFrame {
         instance=this;
         setUpJMenuBar();
 
-        add( new RTextScrollPane( text ) );
+        jTabbedPane = new JTabbedPane();
+        getContentPane().add(jTabbedPane);
 
         // Show the window
         setSize( 1024, 768 );
@@ -89,15 +89,27 @@ public class TextEditor extends JFrame {
 
         //close option to don't close the program.
         setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                instance=null;
+            }
+        });
     }
 
     public void openFile ( String filename )
     {
         FileOpen file = new FileOpen(filename);
+        if(file.open()){
+            JScrollPane jScrollPane = new JScrollPane(file.getText());
+            jTabbedPane.addTab("Tab 1", jScrollPane);
+
+        }
 
     }
 
-    public TextEditor newInstance(){
+    public static TextEditor getInstance(){
         if(instance==null){
             instance=new TextEditor(JSwingRipplesApplication.getInstance());
         }

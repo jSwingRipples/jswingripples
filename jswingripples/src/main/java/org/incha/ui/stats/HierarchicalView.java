@@ -37,7 +37,7 @@ public class HierarchicalView extends ClassTreeView {
                 	final ICompilationUnit unit = getSelectedItem(e.getX(), e.getY()).getNodeIMember().getCompilationUnit();
                 	final File fileToOpen = new File(unit.getPath().toString());
                 	try {
-						TextEditor textEditor = new TextEditor(JSwingRipplesApplication.getInstance());
+						TextEditor textEditor = TextEditor.getInstance();
                         textEditor.openFile(unit.getPath().toString());
 					} catch (Exception e1) {
 						e1.printStackTrace();
