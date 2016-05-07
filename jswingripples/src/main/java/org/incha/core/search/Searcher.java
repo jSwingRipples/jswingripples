@@ -21,6 +21,7 @@ import java.util.List;
 
 /**
  * Created by fcocl_000 on 05-05-2016.
+ * Class that manages user searches using the indexes in the index Directory.
  */
 public class Searcher {
     /**
@@ -42,7 +43,7 @@ public class Searcher {
      * @throws IOException
      */
     public Searcher(String indexDirectoryPath) throws IOException {
-        // The directory containing the indexes. TODO: centralize for use in searcher and indexer.
+        // The directory containing the indexes.
         Directory indexDirectory = FSDirectory.open(new File(indexDirectoryPath));
 
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
@@ -64,7 +65,7 @@ public class Searcher {
 
     /**
      * Retrieves Lucene Document from ScoreDoc.
-     * @param scoreDoc
+     * @param scoreDoc the document to be retrieved.
      * @return the corresponding Document.
      * @throws IOException
      */
@@ -72,6 +73,13 @@ public class Searcher {
         return indexSearcher.doc(scoreDoc.doc);
     }
 
+    /**
+     * Handles complete search process.
+     * @param searchQuery the user's query string.
+     * @return a list of Documents with the top search hits.
+     * @throws IOException
+     * @throws ParseException
+     */
     public List<Document> search(String searchQuery) throws IOException, ParseException {
         TopDocs topDocs = searchIndexes(searchQuery);
         List<Document> results = new ArrayList<Document>();
