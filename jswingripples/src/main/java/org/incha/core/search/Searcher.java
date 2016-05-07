@@ -39,12 +39,11 @@ public class Searcher {
 
     /**
      * Default constructor.
-     * @param indexDirectoryPath the filepath to the directory containing the indexes.
      * @throws IOException
      */
-    public Searcher(String indexDirectoryPath) throws IOException {
+    public Searcher() throws IOException {
         // The directory containing the indexes.
-        Directory indexDirectory = FSDirectory.open(new File(indexDirectoryPath));
+        Directory indexDirectory = FSDirectory.open(new File(LuceneConstants.INDEX_DIRECTORY_PATH));
 
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
         queryParser = new QueryParser(Version.LUCENE_36, LuceneConstants.CONTENTS, analyzer);

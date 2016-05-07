@@ -27,12 +27,11 @@ public class Indexer {
 
     /**
      * Default class constructor.
-     * @param indexDirectoryPath the path to the directory that will contain the indexes.
      * @throws IOException
      */
-    public Indexer (String indexDirectoryPath) throws IOException {
+    public Indexer () throws IOException {
         // Directory that will contain indexes
-        Directory indexDirectory = FSDirectory.open(new File(indexDirectoryPath));
+        Directory indexDirectory = FSDirectory.open(new File(LuceneConstants.INDEX_DIRECTORY_PATH));
 
         // Create the new writer
         StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
@@ -75,7 +74,7 @@ public class Indexer {
      * @param file the file to be indexed.
      * @throws IOException
      */
-    private void indexFile(File file) throws IOException {
+    public void indexFile(File file) throws IOException {
         Document document = createDocument(file);
         writer.addDocument(document);
     }
