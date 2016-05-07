@@ -1,5 +1,6 @@
 package org.incha.core.search;
 
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
@@ -31,10 +32,6 @@ public class Searcher {
      */
     private IndexSearcher indexSearcher;
     /**
-     * Lucene analyzer for handling indexes.
-     */
-    private static final StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
-    /**
      * Maximum number of query results.
      */
     private static final int maxHits = 10;
@@ -48,6 +45,7 @@ public class Searcher {
         // The directory containing the indexes. TODO: centralize for use in searcher and indexer.
         Directory indexDirectory = FSDirectory.open(new File(indexDirectoryPath));
 
+        Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
         queryParser = new QueryParser(Version.LUCENE_36, "contents", analyzer);
         indexSearcher = new IndexSearcher(IndexReader.open(indexDirectory));
     }
