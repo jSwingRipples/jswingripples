@@ -9,6 +9,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.incha.core.JavaProject;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 
@@ -26,10 +27,6 @@ public class Indexer {
      * Object that creates and maintains an index.
      */
     private IndexWriter writer;
-    /**
-     * EIG for the current java project.
-     */
-    private JSwingRipplesEIG eig;
 
     /**
      * Default class constructor.
@@ -44,14 +41,6 @@ public class Indexer {
         StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36, analyzer);
         writer = new IndexWriter(indexDirectory, indexWriterConfig);
-    }
-
-    /**
-     * Sets the eig object.
-     * @param eig the eig to set.
-     */
-    public void setEIG(JSwingRipplesEIG eig) {
-        this.eig = eig;
     }
 
     /**
@@ -98,10 +87,9 @@ public class Indexer {
      * Creates an index of all files in the project.
      * @throws IOException
      */
-    public void indexProject() throws IOException {
-        JSwingRipplesEIGNode[] projectNodes = eig.getAllNodes(); // all nodes in project
-        for (JSwingRipplesEIGNode node : projectNodes) {
-            indexFile(new File(((ICompilationUnit) node).getPath().toString())); // add each file to indexer
+    public void indexProject(JavaProject project) throws IOException {
+        for (File file : project.getSources()) {
+            indexFile(file);
         }
     }
 }
