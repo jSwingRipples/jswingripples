@@ -8,5 +8,6 @@ class LuceneConstants {
     static final String CONTENTS = "contents";
     static final String FILE_NAME = "filename";
     static final String FILE_PATH = "filepath";
-    static final String INDEX_DIRECTORY_PATH = "as";
+    static final String INDEX_DIRECTORY_PATH = "C:\\Users\\fcocl_000\\Dropbox\\Workspace\\IntelliJ\\jswingripples\\jswingripples\\target\\SearchIndexes";
+    static final int MAX_RESULTS_ITEMS = 10;
 }

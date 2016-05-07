@@ -32,10 +32,6 @@ public class Searcher {
      * Lucene class for searching the created indexes.
      */
     private IndexSearcher indexSearcher;
-    /**
-     * Maximum number of query results.
-     */
-    private static final int maxHits = 10;
 
     /**
      * Default constructor.
@@ -59,7 +55,7 @@ public class Searcher {
      */
     private TopDocs searchIndexes(String searchQuery) throws IOException, ParseException {
         Query query = queryParser.parse(searchQuery);
-        return indexSearcher.search(query, maxHits);
+        return indexSearcher.search(query, LuceneConstants.MAX_RESULTS_ITEMS);
     }
 
     /**
@@ -81,7 +77,7 @@ public class Searcher {
      */
     public List<Document> search(String searchQuery) throws IOException, ParseException {
         TopDocs topDocs = searchIndexes(searchQuery);
-        List<Document> results = new ArrayList<Document>();
+        List<Document> results = new ArrayList<>();
         for(ScoreDoc doc : topDocs.scoreDocs) {
             results.add(getDocument(doc));
         }
