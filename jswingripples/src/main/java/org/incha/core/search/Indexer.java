@@ -30,10 +30,6 @@ public class Indexer {
      * EIG for the current java project.
      */
     private JSwingRipplesEIG eig;
-    /**
-     * Lucene analyzer for creating writers.
-     */
-    private StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
 
     /**
      * Default class constructor.
@@ -45,6 +41,7 @@ public class Indexer {
         Directory indexDirectory = FSDirectory.open(new File(indexDirectoryPath));
 
         // Create the new writer
+        StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36, analyzer);
         writer = new IndexWriter(indexDirectory, indexWriterConfig);
     }
