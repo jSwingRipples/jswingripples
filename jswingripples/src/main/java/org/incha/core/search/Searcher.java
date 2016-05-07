@@ -47,7 +47,7 @@ public class Searcher {
         Directory indexDirectory = FSDirectory.open(new File(indexDirectoryPath));
 
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
-        queryParser = new QueryParser(Version.LUCENE_36, "contents", analyzer);
+        queryParser = new QueryParser(Version.LUCENE_36, LuceneConstants.CONTENTS, analyzer);
         indexSearcher = new IndexSearcher(IndexReader.open(indexDirectory));
     }
 

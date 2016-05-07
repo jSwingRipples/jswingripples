@@ -72,9 +72,9 @@ public class Indexer {
         Document document = new Document();
 
         // Create document fields
-        Field content = new Field("contents", new FileReader(file));
-        Field name = new Field("filename", file.getName(), Field.Store.YES, Field.Index.NOT_ANALYZED);
-        Field path = new Field("filepath", file.getCanonicalPath(),  Field.Store.YES, Field.Index.NOT_ANALYZED);
+        Field content = new Field(LuceneConstants.CONTENTS, new FileReader(file));
+        Field name = new Field(LuceneConstants.FILE_NAME, file.getName(), Field.Store.YES, Field.Index.NOT_ANALYZED);
+        Field path = new Field(LuceneConstants.FILE_PATH, file.getCanonicalPath(),  Field.Store.YES, Field.Index.NOT_ANALYZED);
 
         // Add fields to document
         document.add(content);
