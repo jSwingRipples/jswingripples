@@ -4,6 +4,10 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
@@ -29,7 +33,7 @@ public class Indexer {
     /**
      * Lucene analyzer for creating writers.
      */
-    private static final StandardAnalyzer analyzer = new StandardAnalyzer();
+    private StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
 
     /**
      * Default class constructor.
@@ -37,8 +41,12 @@ public class Indexer {
      * @throws IOException
      */
     public Indexer (String indexDirectoryPath) throws IOException {
+        // Directory that will contain indexes
+        Directory indexDirectory = FSDirectory.open(new File(indexDirectoryPath));
+
         // Create the new writer
-        writer = new IndexWriter(indexDirectoryPath, analyzer, true);
+        IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36, analyzer);
+        writer = new IndexWriter(indexDirectory, indexWriterConfig);
     }
 
     /**
@@ -67,9 +75,9 @@ public class Indexer {
         Document document = new Document();
 
         // Create document fields
-        Field content =  Field.Text("contents", new FileReader(file));
-        Field name = Field.Text("filename", file.getName());
-        Field path = Field.Text("filepath", file.getCanonicalPath());
+        Field content = new Field("contents", new FileReader(file));
+        Field name = new Field("filename", file.getName(), Field.Store.YES, Field.Index.NOT_ANALYZED);
+        Field path = new Field("filepath", file.getCanonicalPath(),  Field.Store.YES, Field.Index.NOT_ANALYZED);
 
         // Add fields to document
         document.add(content);
