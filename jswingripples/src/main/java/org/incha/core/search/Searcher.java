@@ -25,6 +25,10 @@ import java.util.List;
  */
 public class Searcher {
     /**
+     * Class instance for singleton pattern.
+     */
+    private static Searcher instance = null;
+    /**
      * Lucene class which handles user input and creates a Lucene query.
      */
     private QueryParser queryParser;
@@ -34,10 +38,22 @@ public class Searcher {
     private IndexSearcher indexSearcher;
 
     /**
+     * Returns the current instance.
+     * @return the current Indexer instance.
+     * @throws IOException
+     */
+    public static Searcher getInstance() throws IOException {
+        if (instance == null) {
+            instance = new Searcher();
+        }
+        return instance;
+    }
+
+    /**
      * Default constructor.
      * @throws IOException
      */
-    public Searcher() throws IOException {
+    private Searcher() throws IOException {
         // The directory containing the indexes.
         Directory indexDirectory = FSDirectory.open(new File(LuceneConstants.INDEX_DIRECTORY_PATH));
 

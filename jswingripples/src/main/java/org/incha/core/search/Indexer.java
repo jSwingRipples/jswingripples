@@ -21,19 +21,31 @@ import java.io.IOException;
  */
 public class Indexer {
     /**
+     * Class instance for singleton pattern.
+     */
+    private static Indexer instance = null;
+    /**
      * Object that creates and maintains an index.
      */
     private IndexWriter writer;
+
     /**
-     * The java project being currently analyzed.
+     * Returns the current instance.
+     * @return the current Indexer instance.
+     * @throws IOException
      */
-    private JavaProject project;
+    public static Indexer getInstance() throws IOException {
+        if (instance == null) {
+            instance = new Indexer();
+        }
+        return instance;
+    }
 
     /**
      * Default class constructor.
      * @throws IOException
      */
-    public Indexer () throws IOException {
+    private Indexer () throws IOException {
         // Directory that will contain indexes
         Directory indexDirectory = FSDirectory.open(new File(LuceneConstants.INDEX_DIRECTORY_PATH));
 
@@ -49,12 +61,6 @@ public class Indexer {
     public void close() throws IOException {
         writer.close();
     }
-
-    /**
-     * Sets the project being searched.
-     * @param project the new java project.
-     */
-    public void setProject(JavaProject project) { this.project = project; }
 
     /**
      * Creates a Lucene Document object from the specified file.
@@ -93,7 +99,7 @@ public class Indexer {
      * Creates an index of all files in the project.
      * @throws IOException
      */
-    public void indexProject() throws IOException {
+    public void indexProject(JavaProject project) throws IOException {
         for (File file : project.getSources()) {
             indexFile(file);
         }
