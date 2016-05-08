@@ -87,12 +87,19 @@ public class Indexer {
 
     /**
      * Indexes the file by adding it to the writer.
+     * If file is a directory, adds all files in the directory.
      * @param file the file to be indexed.
      * @throws IOException
      */
     private void indexFile(File file) throws IOException {
-        Document document = createDocument(file);
-        writer.addDocument(document);
+        System.out.println(file.getName());
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null) for (File subFile : files) indexFile(subFile);
+        } else {
+            Document document = createDocument(file);
+            writer.addDocument(document);
+        }
     }
 
     /**
