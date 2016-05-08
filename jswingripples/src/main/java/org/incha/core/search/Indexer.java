@@ -24,6 +24,10 @@ public class Indexer {
      * Object that creates and maintains an index.
      */
     private IndexWriter writer;
+    /**
+     * The java project being currently analyzed.
+     */
+    private JavaProject project;
 
     /**
      * Default class constructor.
@@ -45,6 +49,12 @@ public class Indexer {
     public void close() throws IOException {
         writer.close();
     }
+
+    /**
+     * Sets the project being searched.
+     * @param project the new java project.
+     */
+    public void setProject(JavaProject project) { this.project = project; }
 
     /**
      * Creates a Lucene Document object from the specified file.
@@ -74,7 +84,7 @@ public class Indexer {
      * @param file the file to be indexed.
      * @throws IOException
      */
-    public void indexFile(File file) throws IOException {
+    private void indexFile(File file) throws IOException {
         Document document = createDocument(file);
         writer.addDocument(document);
     }
@@ -83,7 +93,7 @@ public class Indexer {
      * Creates an index of all files in the project.
      * @throws IOException
      */
-    public void indexProject(JavaProject project) throws IOException {
+    public void indexProject() throws IOException {
         for (File file : project.getSources()) {
             indexFile(file);
         }
