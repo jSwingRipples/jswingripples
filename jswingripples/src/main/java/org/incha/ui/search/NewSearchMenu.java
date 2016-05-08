@@ -1,18 +1,12 @@
-package org.incha.ui;
+package org.incha.ui.search;
 
-import java.awt.FlowLayout;
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.border.BevelBorder;
 
 public class NewSearchMenu {
 	
@@ -26,7 +20,7 @@ public class NewSearchMenu {
      */
 	public NewSearchMenu() {
 		searchpanel = new JPanel();
-		words = new ArrayList<String>();
+		words = new ArrayList<>();
 		searchedWords = new JTextField(15);	
         searchpanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
         searchpanel.setLayout(new FlowLayout());      
@@ -52,9 +46,9 @@ public class NewSearchMenu {
 		return searchpanel;
 	}
 	
-	public List<String> getWordList(String text) {
+	private List<String> getWordList(String text) {
 		words.clear();
-		final StringBuffer word = new StringBuffer("");
+		final StringBuilder word = new StringBuilder("");
 		for (int i = 0; i < text.length(); i ++) {
     		if (text.charAt(i) == ';') {//Encuentra un separador de palabras
     			words.add(word.toString().trim());  //Se tiene una nueva palabra y se coloca en la lista
