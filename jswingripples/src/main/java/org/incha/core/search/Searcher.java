@@ -40,11 +40,14 @@ public class Searcher {
     /**
      * Returns the current instance.
      * @return the current Indexer instance.
-     * @throws IOException
      */
-    public static Searcher getInstance() throws IOException {
+    public static Searcher getInstance() {
         if (instance == null) {
-            instance = new Searcher();
+            try {
+                instance = new Searcher();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return instance;
     }
