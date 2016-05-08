@@ -28,6 +28,14 @@ public class Indexer {
      * Object that creates and maintains an index.
      */
     private IndexWriter writer;
+    /**
+     * Filter for manageable files.
+     */
+    private static final ValidFileFilter validFileFilter = new ValidFileFilter();
+    /**
+     * Filter for files with the .java extension.
+     */
+    private static final JavaFileFilter javaFileFilter = new JavaFileFilter();
 
     /**
      * Returns the current instance.
@@ -92,11 +100,11 @@ public class Indexer {
      * @throws IOException
      */
     private void indexFile(File file) throws IOException {
-        System.out.println(file.getName());
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             if (files != null) for (File subFile : files) indexFile(subFile);
         } else {
+            if (!javaFileFilter.accept(file)) return;
             Document document = createDocument(file);
             writer.addDocument(document);
         }
@@ -108,7 +116,7 @@ public class Indexer {
      */
     public void indexProject(JavaProject project) throws IOException {
         for (File file : project.getSources()) {
-            indexFile(file);
+            if(validFileFilter.accept(file)) indexFile(file);
         }
     }
 }
