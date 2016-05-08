@@ -1,8 +1,10 @@
 package org.incha.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.LayoutManager;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,9 +14,12 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.Properties;
 
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -22,7 +27,10 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.commons.logging.Log;
@@ -158,14 +166,13 @@ public class JSwingRipplesApplication extends JFrame {
     /**
      * @return
      */
-    private JMenuBar createMenuBar() {
-        final JMenuBar bar = new JMenuBar();
-
+    private JMenuBar createMenuBar() {    	
+        final JMenuBar bar = new JMenuBar();       
+        
         //file menu
         final JMenu file = new JMenu("File");
         bar.add(file);
 
-        //New Project option.
         final JMenuItem newProject = new JMenuItem("New Project");
         newProject.addActionListener(new ActionListener() {
             @Override
@@ -174,16 +181,6 @@ public class JSwingRipplesApplication extends JFrame {
             }
         });
         file.add(newProject);
-
-        //Import Project option.
-        final JMenuItem importProject = new JMenuItem("Import Project");
-        importProject.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                importProject();
-            }
-        });
-        file.add(importProject);
 
         //JRipples menu
         final JMenu jRipples = new JMenu("JRipples");
@@ -202,8 +199,10 @@ public class JSwingRipplesApplication extends JFrame {
 //        final JMenuItem saveState = new JMenuItem("Save State");
 //        jRipples.add(saveState);
 //        final JMenuItem loadState = new JMenuItem("Load State");
-//        jRipples.add(loadState);
-
+//        jRipples.add(loadState);        
+        
+        bar.add(new NewSearchMenu().getSearchPanel());  //Se agrega el menu de búsqueda
+        
         return bar;
     }
 
@@ -215,20 +214,6 @@ public class JSwingRipplesApplication extends JFrame {
         if (project != null) {
             JavaProjectsModel.getInstance().addProject(project);
         }
-    }
-
-    /**
-     * Import a project from a path.
-     */
-    protected void importProject(){
-        final JavaProject project = NewProjectWizard.showDialog(this);
-        if (project != null) {
-            if(JavaProjectsModel.getInstance().addProject(project)) {
-                new ImportSource(project);
-            }
-        }
-
-
     }
     /**
      * @return the application home folder.
