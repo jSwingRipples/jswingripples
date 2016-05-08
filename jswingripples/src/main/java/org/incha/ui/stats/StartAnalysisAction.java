@@ -2,6 +2,7 @@ package org.incha.ui.stats;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.List;
 
 import org.incha.core.JavaProject;
@@ -10,6 +11,7 @@ import org.incha.core.ModuleConfiguration;
 import org.incha.core.StatisticsManager;
 import org.incha.core.jswingripples.JRipplesModuleInterface;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
+import org.incha.core.search.Indexer;
 import org.incha.ui.JSwingRipplesApplication;
 import org.incha.ui.jripples.JRipplesDefaultModulesConstants;
 
@@ -88,6 +90,13 @@ public class StartAnalysisAction implements ActionListener {
             }
 
             StatisticsManager.getInstance().addStatistics(config, eig);
+
+            // Set search indexer current project.
+            try {
+                Indexer.getInstance().indexProject(project);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 }
