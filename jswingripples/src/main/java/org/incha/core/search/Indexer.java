@@ -25,10 +25,6 @@ public class Indexer {
      */
     private static Indexer instance = null;
     /**
-     * Object that creates and maintains an index.
-     */
-    private IndexWriter writer;
-    /**
      * Filter for manageable files.
      */
     private static final ValidFileFilter validFileFilter = new ValidFileFilter();
@@ -50,23 +46,25 @@ public class Indexer {
     }
 
     /**
-     * Default class constructor.
+     * Creates a new IndexWriter object for creating and maintaining indexes.
+     * @return the new IndexWriter.
      * @throws IOException
      */
-    private Indexer () throws IOException {
+    private IndexWriter openWriter() throws IOException {
         // Directory that will contain indexes
         Directory indexDirectory = FSDirectory.open(new File(LuceneConstants.INDEX_DIRECTORY_PATH));
 
         // Create the new writer
         StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36, analyzer);
-        writer = new IndexWriter(indexDirectory, indexWriterConfig);
+        return new IndexWriter(indexDirectory, indexWriterConfig);
     }
 
     /**
-     * Close the current writer.
+     * Close the receiverd writer.
+     * @throws IOException
      */
-    public void close() throws IOException {
+    private void closeWriter(IndexWriter writer) throws IOException {
         writer.close();
     }
 
@@ -99,10 +97,10 @@ public class Indexer {
      * @param file the file to be indexed.
      * @throws IOException
      */
-    private void indexFile(File file) throws IOException {
+    private void indexFile(File file, IndexWriter writer) throws IOException {
         if (file.isDirectory()) {
             File[] files = file.listFiles();
-            if (files != null) for (File subFile : files) indexFile(subFile);
+            if (files != null) for (File subFile : files) indexFile(subFile, writer);
         } else {
             if (!javaFileFilter.accept(file)) return;
             Document document = createDocument(file);
@@ -115,8 +113,10 @@ public class Indexer {
      * @throws IOException
      */
     public void indexProject(JavaProject project) throws IOException {
+        IndexWriter writer = openWriter();
         for (File file : project.getSources()) {
-            if(validFileFilter.accept(file)) indexFile(file);
+            if(validFileFilter.accept(file)) indexFile(file, writer);
         }
+        closeWriter(writer);
     }
 }
