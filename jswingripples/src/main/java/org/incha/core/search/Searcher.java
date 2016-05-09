@@ -90,17 +90,16 @@ public class Searcher {
     /**
      * Handles complete search process.
      * @param searchQuery the user's query string.
-     * @return a list of Documents with the top search hits.
      * @throws IOException
      * @throws ParseException
      */
-    public List<Document> search(String searchQuery) throws IOException, ParseException {
+    public void search(String searchQuery) throws IOException, ParseException {
         TopDocs topDocs = searchIndexes(searchQuery);
         List<Document> results = new ArrayList<>();
         for(ScoreDoc doc : topDocs.scoreDocs) {
             results.add(getDocument(doc));
         }
-        return results;
+        System.out.println(results.size());
     }
 
     /**

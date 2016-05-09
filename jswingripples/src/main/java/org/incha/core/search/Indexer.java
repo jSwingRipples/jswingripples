@@ -61,7 +61,7 @@ public class Indexer {
     }
 
     /**
-     * Close the receiverd writer.
+     * Close the received writer.
      * @throws IOException
      */
     private void closeWriter(IndexWriter writer) throws IOException {

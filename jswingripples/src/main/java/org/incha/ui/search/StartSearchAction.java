@@ -1,8 +1,12 @@
 package org.incha.ui.search;
 
+import org.apache.lucene.queryParser.ParseException;
+import org.incha.core.search.Searcher;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +16,11 @@ import java.util.List;
 class StartSearchAction implements ActionListener {
     private List<String> words;
     private JTextField searchedWords;
+    private Searcher searcher;
 
     StartSearchAction(JTextField searchedWords) {
         this.searchedWords = searchedWords;
+        searcher = Searcher.getInstance();
     }
 
     @Override
@@ -25,8 +31,14 @@ class StartSearchAction implements ActionListener {
         final String cleanedText = text.trim();
         if (text != null && cleanedText.length() > 0) {
             words = getWordList(cleanedText);
-            //search = new Search(words);
-            print(words);
+            // perform search
+            for (String word : words) {
+                try {
+                    searcher.search(word);
+                } catch (IOException | ParseException e1) {
+                    e1.printStackTrace();
+                }
+            }
         }
     }
 
