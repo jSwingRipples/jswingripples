@@ -17,6 +17,7 @@ import org.apache.lucene.util.Version;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,6 +37,10 @@ public class Searcher {
      * Lucene class for searching the created indexes.
      */
     private IndexSearcher indexSearcher;
+    /**
+     * Contains all search hits.
+     */
+    private List<String> results = new ArrayList<>();
 
     /**
      * Returns the current instance.
@@ -63,6 +68,14 @@ public class Searcher {
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
         queryParser = new QueryParser(Version.LUCENE_36, LuceneConstants.CONTENTS, analyzer);
         indexSearcher = new IndexSearcher(IndexReader.open(indexDirectory));
+    }
+
+    /**
+     * Closes the IndexSearcher.
+     * @throws IOException
+     */
+    public void close() throws IOException {
+        indexSearcher.close();
     }
 
     /**
@@ -95,20 +108,30 @@ public class Searcher {
      */
     public void search(String searchQuery) throws IOException, ParseException {
         TopDocs topDocs = searchIndexes(searchQuery);
-        List<Document> results = new ArrayList<>();
+        results = new ArrayList<>();
         for(ScoreDoc doc : topDocs.scoreDocs) {
-            Document aux = getDocument(doc);
+            String aux = removeJavaExtension(getDocument(doc).get(LuceneConstants.FILE_NAME));
             results.add(aux);
-            System.out.println(aux.get(LuceneConstants.FILE_NAME));
         }
         System.out.println(results.size());
     }
 
     /**
-     * Closes the IndexSearcher.
-     * @throws IOException
+     * Calculates the proportion of times the last searched term appears in the specified file
+     * to the total number of search hits for the same term.
+     * @param fileName the file's name.
+     * @return the number of hits.
      */
-    public void close() throws IOException {
-        indexSearcher.close();
+    float searchHits(String fileName) {
+        return results.size() == 0 ? 0 : Collections.frequency(results, fileName) / results.size();
+    }
+
+    /**
+     * Removes the .java extension from the given filename.
+     * @param fileName the filename to modify.
+     * @return the filename without the .java extension.
+     */
+    private String removeJavaExtension(String fileName) {
+        return fileName.replace(".java", "");
     }
 }
