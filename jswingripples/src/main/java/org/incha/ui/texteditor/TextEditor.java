@@ -58,7 +58,7 @@ public class TextEditor extends JFrame {
         fileSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                openFiles.get(jTabbedPane.getSelectedIndex()).save( );
+                openFiles.get(jTabbedPane.getSelectedIndex()).save(instance);
             }
         });
         //add listener to the syntax menu.
@@ -79,8 +79,6 @@ public class TextEditor extends JFrame {
         instance=this;
 
         setUpJMenuBar();
-
-
         getContentPane().add(jTabbedPane);
 
         // Show the window
