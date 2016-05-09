@@ -47,7 +47,8 @@ public class TextEditor extends JFrame {
         extensionMap.put( "RUBY", SyntaxConstants.SYNTAX_STYLE_RUBY );
         extensionMap.put( "SQL", SyntaxConstants.SYNTAX_STYLE_SQL );
         extensionMap.put( "XML", SyntaxConstants.SYNTAX_STYLE_XML );
-
+        jTabbedPane = new JTabbedPane();
+        openFiles = new ArrayList<FileOpen>();
         //build Menu.
         JMenuBar menubar = new JMenuBar();
         fileMenu.add( fileSave );
@@ -57,7 +58,7 @@ public class TextEditor extends JFrame {
         fileSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                openFiles.get(tab).save( );
+                openFiles.get(jTabbedPane.getSelectedIndex()).save( );
             }
         });
         //add listener to the syntax menu.
@@ -67,7 +68,7 @@ public class TextEditor extends JFrame {
             extension.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    openFiles.get(tab).setSyntax(extensionMap.get(s));
+                    openFiles.get(jTabbedPane.getSelectedIndex()).setSyntax(extensionMap.get(s));
                 }
             });
         }
@@ -76,9 +77,10 @@ public class TextEditor extends JFrame {
     {
         super( "Text Editor" );
         instance=this;
+
         setUpJMenuBar();
 
-        jTabbedPane = new JTabbedPane();
+
         getContentPane().add(jTabbedPane);
 
         // Show the window
@@ -102,8 +104,9 @@ public class TextEditor extends JFrame {
     {
         FileOpen file = new FileOpen(filename);
         if(file.open()){
+            openFiles.add(file);
             JScrollPane jScrollPane = new JScrollPane(file.getText());
-            jTabbedPane.addTab("Tab 1", jScrollPane);
+            jTabbedPane.addTab(file.getFileName(), jScrollPane);
 
         }
 

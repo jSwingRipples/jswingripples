@@ -75,5 +75,13 @@ public class FileOpen {
     public RSyntaxTextArea getText() {
         return text;
     }
+
+    public String getPath(){
+        return path;
+    }
+
+    public String getFileName(){
+        return path.substring( path.lastIndexOf( "/" ) + 1 );
+    }
 }
 
