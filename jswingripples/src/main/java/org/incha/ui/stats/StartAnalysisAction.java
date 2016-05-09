@@ -93,7 +93,8 @@ public class StartAnalysisAction implements ActionListener {
 
             // Set search indexer current project.
             try {
-                Indexer.getInstance().indexProject(project);
+                //Indexer.getInstance().indexProject(project);
+                Indexer.getInstance().indexEIG(eig);
             } catch (IOException e1) {
                 e1.printStackTrace();
             }

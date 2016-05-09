@@ -97,7 +97,9 @@ public class Searcher {
         TopDocs topDocs = searchIndexes(searchQuery);
         List<Document> results = new ArrayList<>();
         for(ScoreDoc doc : topDocs.scoreDocs) {
-            results.add(getDocument(doc));
+            Document aux = getDocument(doc);
+            results.add(aux);
+            System.out.println(aux.get(LuceneConstants.FILE_NAME));
         }
         System.out.println(results.size());
     }

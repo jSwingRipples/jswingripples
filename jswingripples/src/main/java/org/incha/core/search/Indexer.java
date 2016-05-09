@@ -8,7 +8,10 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.incha.core.JavaProject;
+import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
+import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -110,12 +113,27 @@ public class Indexer {
 
     /**
      * Creates an index of all files in the project.
+     * @param project the JavaProject being indexed.
      * @throws IOException
      */
     public void indexProject(JavaProject project) throws IOException {
         IndexWriter writer = openWriter();
         for (File file : project.getSources()) {
             if(validFileFilter.accept(file)) indexFile(file, writer);
+        }
+        closeWriter(writer);
+    }
+
+    /**
+     * Creates an index of all files in the project.
+     * @param eig the eig of the java project being indexed.
+     * @throws IOException
+     */
+    public void indexEIG(JSwingRipplesEIG eig) throws IOException {
+        IndexWriter writer = openWriter();
+        for (JSwingRipplesEIGNode node : eig.getAllNodes()) {
+            File file = new File(node.getNodeIMember().getCompilationUnit().getPath().toString());
+            if (validFileFilter.accept(file)) indexFile(file, writer);
         }
         closeWriter(writer);
     }
