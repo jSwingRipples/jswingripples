@@ -67,12 +67,8 @@ public class Searcher {
      * @throws IOException
      */
     private Searcher() throws IOException {
-        // The directory containing the indexes.
-        Directory indexDirectory = FSDirectory.open(new File(LuceneConstants.INDEX_DIRECTORY_PATH));
-
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
         queryParser = new QueryParser(Version.LUCENE_36, LuceneConstants.CONTENTS, analyzer);
-        indexSearcher = new IndexSearcher(IndexReader.open(indexDirectory));
     }
 
     /**
@@ -118,6 +114,9 @@ public class Searcher {
      * @throws ParseException
      */
     public void search(String searchQuery) throws IOException, ParseException {
+        // The directory containing the indexes.
+        Directory indexDirectory = FSDirectory.open(new File(LuceneConstants.INDEX_DIRECTORY_PATH));
+        indexSearcher = new IndexSearcher(IndexReader.open(indexDirectory));
         TopDocs topDocs = searchIndexes(searchQuery);
         results = new ArrayList<>();
         for(ScoreDoc doc : topDocs.scoreDocs) {
