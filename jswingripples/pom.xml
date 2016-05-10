@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.incha</groupId>
 	<artifactId>jswingripples</artifactId>
-	<version>0.0.3</version>
+	<version>0.1 Milestone 1</version>
 	<description>Swing port of JRipples Eclipse Plugin</description>
 	<properties>
 		<mainClass>org.incha.ui.JSwingRipplesApplication</mainClass>
