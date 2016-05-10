@@ -14,7 +14,7 @@ public class Highlight {
      * @return the highlight color.
      */
     public static Color getColor(String fileName) {
-        float hitPercentage = Searcher.getInstance().searchHits(fileName);
+        double hitPercentage = Searcher.getInstance().searchHits(fileName);
 
         if (hitPercentage == 0) return Color.CYAN;
         return Color.MAGENTA;

@@ -113,7 +113,6 @@ public class Searcher {
             String aux = removeJavaExtension(getDocument(doc).get(LuceneConstants.FILE_NAME));
             results.add(aux);
         }
-        System.out.println(results.size());
     }
 
     /**
@@ -122,8 +121,8 @@ public class Searcher {
      * @param fileName the file's name.
      * @return the number of hits.
      */
-    float searchHits(String fileName) {
-        return results.size() == 0 ? 0 : Collections.frequency(results, fileName) / results.size();
+    double searchHits(String fileName) {
+        return results.size() == 0 ? 0 : Collections.frequency(results, fileName) * 1.0  / results.size();
     }
 
     /**
