@@ -183,7 +183,7 @@ public class JSwingRipplesApplication extends JFrame {
             }
         });
         file.add(newProject);
-
+        
         //JRipples menu
         final JMenu jRipples = new JMenu("JRipples");
         bar.add(jRipples);
