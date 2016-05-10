@@ -27,6 +27,13 @@
 			<artifactId>org.eclipse.jdt.core</artifactId>
 			<version>3.10.0</version>
 		</dependency>
+		<!-- Text Editor-->
+		<dependency>
+			<groupId>com.fifesoft</groupId>
+			<artifactId>rsyntaxtextarea</artifactId>
+			<version>2.5.8</version>
+			<optional>false</optional>
+		</dependency>
 
 		<!-- Tests -->
 		<dependency>
