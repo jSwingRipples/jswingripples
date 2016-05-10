@@ -183,7 +183,18 @@ public class JSwingRipplesApplication extends JFrame {
             }
         });
         file.add(newProject);
-        
+
+        //Import Project option.
+        //Imports a project into the workspace
+        final JMenuItem importProject = new JMenuItem("Import Project");
+        importProject.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                importProject();
+            }
+        });
+        file.add(importProject);
+
         //JRipples menu
         final JMenu jRipples = new JMenu("JRipples");
         bar.add(jRipples);
@@ -221,6 +232,21 @@ public class JSwingRipplesApplication extends JFrame {
             JavaProjectsModel.getInstance().addProject(project);
         }
     }
+
+    /**
+     * Import a project from a path.
+     */
+    protected void importProject(){
+        final JavaProject project = NewProjectWizard.showDialog(this);
+        if (project != null) {
+            if(JavaProjectsModel.getInstance().addProject(project)) {
+                new ImportSource(project);
+            }
+        }
+
+
+    }
+
     /**
      * @return the application home folder.
      */

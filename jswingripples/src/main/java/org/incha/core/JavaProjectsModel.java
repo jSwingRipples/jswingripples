@@ -46,13 +46,16 @@ public class JavaProjectsModel {
     /**
      * @param prg new project.
      */
-    public void addProject(final JavaProject prg) {
+    public boolean addProject(final JavaProject prg) {
         final JavaProject equals = getProjectByName(prg.getName());
         if (equals == null) {
             final List<JavaProject> old = new ArrayList<>(projects);
             projects.add(prg);
             firePropertyChange(PROJECTS, old, projects);
+            return true;
         }
+
+        return false;
     }
     /**
      * @param project project to delete.
