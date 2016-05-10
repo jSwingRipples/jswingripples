@@ -33,7 +33,7 @@ public class JavaProjectsModel {
     /**
      * List of projects.
      */
-    private final List<JavaProject> projects = new LinkedList<JavaProject>();
+    private final List<JavaProject> projects = new LinkedList<>();
 
     /**
      * Default constructor.
@@ -46,15 +46,13 @@ public class JavaProjectsModel {
     /**
      * @param prg new project.
      */
-    public boolean addProject(final JavaProject prg) {
+    public void addProject(final JavaProject prg) {
         final JavaProject equals = getProjectByName(prg.getName());
         if (equals == null) {
-            final List<JavaProject> old = new ArrayList<JavaProject>(projects);
+            final List<JavaProject> old = new ArrayList<>(projects);
             projects.add(prg);
             firePropertyChange(PROJECTS, old, projects);
-            return true;
         }
-        return false;
     }
     /**
      * @param project project to delete.
@@ -62,7 +60,7 @@ public class JavaProjectsModel {
     public void deleteProject(final JavaProject project) {
         final JavaProject equals = getProjectByName(project.getName());
         if (equals != null) {
-            final List<JavaProject> old = new ArrayList<JavaProject>(projects);
+            final List<JavaProject> old = new ArrayList<>(projects);
             projects.remove(project);
             firePropertyChange(PROJECTS, old, projects);
         }
