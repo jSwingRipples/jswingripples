@@ -172,6 +172,7 @@ public class JSwingRipplesApplication extends JFrame {
         file.add(newProject);
 
         //Import Project option.
+        //Imports a project into the workspace
         final JMenuItem importProject = new JMenuItem("Import Project");
         importProject.addActionListener(new ActionListener() {
             @Override
