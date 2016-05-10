@@ -13,6 +13,7 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.incha.ui.classview.ClassTreeView;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,6 +42,10 @@ public class Searcher {
      * Contains all search hits.
      */
     private List<String> results = new ArrayList<>();
+
+    private ClassTreeView classTreeView;
+
+    public void setClassTreeView(ClassTreeView classTreeView) { this.classTreeView = classTreeView; }
 
     /**
      * Returns the current instance.
@@ -113,6 +118,7 @@ public class Searcher {
             String aux = removeJavaExtension(getDocument(doc).get(LuceneConstants.FILE_NAME));
             results.add(aux);
         }
+        classTreeView.repaint();
     }
 
     /**
