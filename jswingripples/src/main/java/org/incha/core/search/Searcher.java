@@ -42,10 +42,10 @@ public class Searcher {
      * Contains all search hits.
      */
     private List<String> results = new ArrayList<>();
-
+    /**
+     * Class view UI.
+     */
     private ClassTreeView classTreeView;
-
-    public void setClassTreeView(ClassTreeView classTreeView) { this.classTreeView = classTreeView; }
 
     /**
      * Returns the current instance.
@@ -84,6 +84,12 @@ public class Searcher {
     }
 
     /**
+     * Set current class view.
+     * @param classTreeView the current class view.
+     */
+    public void setClassTreeView(ClassTreeView classTreeView) { this.classTreeView = classTreeView; }
+
+    /**
      * Searches the indexes in the Directory.
      * @param searchQuery the user's query.
      * @return the query results.
@@ -118,6 +124,7 @@ public class Searcher {
             String aux = removeJavaExtension(getDocument(doc).get(LuceneConstants.FILE_NAME));
             results.add(aux);
         }
+        // Refresh analysis table
         classTreeView.repaint();
     }
 
