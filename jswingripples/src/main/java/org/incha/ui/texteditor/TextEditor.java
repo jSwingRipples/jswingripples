@@ -52,8 +52,8 @@ public class TextEditor extends JFrame {
         //build Menu.
         JMenuBar menubar = new JMenuBar();
         fileMenu.add( fileSave );
-        fileMenu.add( syntax );
         menubar.add( fileMenu );
+        menubar.add( syntax );
         add( menubar, BorderLayout.NORTH );
         fileSave.addActionListener(new ActionListener() {
             @Override
@@ -73,8 +73,8 @@ public class TextEditor extends JFrame {
             });
         }
     }
-    public TextEditor (JSwingRipplesApplication jSwingRipplesApplication)
-    {
+
+    public TextEditor (JSwingRipplesApplication jSwingRipplesApplication){
         super( "Text Editor" );
         instance=this;
 
@@ -98,8 +98,7 @@ public class TextEditor extends JFrame {
         });
     }
 
-    public void openFile ( String filename )
-    {
+    public void openFile ( String filename ){
         FileOpen file = new FileOpen(filename);
         if(file.open()){
             openFiles.add(file);
