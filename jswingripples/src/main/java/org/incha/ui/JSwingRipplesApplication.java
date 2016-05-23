@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.LinkedList;
 import java.util.Properties;
 
 import javax.swing.JButton;
@@ -25,13 +24,24 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.StatisticsManager;
+import org.incha.ui.stats.GraphVisualizationAction;
+import org.incha.ui.search.NewSearchMenu;
 import org.incha.ui.stats.ShowCurrentStateAction;
 import org.incha.ui.stats.StartAnalysisAction;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class JSwingRipplesApplication extends JFrame {
     private static final long serialVersionUID = 6142679404175274529L;
@@ -158,14 +168,13 @@ public class JSwingRipplesApplication extends JFrame {
     /**
      * @return
      */
-    private JMenuBar createMenuBar() {
-        final JMenuBar bar = new JMenuBar();
-
+    private JMenuBar createMenuBar() {    	
+        final JMenuBar bar = new JMenuBar();       
+        
         //file menu
         final JMenu file = new JMenu("File");
         bar.add(file);
 
-        //New Project option.
         final JMenuItem newProject = new JMenuItem("New Project");
         newProject.addActionListener(new ActionListener() {
             @Override
@@ -176,6 +185,7 @@ public class JSwingRipplesApplication extends JFrame {
         file.add(newProject);
 
         //Import Project option.
+        //Imports a project into the workspace
         final JMenuItem importProject = new JMenuItem("Import Project");
         importProject.addActionListener(new ActionListener() {
             @Override
@@ -197,13 +207,19 @@ public class JSwingRipplesApplication extends JFrame {
         final JMenuItem currentState = new JMenuItem("Current state - statistics");
         currentState.addActionListener(new ShowCurrentStateAction());
         jRipples.add(currentState);
+
+        final JMenuItem currentGraph = new JMenuItem("Current Graph");
+        currentGraph.addActionListener(new GraphVisualizationAction());
+        jRipples.add(currentGraph);
 //        final JMenuItem manageStates = new JMenuItem("Manage Statess");
 //        jRipples.add(manageStates);
 //        final JMenuItem saveState = new JMenuItem("Save State");
 //        jRipples.add(saveState);
 //        final JMenuItem loadState = new JMenuItem("Load State");
-//        jRipples.add(loadState);
-
+//        jRipples.add(loadState);        
+        
+        bar.add(new NewSearchMenu().getSearchPanel());  //Se agrega el menu de búsqueda
+        
         return bar;
     }
 
@@ -230,6 +246,7 @@ public class JSwingRipplesApplication extends JFrame {
 
 
     }
+
     /**
      * @return the application home folder.
      */
@@ -238,6 +255,7 @@ public class JSwingRipplesApplication extends JFrame {
     }
 
     public static void main(final String[] args) {
+        System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
         //init logging
         getHome().mkdirs();
 
@@ -252,6 +270,7 @@ public class JSwingRipplesApplication extends JFrame {
             System.exit(1);
         }
         final JFrame f = new JSwingRipplesApplication();
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //set frame location
         final Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
@@ -263,7 +282,6 @@ public class JSwingRipplesApplication extends JFrame {
         
         // If called with the protocol args
         processArgs(args);
-        
 
         //show frame
         SwingUtilities.invokeLater(new Runnable() {

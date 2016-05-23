@@ -106,3 +106,8 @@ dist/
 nbdist/
 nbactions.xml
 .nb-gradle/
+
+# Search indexes
+SearchIndexes/
+.SearchIndexes/
+jswingripples\\.SearchIndexes/
