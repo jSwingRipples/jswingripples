@@ -4,18 +4,17 @@ import org.apache.commons.logging.LogFactory;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.DefaultGraph;
-import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
-import org.incha.core.jswingripples.eig.JSwingRipplesEIGEdge;
-import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
+import org.incha.core.jswingripples.eig.*;
 import org.incha.ui.JSwingRipplesApplication;
 import org.incha.ui.TaskProgressMonitor;
+import org.incha.ui.jripples.EIGStatusMarks;
 
 /**
  * Created by Manuel Olguín (molguin@dcc.uchile.cl) on 4/26/2016.
  * Part of org.incha.core.jswingripples.
  */
 
-public class GraphBuilder {
+public class GraphBuilder implements JSwingRipplesEIGListener{
 
     private static GraphBuilder instance = null; // singleton
 
@@ -94,6 +93,7 @@ public class GraphBuilder {
             monitor.worked(i);
             monitor.setTaskName("Adding node " + node.getShortName());
             if (graph.getNode(node.getFullName()) == null) {
+                LogFactory.getLog(this.getClass()).info(node.getMark());
                 Node n = graph.addNode(node.getFullName());
                 n.addAttribute("label", node.getShortName());
             }
@@ -114,4 +114,53 @@ public class GraphBuilder {
     }
 
     public Graph getGraph() { return graph; }
+
+    @Override
+    public void jRipplesEIGChanged(JSwingRipplesEIGEvent event) {
+
+        if (!event.hasNodeEvents()) return;
+
+        final JSwingRipplesEIGNodeEvent[] nodeEvents=event.getNodeTypedEvents(
+                new int[] {JSwingRipplesEIGNodeEvent.NODE_MARK_CHANGED, JSwingRipplesEIGNodeEvent.NODE_REMOVED,
+                        JSwingRipplesEIGNodeEvent.NODE_ADDED});
+        if (nodeEvents.length==0) return;
+
+        for (int i=0;i<nodeEvents.length;i++) {
+            final JSwingRipplesEIGNode changedNode = nodeEvents[i].getSource();
+            switch (nodeEvents[i].getEventType()) {
+                case JSwingRipplesEIGNodeEvent.NODE_REMOVED: {
+                    //TODO
+                    break;
+                }
+                case JSwingRipplesEIGNodeEvent.NODE_ADDED: {
+                    //TODO
+                    break;
+                }
+                case JSwingRipplesEIGNodeEvent.NODE_MARK_CHANGED: {
+                    final String mark=changedNode.getMark();
+                    if (mark!=null)
+                    {
+
+                        switch (mark)
+                        {
+                            case EIGStatusMarks.CHANGED:
+                                graph.getNode(changedNode.getFullName()).setAttribute("ui.class", "changed");
+                                break;
+                            case EIGStatusMarks.IMPACTED:
+                                graph.getNode(changedNode.getFullName()).setAttribute("ui.class", "impacted");
+                                break;
+                            case EIGStatusMarks.NEXT_VISIT:
+                                graph.getNode(changedNode.getFullName()).setAttribute("ui.class", "next");
+                                break;
+                            default:
+                                graph.getNode(changedNode.getFullName()).setAttribute("ui.class", "blank");
+                                break;
+                        }
+
+                    }
+                    break;
+                }
+            }
+        }
+    }
 }

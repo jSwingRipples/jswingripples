@@ -11,3 +11,44 @@ node {
 node:clicked {
     fill-color: red;
 }
+
+node.blank {
+    size: 20px, 20px;
+    shape: circle;
+    fill-color: black;
+    text-mode: normal;
+    text-background-mode: rounded-box;
+    text-visibility-mode: normal;
+    text-alignment: at-right;
+}
+
+node.changed {
+    size: 20px, 20px;
+    shape: circle;
+    fill-color: red;
+    text-mode: normal;
+    text-background-mode: rounded-box;
+    text-visibility-mode: normal;
+    text-alignment: at-right;
+}
+
+node.impacted {
+    size: 20px, 20px;
+    shape: circle;
+    fill-color: magenta;
+    text-mode: normal;
+    text-background-mode: rounded-box;
+    text-visibility-mode: normal;
+    text-alignment: at-right;
+}
+
+node.next {
+    size: 20px, 20px;
+    shape: circle;
+    fill-color: green;
+    text-mode: normal;
+    text-background-mode: rounded-box;
+    text-visibility-mode: normal;
+    text-alignment: at-right;
+}
+

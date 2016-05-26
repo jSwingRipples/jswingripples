@@ -97,6 +97,7 @@ public class StartAnalysisAction implements ActionListener {
             //GraphBuilder.getInstance().prepareGraph();
             Thread t = new Thread(new GraphBuild());
             t.start();
+            eig.addJRipplesEIGListener(GraphBuilder.getInstance());
 
             // Set search indexer current project.
             try {
