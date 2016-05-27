@@ -116,4 +116,5 @@ public class TextEditor extends JFrame {
         return instance;
     }
 
+
 }
