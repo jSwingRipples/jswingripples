@@ -14,7 +14,7 @@ public class Highlight {
      */
     public static Color getColor(String fileName) {
         double hitPercentage = Searcher.getInstance().searchHits(fileName);
-        if (hitPercentage == 0) return Color.WHITE;
+        if (hitPercentage == -1) return Color.WHITE;
         return new Color((int) (255 * hitPercentage), 0, (int) (255 * (1 - hitPercentage)), 150 );
     }
 }

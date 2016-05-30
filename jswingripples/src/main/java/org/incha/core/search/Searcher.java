@@ -17,9 +17,9 @@ import org.incha.ui.classview.ClassTreeView;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by fcocl_000 on 05-05-2016.
@@ -39,13 +39,22 @@ public class Searcher {
      */
     private IndexSearcher indexSearcher;
     /**
-     * Contains all search hits.
+     * Contains all distinct search hits and the number of occurrences of the search
+     * term in each search hit.
      */
-    private List<String> results = new ArrayList<>();
+    private Map<String, Integer> results = new HashMap<>();
     /**
      * Class view UI.
      */
     private ClassTreeView classTreeView;
+    /**
+     * Maximum number of appearances of the search term in a single file.
+     */
+    private int maxFrequency;
+    /**
+     * Minimum number of appearances of the search term in a single file.
+     */
+    private int minFrequency;
 
     /**
      * Returns the current instance.
@@ -118,13 +127,32 @@ public class Searcher {
         Directory indexDirectory = FSDirectory.open(new File(LuceneConstants.INDEX_DIRECTORY_PATH));
         indexSearcher = new IndexSearcher(IndexReader.open(indexDirectory));
         TopDocs topDocs = searchIndexes(searchQuery);
-        results = new ArrayList<>();
+        results = new HashMap<>();
         for(ScoreDoc doc : topDocs.scoreDocs) {
             String aux = removeJavaExtension(getDocument(doc).get(LuceneConstants.FILE_NAME));
-            results.add(aux);
+            if(results.containsKey(aux)) {
+                // If contained, update appearance frequency.
+                results.put(aux, results.get(aux) + 1);
+            }
+            else {
+                // Entry added if filename not contained.
+                results.put(aux, 1);
+            }
         }
+        // Update files with most/least search term occurrences
+        refreshMaxMin();
+
         // Refresh analysis table
         classTreeView.repaint();
+    }
+
+    /**
+     * Updates max and min frequency fields upon a new search. Used to avoid Collections operations
+     * for every searchHits() call.
+     */
+    private void refreshMaxMin() {
+        maxFrequency = Collections.max(results.values());
+        minFrequency = Collections.min(results.values());
     }
 
     /**
@@ -134,7 +162,8 @@ public class Searcher {
      * @return the number of hits.
      */
     double searchHits(String fileName) {
-        return results.size() == 0 ? 0 : Collections.frequency(results, fileName) * 1.0  / results.size();
+        return !results.containsKey(fileName) ? -1 : (results.get(fileName) - minFrequency)  * 1.0
+                                                        / (maxFrequency - minFrequency);
     }
 
     /**
