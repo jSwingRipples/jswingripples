@@ -82,8 +82,13 @@ public class TextEditor extends JFrame {
         fileSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                openFiles.get( jTabbedPane.getSelectedIndex() ).save();
-                JOptionPane.showMessageDialog( instance, "Saved" );
+                try {
+                    openFiles.get( jTabbedPane.getSelectedIndex() ).save();
+                    JOptionPane.showMessageDialog( instance, "Saved" );
+
+                } catch ( Exception exception ) {
+                    exception.printStackTrace();
+                }
             }
         });
         //add listener to the syntax menu.
