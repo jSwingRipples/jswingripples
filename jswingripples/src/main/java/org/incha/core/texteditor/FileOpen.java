@@ -16,13 +16,21 @@ public class FileOpen {
     private String path;
     private String extension;
     private String content;
-    private HashMap<String,String> extensionMap = new HashMap<>();
+    private static HashMap< String , String > extensionMap = new HashMap<>();
 
+    /**
+     * Constructor to the FileOpen.
+     * @param absolutePath Path of the file.
+     */
     public FileOpen( String absolutePath ) {
         path = absolutePath;
         text = new RSyntaxTextArea();
     }
 
+    /**
+     * Read the file and copy the content in the RSyntaxTextArea text.
+     * @return true if the file was read and false if not.
+     */
     public boolean open() {
         try {
             BufferedReader reader = new BufferedReader( new FileReader( path ) );
@@ -34,15 +42,20 @@ public class FileOpen {
             }
 
             // See if we can set its highlighting
-            if (path.indexOf('.') != -1) {
-                extension = path.substring(path.lastIndexOf('.') + 1);
-                setSyntax(getSyntax(extension));
+            if ( path.indexOf('.') != -1 ) {
+                extension = path.substring( path.lastIndexOf('.') + 1 );
+                try {
+                    setSyntax( getSyntax( extension ) );
+                }
+                catch( Exception e ) {
+                    e.printStackTrace();
+                }
             }
             else{
                 extension = "";
             }
             content = sb.toString();
-            text.setText(content);
+            text.setText( content );
             return true;
 
         } catch ( Exception e ) {
@@ -51,65 +64,78 @@ public class FileOpen {
         }
     }
 
-    private String getSyntax(String extension) {
-        extensionMap.put( "c", SyntaxConstants.SYNTAX_STYLE_C );
-        extensionMap.put( "cpp", SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS );
-        extensionMap.put( "cs", SyntaxConstants.SYNTAX_STYLE_CSHARP );
-        extensionMap.put( "html", SyntaxConstants.SYNTAX_STYLE_HTML );
-        extensionMap.put( "java", SyntaxConstants.SYNTAX_STYLE_JAVA );
-        extensionMap.put( "js", SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT );
-        extensionMap.put( "php", SyntaxConstants.SYNTAX_STYLE_PHP );
-        extensionMap.put( "py", SyntaxConstants.SYNTAX_STYLE_PYTHON );
-        extensionMap.put( "rb", SyntaxConstants.SYNTAX_STYLE_RUBY );
-        extensionMap.put( "sql", SyntaxConstants.SYNTAX_STYLE_SQL );
-        extensionMap.put( "xml", SyntaxConstants.SYNTAX_STYLE_XML );
-        return extensionMap.get(extension);
+    /**
+     * Syntax Option.
+     * @param extension the extension of the file.
+     * @return the SyntaxConstants of the file.
+     */
+    private static String getSyntax( String extension ) {
+        if( extensionMap.isEmpty() ) {
+            extensionMap.put("c", SyntaxConstants.SYNTAX_STYLE_C);
+            extensionMap.put("cpp", SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
+            extensionMap.put("cs", SyntaxConstants.SYNTAX_STYLE_CSHARP);
+            extensionMap.put("html", SyntaxConstants.SYNTAX_STYLE_HTML);
+            extensionMap.put("java", SyntaxConstants.SYNTAX_STYLE_JAVA);
+            extensionMap.put("js", SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+            extensionMap.put("php", SyntaxConstants.SYNTAX_STYLE_PHP);
+            extensionMap.put("py", SyntaxConstants.SYNTAX_STYLE_PYTHON);
+            extensionMap.put("rb", SyntaxConstants.SYNTAX_STYLE_RUBY);
+            extensionMap.put("sql", SyntaxConstants.SYNTAX_STYLE_SQL);
+            extensionMap.put("xml", SyntaxConstants.SYNTAX_STYLE_XML);
+        }
+        return extensionMap.get( extension );
     }
 
-    public void close(TextEditor frame, int i){
-        int confirm = JOptionPane.showConfirmDialog(frame,"Would you like to save the changes?","Confirm",JOptionPane.YES_NO_CANCEL_OPTION);
-        if(confirm ==0){
-            save(frame);
-            frame.closeTab(i);
-        }
-        else if(confirm == 1){
-            frame.closeTab(i);
-        }
-        else{
-
-        }
-    }
-
-    public void close(TextEditor frame){
-        int confirm = JOptionPane.showConfirmDialog(frame,"Would you like to save the changes?","Confirm",JOptionPane.YES_NO_CANCEL_OPTION);
-        if(confirm ==0){
-            save(frame);
-            frame.closeSelectedTab();
-        }
-        else if(confirm == 1){
-            frame.closeSelectedTab();
-        }
-        else{
-
-        }
-    }
-
-    public void save(TextEditor frame) {
-        BufferedWriter output = null;
-        try{
-            output = new BufferedWriter( new FileWriter( path ) );
-            output.write( text.getText() );
-
-
-        } catch( IOException e ){
-            e.printStackTrace();
-        } finally {
+    /**
+     * Closer to the File Open.
+     * @param frame The TextEditor.
+     * @param tab The index of the tab that would be close.
+     */
+    public void close( TextEditor frame , int tab ) {
+        int confirm = JOptionPane.showConfirmDialog( frame , "Would you like to save the changes?" , "Confirm" , JOptionPane.YES_NO_CANCEL_OPTION );
+        if(confirm == 0) {
             try {
-                output.close();
-            }catch ( IOException e ) {
-                e.printStackTrace();
+                save();
+                frame.closeTab(tab);
+            }
+            catch (Exception e){
+
             }
         }
+        else if( confirm == 1 ) {
+            frame.closeTab( tab );
+        }
+    }
+
+    /**
+     * Closer to the File Open.
+     * @param frame The TextEditor.
+     */
+    public void close( TextEditor frame ) {
+        int confirm = JOptionPane.showConfirmDialog( frame , "Would you like to save the changes?" , "Confirm" , JOptionPane.YES_NO_CANCEL_OPTION );
+        if( confirm == 0 ) {
+            try {
+                save();
+                frame.closeSelectedTab();
+            }
+            catch (Exception e){
+
+            }
+        }
+        else if( confirm == 1 ){
+            frame.closeSelectedTab();
+        }
+    }
+
+    /**
+     * Read all the text and Save the content in the Path of this File.
+     */
+    public void save() throws IOException {
+        BufferedWriter output = null;
+
+            output = new BufferedWriter( new FileWriter( path ) );
+            output.write( text.getText() );
+       output.close();
     }
     public String getContent() {
         return content;
@@ -119,8 +145,8 @@ public class FileOpen {
         return extension;
     }
 
-    public void setSyntax(String syntax) {
-        text.setSyntaxEditingStyle(syntax);
+    public void setSyntax( String syntax ) {
+        text.setSyntaxEditingStyle( syntax );
     }
 
     public RSyntaxTextArea getText() {
