@@ -66,13 +66,40 @@ public class FileOpen {
         return extensionMap.get(extension);
     }
 
-    public void save(JFrame frame) {
+    public void close(TextEditor frame, int i){
+        int confirm = JOptionPane.showConfirmDialog(frame,"Would you like to save the changes?","Confirm",JOptionPane.YES_NO_CANCEL_OPTION);
+        if(confirm ==0){
+            save(frame);
+            frame.closeTab(i);
+        }
+        else if(confirm == 1){
+            frame.closeTab(i);
+        }
+        else{
+
+        }
+    }
+
+    public void close(TextEditor frame){
+        int confirm = JOptionPane.showConfirmDialog(frame,"Would you like to save the changes?","Confirm",JOptionPane.YES_NO_CANCEL_OPTION);
+        if(confirm ==0){
+            save(frame);
+            frame.closeSelectedTab();
+        }
+        else if(confirm == 1){
+            frame.closeSelectedTab();
+        }
+        else{
+
+        }
+    }
+
+    public void save(TextEditor frame) {
         BufferedWriter output = null;
         try{
             output = new BufferedWriter( new FileWriter( path ) );
             output.write( text.getText() );
-            JOptionPane.showMessageDialog(frame,
-                    "File Saved.");
+
 
         } catch( IOException e ){
             e.printStackTrace();

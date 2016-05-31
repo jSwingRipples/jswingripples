@@ -34,6 +34,10 @@ public class TextEditor extends JFrame {
 
     private Map<String,String> extensionMap = new HashMap<String,String>();
 
+    public void closeTab(int tab){
+        jTabbedPane.remove(tab);
+    }
+
     private void setUpJMenuBar(){
         //put the syntax in the extensionMap.
         extensionMap.put( "C", SyntaxConstants.SYNTAX_STYLE_C );
@@ -59,6 +63,7 @@ public class TextEditor extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 openFiles.get(jTabbedPane.getSelectedIndex()).save(instance);
+                JOptionPane.showMessageDialog(instance,"Saved");
             }
         });
         //add listener to the syntax menu.
@@ -72,6 +77,10 @@ public class TextEditor extends JFrame {
                 }
             });
         }
+    }
+
+    public void closeSelectedTab(){
+        jTabbedPane.remove(jTabbedPane.getSelectedIndex());
     }
 
     public TextEditor (JSwingRipplesApplication jSwingRipplesApplication){
@@ -92,6 +101,20 @@ public class TextEditor extends JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                int confirm = JOptionPane.showConfirmDialog(instance,"Would you like to save the changes?","Confirm",JOptionPane.YES_NO_OPTION);
+                if(confirm ==0){
+                    for (int i=0;i<jTabbedPane.getTabCount();i++){
+                        try{
+                            openFiles.get((i)).save(instance);
+
+                        }
+                        catch (Exception exception)
+                        {
+                            exception.printStackTrace();
+                        }
+                    }
+                    JOptionPane.showMessageDialog(instance,"Saved");
+                }
                 super.windowClosing(e);
                 instance=null;
             }
