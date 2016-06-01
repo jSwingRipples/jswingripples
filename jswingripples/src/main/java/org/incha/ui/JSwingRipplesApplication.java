@@ -216,9 +216,7 @@ public class JSwingRipplesApplication extends JFrame {
         currentGraph.addActionListener(new GraphVisualizationAction());
         jRipples.add(currentGraph);
         
-        final JMenuItem currentSearch = new JMenuItem("Current Search");
-        currentSearch.addActionListener(new NodeSearchView());
-        jRipples.add(currentSearch);
+       
 //        final JMenuItem manageStates = new JMenuItem("Manage Statess");
 //        jRipples.add(manageStates);
 //        final JMenuItem saveState = new JMenuItem("Save State");
