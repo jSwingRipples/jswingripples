@@ -1,9 +1,16 @@
 package org.incha.ui.search;
 
 import org.apache.lucene.queryParser.ParseException;
+import org.graphstream.graph.Graph;
+import org.graphstream.ui.swingViewer.ViewPanel;
+import org.graphstream.ui.view.Viewer;
+import org.incha.core.jswingripples.NodeSearchBuilder;
 import org.incha.core.search.Searcher;
+import org.incha.ui.JSwingRipplesApplication;
 
 import javax.swing.*;
+
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -25,8 +32,9 @@ class StartSearchAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+    	
         words = new ArrayList<>();
-
+        NodeSearchBuilder.getInstance().clearGraph();
         final String text = searchedWords.getText();
         final String cleanedText = text.trim();
         if (text != null && cleanedText.length() > 0) {
@@ -35,10 +43,13 @@ class StartSearchAction implements ActionListener {
             for (String word : words) {
                 try {
                     searcher.search(word);
+                    System.out.println("ADD TO GRAPH THE WORD " + word);
+                    addToGraph(word);
                 } catch (IOException | ParseException e1) {
                     e1.printStackTrace();
                 }
             }
+            showGraph();
         }
     }
 
@@ -58,6 +69,36 @@ class StartSearchAction implements ActionListener {
         return words;
     }
 
+    public void addToGraph(String s){
+    	NodeSearchBuilder.getInstance().setSearch(s);
+    }
+    public void showGraph()
+    {
+    	System.out.println("SHOWING GRAPH");
+        //NodeSearchBuilder NS = NodeSearchBuilder.getInstance();
+        //NS.setSearch(search);
+        //NS.setSearch("Node");
+        Graph graph = NodeSearchBuilder.getInstance().getGraph();
+        Viewer v = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
+        v.enableAutoLayout();
+        ViewPanel view =  v.addDefaultView(false);
+        JInternalFrame frame = new JInternalFrame("Search Graph");
+        frame.getContentPane().setLayout(new BorderLayout());
+
+
+        JDesktopPane viewArea = JSwingRipplesApplication.getInstance().getViewArea();
+        frame.setBounds(0, 0, viewArea.getWidth(), viewArea.getHeight());
+        frame.setClosable(true);
+        frame.setMaximizable(true);
+        frame.setVisible(true);
+        frame.setResizable(true);
+        frame.add(view, BorderLayout.CENTER);
+        viewArea.add(frame);
+        frame.moveToFront();
+        System.out.println("GRAPH SHOWN");
+
+    }
+    
     // Prints received words. For testing purposes only.
     private void print(List<String> words) {
         for(String word : words) {

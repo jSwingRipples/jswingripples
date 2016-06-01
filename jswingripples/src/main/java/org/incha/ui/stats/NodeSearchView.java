@@ -5,6 +5,7 @@ import org.graphstream.graph.Graph;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.incha.core.jswingripples.NodeSearchBuilder;
+import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.ui.JSwingRipplesApplication;
 
 import javax.swing.*;
@@ -14,19 +15,21 @@ import java.awt.event.ActionListener;
 
 public class NodeSearchView implements ActionListener{
 
+	JSwingRipplesEIG e;
 
-
-    public NodeSearchView() { super(); }
+    public NodeSearchView(){super();}
 
     public void showGraph()
     {
-        NodeSearchBuilder NS = new NodeSearchBuilder("Class");
-        //NS.addEIG(eig); en la busqueda se debe crear un NodeSearchBuilder
+    	System.out.println("SHOWING GRAPH");
+        NodeSearchBuilder NS = NodeSearchBuilder.getInstance();
+        NS.setSearch("Node");
+        //NS.setSearch("Node");
         Graph graph = NS.getGraph();
         Viewer v = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         v.enableAutoLayout();
         ViewPanel view =  v.addDefaultView(false);
-        JInternalFrame frame = new JInternalFrame("graph");
+        JInternalFrame frame = new JInternalFrame("Search Graph");
         frame.getContentPane().setLayout(new BorderLayout());
 
 
@@ -39,6 +42,7 @@ public class NodeSearchView implements ActionListener{
         frame.add(view, BorderLayout.CENTER);
         viewArea.add(frame);
         frame.moveToFront();
+        System.out.println("GRAPH SHOWN");
 
     }
     
