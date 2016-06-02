@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 import org.incha.core.jswingripples.eig.JSwingRipplesIMemberServices;
+import org.incha.core.search.Searcher;
 import org.incha.ui.jripples.EIGStatusMarks;
 
 public abstract class AbstractMemberRenderer extends DefaultTableCellRenderer {
@@ -82,7 +83,7 @@ public abstract class AbstractMemberRenderer extends DefaultTableCellRenderer {
                 if (node.getNodeIMember() instanceof IInitializer) {
                     label.setText("{...}");
                 } else {
-                    label.setText(node.getShortName());
+                    label.setText(node.getShortName() + searchResults(node));
                 }
                 label.setIcon(icon);
             }
@@ -93,9 +94,23 @@ public abstract class AbstractMemberRenderer extends DefaultTableCellRenderer {
         renderOtherColumn(label, node, column);
         return label;
     }
+
     /**
-     * @param member
-     * @return
+     * Creates a string containing the number of appearances of the last searched term in the
+     * given node.
+     * @param node the EIG node.
+     * @return string containing the total search hits. If there are no search hits, the empty
+     * string is returned.
+     */
+    private String searchResults(JSwingRipplesEIGNode node) {
+        int hits = Searcher.getInstance().totalHits(node.getShortName());
+        return (hits == 0 ? "" : (" (" + hits + ")"));
+    }
+
+    /**
+     * Get the icon corresponding the the node's type.
+     * @param node the EIG node.
+     * @return the corresponding icon.
      */
     private AbstractJavaElementIcon getIcon(final JSwingRipplesEIGNode node) {
         final IMember member = node.getNodeIMember();
@@ -120,8 +135,9 @@ public abstract class AbstractMemberRenderer extends DefaultTableCellRenderer {
     protected abstract void renderOtherColumn(final JLabel label, final JSwingRipplesEIGNode member,
             final int column);
     /**
-     * @param member
-     * @return
+     * Generates the complete name for the given EIG node.
+     * @param node the EIG node.
+     * @return the node's full name.
      */
     protected String getFullName(final JSwingRipplesEIGNode node) {
         final IMember member = node.getNodeIMember();

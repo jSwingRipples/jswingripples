@@ -157,13 +157,22 @@ public class Searcher {
 
     /**
      * Calculates the proportion of times the last searched term appears in the specified file
-     * to the total number of search hits for the same term.
+     * to the difference of the maximum and minimum number of search hits in any file for the same term.
      * @param fileName the file's name.
-     * @return the number of hits.
+     * @return the percentage of hits.
      */
     double hitPercentage(String fileName) {
         return !results.containsKey(fileName) ? -1 : (results.get(fileName) - minFrequency)  * 1.0
                                                         / (maxFrequency - minFrequency);
+    }
+
+    /**
+     * Returns the total number of term appearance in the file.
+     * @param fileName the file's name.
+     * @return the total number of hits.
+     */
+    public int totalHits (String fileName) {
+        return !results.containsKey(fileName) ? 0 : results.get(fileName);
     }
 
     /**
