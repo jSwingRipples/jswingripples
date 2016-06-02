@@ -75,7 +75,7 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
      * Constructs a Graph object from the previously provided EIG instance and returns it.
      * @return Graph object representing the EIG model, or null if no EIG instance has been provided.
      */
-    public void prepargiteGraph()
+    public void prepareGraph()
     {
 
         if ( eig == null )
