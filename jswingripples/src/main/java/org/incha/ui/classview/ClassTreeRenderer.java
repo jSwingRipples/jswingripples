@@ -17,9 +17,9 @@ public class ClassTreeRenderer extends AbstractMemberRenderer {
     public ClassTreeRenderer() { super(); }
 
     /**
-     * @param label
-     * @param node
-     * @param column
+     * @param label the table cell being rendered.
+     * @param node the associated eig node.
+     * @param column the table column for the given label.
      */
     @Override
     protected void renderOtherColumn(final JLabel label, final JSwingRipplesEIGNode node,

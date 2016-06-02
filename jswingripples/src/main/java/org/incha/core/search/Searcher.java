@@ -148,7 +148,7 @@ public class Searcher {
 
     /**
      * Updates max and min frequency fields upon a new search. Used to avoid Collections operations
-     * for every searchHits() call.
+     * for every hitPercentage() call.
      */
     private void refreshMaxMin() {
         maxFrequency = Collections.max(results.values());
@@ -161,7 +161,7 @@ public class Searcher {
      * @param fileName the file's name.
      * @return the number of hits.
      */
-    double searchHits(String fileName) {
+    double hitPercentage(String fileName) {
         return !results.containsKey(fileName) ? -1 : (results.get(fileName) - minFrequency)  * 1.0
                                                         / (maxFrequency - minFrequency);
     }
