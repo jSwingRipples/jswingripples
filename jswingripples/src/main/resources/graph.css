@@ -52,3 +52,13 @@ node.next {
     text-alignment: at-right;
 }
 
+node.propagating {
+    size: 20px, 20px;
+    shape: circle;
+    fill-color: orange;
+    text-mode: normal;
+    text-background-mode: rounded-box;
+    text-visibility-mode: normal;
+    text-alignment: at-right;
+}
+

@@ -26,7 +26,7 @@ public class GraphVisualizationAction implements ActionListener{
         Viewer v = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         v.enableAutoLayout();
         ViewPanel view =  v.addDefaultView(false);
-        JInternalFrame frame = new JInternalFrame("graph");
+        JInternalFrame frame = new JInternalFrame("Graph: Dependencies");
         frame.getContentPane().setLayout(new BorderLayout());
 
 

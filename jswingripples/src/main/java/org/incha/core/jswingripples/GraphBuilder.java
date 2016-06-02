@@ -179,6 +179,18 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
                                     impactn.setAttribute("ui.class", "next");
 
                                 break;
+                            case EIGStatusMarks.VISITED_CONTINUE:
+                                graphn.setAttribute("ui.class", "propagating");
+
+                                if ( impactn == null ) {
+                                    impactn = impactSetGraph.addNode(changedNode.getFullName());
+                                    impactn.setAttribute("ui.class", "propagating");
+                                    impactn.setAttribute("label", changedNode.getShortName());
+                                }
+                                else
+                                    impactn.setAttribute("ui.class", "propagating");
+
+                                break;
                             default:
                                 graphn.setAttribute("ui.class", "blank");
 
