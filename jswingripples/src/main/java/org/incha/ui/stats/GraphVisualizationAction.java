@@ -19,7 +19,7 @@ public class GraphVisualizationAction implements ActionListener{
 
     public GraphVisualizationAction() { super(); }
 
-    public void showGraph()
+    private void showGraph()
     {
         Graph graph = GraphBuilder.getInstance().getDependencyGraph();
 

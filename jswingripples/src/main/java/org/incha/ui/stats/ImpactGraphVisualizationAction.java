@@ -19,7 +19,7 @@ public class ImpactGraphVisualizationAction implements ActionListener {
 
     public ImpactGraphVisualizationAction() { super(); }
 
-    public void showGraph()
+    private void showGraph()
     {
         Graph graph = GraphBuilder.getInstance().getImpactSetGraph();
 

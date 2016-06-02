@@ -34,8 +34,7 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
     }
 
     /**
-     * Resets the internal graphs and returns it.
-     * @return Graph object.
+     * Resets the internal graphs.
      */
     public void resetGraphs()
     {
