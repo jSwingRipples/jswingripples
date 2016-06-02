@@ -22,8 +22,9 @@ public class TextEditor extends JFrame {
     private JTabbedPane jTabbedPane;
 
     private JMenu fileMenu = new JMenu( "File" );
-    private JMenuItem fileSave = new JMenuItem( "Save" );
+
     private JMenu syntax = new JMenu( "Syntax" );
+    private JMenuBar menubar = new JMenuBar();
 
     private Map<String,String> extensionMap = new HashMap<String,String>();
 
@@ -43,42 +44,30 @@ public class TextEditor extends JFrame {
         extensionMap.put( "RUBY", SyntaxConstants.SYNTAX_STYLE_RUBY );
         extensionMap.put( "SQL", SyntaxConstants.SYNTAX_STYLE_SQL );
         extensionMap.put( "XML", SyntaxConstants.SYNTAX_STYLE_XML );
+        //add a tab pane to the window.
         jTabbedPane = new JTabbedPane();
-        jTabbedPane.addMouseListener(new MouseListener() {
+
+        //add a click listener to the tab pane, and intersect the mouse location with the tab pane.
+        jTabbedPane.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON2){
                     openFiles.get(jTabbedPane.indexAtLocation(e.getX(),e.getY())).close(instance,jTabbedPane.indexAtLocation(e.getX(),e.getY()));
                 }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
+                super.mouseClicked(e);
             }
         });
         openFiles = new ArrayList<FileOpen>();
+        JMenuItem fileSave = new JMenuItem( "Save" );
+        JMenuItem revertAll = new JMenuItem( "Revert All" );
         //build Menu.
-        JMenuBar menubar = new JMenuBar();
         fileMenu.add( fileSave );
+        fileMenu.add( revertAll );
         menubar.add( fileMenu );
         menubar.add( syntax );
         add( menubar, BorderLayout.NORTH );
+
+        //add ClickListener to the fileSave.
         fileSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -91,7 +80,18 @@ public class TextEditor extends JFrame {
                 }
             }
         });
-        //add listener to the syntax menu.
+        revertAll.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    openFiles.get( jTabbedPane.getSelectedIndex() ).revertText();
+                } catch ( Exception exception ) {
+                    exception.printStackTrace();
+                }
+            }
+        });
+
+        //add ClickListener to the syntax menu.
         for (final String string : extensionMap.keySet()){
             JMenuItem extension = new JMenuItem( string );
             syntax.add(extension);
@@ -119,14 +119,17 @@ public class TextEditor extends JFrame {
         jTabbedPane.remove(jTabbedPane.getSelectedIndex());
     }
 
+    /**
+     * Constructor.
+     * @param jSwingRipplesApplication in case to be necesary.
+     */
     public TextEditor (JSwingRipplesApplication jSwingRipplesApplication){
         super( "Text Editor" );
-        instance=this;
 
+        instance = this;
         setUpJMenuBar();
-        getContentPane().add(jTabbedPane);
+        getContentPane().add( jTabbedPane );
 
-        // Show the window
         setSize( 1024, 768 );
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation( d.width/2 - 512, d.height/2 - 384 );
@@ -138,18 +141,22 @@ public class TextEditor extends JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                int confirm = JOptionPane.showConfirmDialog(instance,"Would you like to save the changes?","Confirm",JOptionPane.YES_NO_OPTION);
-                if(confirm ==0){
-                    for (int i=0;i<jTabbedPane.getTabCount();i++){
-                        try{
-                            openFiles.get((i)).save();
+                if(jTabbedPane.getTabCount()>0)
+                {
+                    int confirm = JOptionPane.showConfirmDialog(instance,"Would you like to save the changes?","Confirm",JOptionPane.YES_NO_OPTION);
+
+                    if(confirm ==0){
+                        for (int i=0;i<jTabbedPane.getTabCount();i++){
+                            try{
+                                openFiles.get((i)).save();
+                            }
+                            catch (Exception exception)
+                            {
+                                exception.printStackTrace();
+                            }
                         }
-                        catch (Exception exception)
-                        {
-                            exception.printStackTrace();
-                        }
+                        JOptionPane.showMessageDialog(instance,"Saved");
                     }
-                    JOptionPane.showMessageDialog(instance,"Saved");
                 }
                 super.windowClosing(e);
                 instance=null;
@@ -162,13 +169,35 @@ public class TextEditor extends JFrame {
      * the file.
      * @param filename String with the path of the File.
      */
-    public void openFile ( String filename ){
-        FileOpen file = new FileOpen(filename);
-        if(file.open()){
-            openFiles.add(file);
-            JScrollPane jScrollPane = new JScrollPane(file.getText());
-            jTabbedPane.addTab(file.getFileName(), jScrollPane);
+    public void openFile ( String filename ) {
+        //search if the File isn't open.
+        for(FileOpen file: openFiles){
+            //if found the file open, select this tab.
+            if ( file.getPath().equals(filename)){
+                jTabbedPane.setSelectedIndex(openFiles.indexOf(file));
+                return;
+            }
         }
+        FileOpen newFile = new FileOpen(filename);
+        if (newFile.open()) {
+            openFiles.add(newFile);
+            JScrollPane jScrollPane = new JScrollPane(newFile.getText());
+            jTabbedPane.addTab(newFile.getFileName(), jScrollPane);
+        }
+
+        /**
+         * if need a limit to the files open for any reason use this.
+        if(openFiles.size()<15) {
+            FileOpen newFile = new FileOpen(filename);
+            if (newFile.open()) {
+                openFiles.add(newFile);
+                JScrollPane jScrollPane = new JScrollPane(newFile.getText());
+                jTabbedPane.addTab(newFile.getFileName(), jScrollPane);
+            }
+        }
+        else{
+
+        }**/
 
     }
 

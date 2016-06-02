@@ -129,36 +129,70 @@ public class FileOpen {
 
     /**
      * Read all the text and Save the content in the Path of this File.
+     * rewrite content to save the new initial state.
      */
     public void save() throws IOException {
         BufferedWriter output = null;
-
-            output = new BufferedWriter( new FileWriter( path ) );
-            output.write( text.getText() );
-       output.close();
+        output = new BufferedWriter( new FileWriter( path ) );
+        output.write( text.getText() );
+        output.close();
+        content = text.getText();
     }
+
+    /**
+     * getter.
+     * @return the initial Content in String.
+     */
     public String getContent() {
         return content;
     }
 
+    /**
+     * getter.
+     * @return the extension of the file.
+     */
     public String getExtension() {
         return extension;
     }
 
+    /**
+     * set the syntax to the text.
+     * @param syntax the variable of the syntax.
+     */
     public void setSyntax( String syntax ) {
         text.setSyntaxEditingStyle( syntax );
     }
 
+    /**
+     * getter.
+     * @return the text in format RSyntaxTextArea,
+     * have the syntax, and other propetries.
+     */
     public RSyntaxTextArea getText() {
         return text;
     }
 
+    /**
+     * getter.
+     * @return the path of the file.
+     */
     public String getPath(){
         return path;
     }
 
+    /**
+     * getter.
+     * @return the name of the file without extension.
+     */
     public String getFileName(){
         return path.substring( path.lastIndexOf( "/" ) + 1 );
+    }
+
+    /**
+     * Change the actual text for the initial text without close the file.
+     */
+    public void revertText(){
+        text.setText(content);
     }
 }
 
