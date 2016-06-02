@@ -12,21 +12,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Created by Manuel Olguín (molguin@dcc.uchile.cl) on 4/28/16.
- * Part of org.incha.ui.
+ * Created by Manuel Olguín (molguin@dcc.uchile.cl) on 6/2/16.
+ * Part of org.incha.ui.stats.
  */
-public class GraphVisualizationAction implements ActionListener{
+public class ImpactGraphVisualizationAction implements ActionListener {
 
-    public GraphVisualizationAction() { super(); }
+    public ImpactGraphVisualizationAction() { super(); }
 
     public void showGraph()
     {
-        Graph graph = GraphBuilder.getInstance().getDependencyGraph();
+        Graph graph = GraphBuilder.getInstance().getImpactSetGraph();
 
         Viewer v = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         v.enableAutoLayout();
         ViewPanel view =  v.addDefaultView(false);
-        JInternalFrame frame = new JInternalFrame("graph");
+        JInternalFrame frame = new JInternalFrame("impact set graph");
         frame.getContentPane().setLayout(new BorderLayout());
 
 
@@ -47,4 +47,3 @@ public class GraphVisualizationAction implements ActionListener{
         showGraph();
     }
 }
-

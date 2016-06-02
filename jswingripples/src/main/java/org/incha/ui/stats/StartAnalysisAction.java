@@ -95,8 +95,8 @@ public class StartAnalysisAction implements ActionListener {
             StatisticsManager.getInstance().addStatistics(config, eig);
 
             GraphBuilder.getInstance().addEIG(eig);
-            GraphBuilder.getInstance().resetGraph();
-            //GraphBuilder.getInstance().prepareGraph();
+            GraphBuilder.getInstance().resetGraphs();
+            //GraphBuilder.getInstance().prepareDependencyGraph();
             Thread t = new Thread(new GraphBuild());
             t.start();
             eig.addJRipplesEIGListener(GraphBuilder.getInstance());
@@ -121,7 +121,7 @@ public class StartAnalysisAction implements ActionListener {
     {
         @Override
         public void run() {
-            GraphBuilder.getInstance().prepareGraph();
+            GraphBuilder.getInstance().prepareGraphs();
         }
     }
 
