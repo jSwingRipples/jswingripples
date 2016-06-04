@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 import org.incha.core.search.Highlight;
+import org.incha.core.search.Searcher;
 import org.incha.ui.jripples.EIGStatusMarks;
 
 public class ClassTreeRenderer extends AbstractMemberRenderer {
@@ -26,9 +27,6 @@ public class ClassTreeRenderer extends AbstractMemberRenderer {
             final int column) {
         final String mark = node.getMark();
         switch (column) {
-            case 0:
-                label.setBackground(Highlight.getColor(node.getShortName()));
-            break;
             case 1:
                 if (mark != null && !mark.isEmpty()) {
                     final Color color = EIGStatusMarks.getColorForMark(mark);
@@ -47,9 +45,23 @@ public class ClassTreeRenderer extends AbstractMemberRenderer {
                 label.setIcon(null);
                 label.setText(getFullName(node));
             break;
-
+            case 4:
+                label.setBackground(Highlight.getColor(node.getShortName()));
+                label.setText(searchResults(node));
             default:
             break;
         }
+    }
+
+    /**
+     * Creates a string containing the number of appearances of the last searched term in the
+     * given node.
+     * @param node the EIG node.
+     * @return string containing the total search hits. If there are no search hits, the empty
+     * string is returned.
+     */
+    private String searchResults(JSwingRipplesEIGNode node) {
+        int hits = Searcher.getInstance().totalHits(node.getShortName());
+        return (hits == 0 ? "" : (" (" + hits + ")"));
     }
 }

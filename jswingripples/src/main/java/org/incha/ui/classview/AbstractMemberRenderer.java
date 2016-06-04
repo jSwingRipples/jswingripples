@@ -83,7 +83,7 @@ public abstract class AbstractMemberRenderer extends DefaultTableCellRenderer {
                 if (node.getNodeIMember() instanceof IInitializer) {
                     label.setText("{...}");
                 } else {
-                    label.setText(node.getShortName() + searchResults(node));
+                    label.setText(node.getShortName());
                 }
                 label.setIcon(icon);
             }
@@ -93,18 +93,6 @@ public abstract class AbstractMemberRenderer extends DefaultTableCellRenderer {
 
         renderOtherColumn(label, node, column);
         return label;
-    }
-
-    /**
-     * Creates a string containing the number of appearances of the last searched term in the
-     * given node.
-     * @param node the EIG node.
-     * @return string containing the total search hits. If there are no search hits, the empty
-     * string is returned.
-     */
-    private String searchResults(JSwingRipplesEIGNode node) {
-        int hits = Searcher.getInstance().totalHits(node.getShortName());
-        return (hits == 0 ? "" : (" (" + hits + ")"));
     }
 
     /**
