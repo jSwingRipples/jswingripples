@@ -4,6 +4,8 @@ import java.awt.Color;
 
 import javax.swing.JLabel;
 
+import org.eclipse.jdt.core.Flags;
+import org.eclipse.jdt.core.IType;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 import org.incha.core.search.Highlight;
 import org.incha.core.search.Searcher;
@@ -46,9 +48,12 @@ public class ClassTreeRenderer extends AbstractMemberRenderer {
                 label.setText(getFullName(node));
             break;
             case 4:
-                label.setBackground(Highlight.getColor(node.getShortName()));
-                label.setText(searchResults(node));
-            default:
+                if (node.getNodeIMember() instanceof IType) {
+                    label.setBackground(Highlight.getColor(node.getShortName()));
+                    label.setText(searchResults(node));
+                } else {
+                    label.setText("");
+                }
             break;
         }
     }
