@@ -1,15 +1,13 @@
 package org.incha.ui.classview;
 
-import java.awt.Color;
-
-import javax.swing.JLabel;
-
-import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IType;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 import org.incha.core.search.Highlight;
 import org.incha.core.search.Searcher;
 import org.incha.ui.jripples.EIGStatusMarks;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class ClassTreeRenderer extends AbstractMemberRenderer {
     private static final long serialVersionUID = 5646472411943179112L;
