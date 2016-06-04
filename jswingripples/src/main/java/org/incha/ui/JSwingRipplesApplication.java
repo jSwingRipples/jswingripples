@@ -29,19 +29,9 @@ import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.StatisticsManager;
 import org.incha.ui.stats.GraphVisualizationAction;
-import org.incha.ui.search.NewSearchMenu;
+import org.incha.ui.search.SearchMenu;
 import org.incha.ui.stats.ShowCurrentStateAction;
 import org.incha.ui.stats.StartAnalysisAction;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 
 public class JSwingRipplesApplication extends JFrame {
     private static final long serialVersionUID = 6142679404175274529L;
@@ -218,7 +208,7 @@ public class JSwingRipplesApplication extends JFrame {
 //        final JMenuItem loadState = new JMenuItem("Load State");
 //        jRipples.add(loadState);        
         
-        bar.add(new NewSearchMenu().getSearchPanel());  //Se agrega el menu de búsqueda
+        bar.add(new SearchMenu().getSearchPanel());  //Se agrega el menu de búsqueda
         
         return bar;
     }

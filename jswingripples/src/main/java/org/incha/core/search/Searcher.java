@@ -176,6 +176,21 @@ public class Searcher {
     }
 
     /**
+     * Closes index searcher and clears the result HashMap.
+     */
+    public void clearResults() {
+        try {
+            close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        results = new HashMap<>();
+
+        // Refresh analysis table
+        classTreeView.repaint();
+    }
+
+    /**
      * Removes the .java extension from the given filename.
      * @param fileName the filename to modify.
      * @return the filename without the .java extension.
