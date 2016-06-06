@@ -1,5 +1,8 @@
 package org.incha.core.jswingripples;
+import java.awt.Color;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -7,6 +10,8 @@ import org.graphstream.graph.implementations.DefaultGraph;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGEdge;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
+import org.incha.core.search.Highlight;
+import org.incha.core.search.Searcher;
 
 public class NodeSearchBuilder {
 
@@ -104,35 +109,64 @@ public class NodeSearchBuilder {
         //JSwingRipplesEIGNode[] eigNodes = eig.getAllNodes();
         System.out.println("Looking at EIG nodes");
         for ( JSwingRipplesEIGNode node : eigNodes ){
+        	for (String searched_node : Searcher.getInstance().getResults()) {
+            	if (searched_node.equals(node.getShortName())) {
+            		computeAndAddEdges(node,addRelatedNodes(node));                    
+                    openNode(graph.getNode(node.getShortName()), list.size()); 
+            	}
+            }
+        }
+        
+        /*for ( JSwingRipplesEIGNode node : eigNodes ){
         	System.out.println("Name of node is " + node.getShortName());              	
         	//computeAndAddEdges(node,addRelatedNodes(node));  
         	for (String searched_node : list) {
-        		if ( searched_node.equals(node.getShortName())){
+        		if (patternCheck(searched_node,node.getShortName())){
             		System.out.println("GOT A MATCH");            		
             		computeAndAddEdges(node,addRelatedNodes(node));                    
                     openNode(graph.getNode(node.getShortName()), list.size()); 
             	}}
-        	}
+        	}*/
             	
         System.out.println("No more to look");
     }
     
     private void openNode(Node node, int total_words) {
     	int node_size;
+    	Color color = Highlight.getColor(node.getId());
+        String rgb = "rgb(" + color.getRed() + 
+        		     "," + color.getGreen() + 
+        		     "," + color.getBlue() + ")";
     	if (total_words >= 6) {
     		node_size = 10;
     	}
     	else {
     		node_size = 100 - 20*(total_words - 1);
     	}    	
-    	node.addAttribute("ui.style", "fill-color: red; "
-    			                      + "size: " + node_size + "px;");
+    	node.addAttribute("ui.style", "fill-color: " + rgb + "; "
+    			                      + "size: " + node_size + "px;"
+    			                      + "text-style: bold; "
+    			                      + "text-color: white");
+    }
+    
+    private boolean patternCheck(String searched_word, String node_name) {
+    	Pattern pattern = Pattern.compile(".*" + searched_word + ".*");
+    	Matcher matcher = pattern.matcher(node_name);
+    	return matcher.matches();    	
     }
     
     public Graph getGraph(){
     	return graph;
     }
 
-
+    
+    /*public static void main(String [] args) {
+    	Color color = Highlight.getColor("clone");
+        String rgb = "rgb(" + color.getRed() + 
+        		     "," + color.getGreen() + 
+        		     "," + color.getBlue() + ")";
+        System.out.println(rgb);
+    }
+*/
 }
 
