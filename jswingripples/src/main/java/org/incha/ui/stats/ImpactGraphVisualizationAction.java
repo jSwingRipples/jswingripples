@@ -30,7 +30,7 @@ public class ImpactGraphVisualizationAction implements ActionListener {
 
         v.enableAutoLayout();*/
 
-        Viewer v = GraphBuilder.getInstance().getImpactView();
+        Viewer v = GraphBuilder.getInstance().getImpactViewer();
         ViewPanel view =  v.addDefaultView(false);
         JInternalFrame frame = new JInternalFrame("Graph: Impact Set");
         frame.getContentPane().setLayout(new BorderLayout());

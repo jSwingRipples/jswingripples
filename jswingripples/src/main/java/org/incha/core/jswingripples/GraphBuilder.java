@@ -10,6 +10,7 @@ import org.incha.core.jswingripples.eig.*;
 import org.incha.ui.JSwingRipplesApplication;
 import org.incha.ui.TaskProgressMonitor;
 import org.incha.ui.jripples.EIGStatusMarks;
+import org.incha.ui.stats.DependencyGraphViewerListener;
 import org.incha.ui.stats.ImpactGraphViewerListener;
 
 /**
@@ -24,8 +25,8 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
     private JSwingRipplesEIG eig;
     private Graph graph;
     private Graph impactSetGraph;
-    private Viewer impactView;
-    private Viewer dependencyView;
+    private Viewer impactViewer;
+    private Viewer dependencyViewer;
 
     /**
      * Private constructor for singleton instance.
@@ -54,18 +55,28 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
             System.exit(1);
         }
 
-        impactView = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
-
-        ViewerPipe pipe = impactView.newViewerPipe();
+        impactViewer = new Viewer(impactSetGraph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
+        ViewerPipe pipe = impactViewer.newViewerPipe();
         pipe.addViewerListener(new ImpactGraphViewerListener(pipe));
-        pipe.addSink(graph);
-        impactView.enableAutoLayout();
+        pipe.addSink(impactSetGraph);
+        impactViewer.enableAutoLayout();
+
+        dependencyViewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
+        ViewerPipe piped = dependencyViewer.newViewerPipe();
+        piped.addViewerListener(new DependencyGraphViewerListener(piped));
+        piped.addSink(graph);
+        dependencyViewer.enableAutoLayout();
 
     }
 
-    public Viewer getImpactView()
+    public Viewer getImpactViewer()
     {
-        return impactView;
+        return impactViewer;
+    }
+
+    public Viewer getDependencyViewer()
+    {
+        return dependencyViewer;
     }
 
     /**
