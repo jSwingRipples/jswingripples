@@ -27,6 +27,8 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
     private Graph impactSetGraph;
     private Viewer impactViewer;
     private Viewer dependencyViewer;
+    private DependencyGraphViewerListener depListener;
+    private ImpactGraphViewerListener impListener;
 
     /**
      * Private constructor for singleton instance.
@@ -42,6 +44,13 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
      */
     public void resetGraphs()
     {
+
+        //stop viewers
+        if(depListener != null)
+            depListener.stopPumpThread();
+        if(impListener != null)
+            impListener.stopPumpThread();
+
         graph = new DefaultGraph("Dependencies");
         impactSetGraph = new DefaultGraph("Impact Set");
         try {
@@ -57,13 +66,15 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
 
         impactViewer = new Viewer(impactSetGraph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         ViewerPipe pipe = impactViewer.newViewerPipe();
-        pipe.addViewerListener(new ImpactGraphViewerListener(pipe));
+        impListener = new ImpactGraphViewerListener(pipe);
+        pipe.addViewerListener(impListener);
         pipe.addSink(impactSetGraph);
         impactViewer.enableAutoLayout();
 
         dependencyViewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         ViewerPipe piped = dependencyViewer.newViewerPipe();
-        piped.addViewerListener(new DependencyGraphViewerListener(piped));
+        depListener = new DependencyGraphViewerListener(piped);
+        piped.addViewerListener(depListener);
         piped.addSink(graph);
         dependencyViewer.enableAutoLayout();
 
