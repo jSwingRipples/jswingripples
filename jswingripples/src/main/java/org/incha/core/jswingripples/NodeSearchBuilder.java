@@ -109,13 +109,24 @@ public class NodeSearchBuilder {
         	for (String searched_node : list) {
         		if ( searched_node.equals(node.getShortName())){
             		System.out.println("GOT A MATCH");            		
-            		computeAndAddEdges(node,addRelatedNodes(node));
-                    graph.getNode(node.getShortName()).addAttribute("ui.style", "fill-color: red; size: 100px;");
-                     
+            		computeAndAddEdges(node,addRelatedNodes(node));                    
+                    openNode(graph.getNode(node.getShortName()), list.size()); 
             	}}
         	}
             	
         System.out.println("No more to look");
+    }
+    
+    private void openNode(Node node, int total_words) {
+    	int node_size;
+    	if (total_words >= 6) {
+    		node_size = 10;
+    	}
+    	else {
+    		node_size = 100 - 20*(total_words - 1);
+    	}    	
+    	node.addAttribute("ui.style", "fill-color: red; "
+    			                      + "size: " + node_size + "px;");
     }
     
     public Graph getGraph(){
