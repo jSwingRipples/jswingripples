@@ -1,4 +1,6 @@
 package org.incha.core.jswingripples;
+import java.util.List;
+
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.DefaultGraph;
@@ -23,10 +25,10 @@ public class NodeSearchBuilder {
     }
    
    
-   public void setSearch(String s){
+   public void setSearch(List<String> list){
 	  // search = s;
 	   System.out.println("PREPARING GRAPH");
-	   prepareGraph(s);
+	   prepareGraph(list);
 	   System.out.println("GRAPH PREPARED");
    }
    
@@ -93,7 +95,7 @@ public class NodeSearchBuilder {
     	}
     }
 
-    private void prepareGraph(String name)
+    private void prepareGraph(List<String> list)
     {
     	System.out.println("Looking at EIG nodes");
     	if (eig == null){
@@ -103,13 +105,16 @@ public class NodeSearchBuilder {
         System.out.println("Looking at EIG nodes");
         for ( JSwingRipplesEIGNode node : eigNodes ){
         	System.out.println("Name of node is " + node.getShortName());              	
-        	//computeAndAddEdges(node,addRelatedNodes(node));        	
-            	if ( name.equals(node.getShortName())  ){
+        	//computeAndAddEdges(node,addRelatedNodes(node));  
+        	for (String searched_node : list) {
+        		if ( searched_node.equals(node.getShortName())){
             		System.out.println("GOT A MATCH");            		
             		computeAndAddEdges(node,addRelatedNodes(node));
                     graph.getNode(node.getShortName()).addAttribute("ui.style", "fill-color: red; size: 100px;");
                      
             	}}
+        	}
+            	
         System.out.println("No more to look");
     }
     
