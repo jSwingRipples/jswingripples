@@ -1,6 +1,5 @@
 package org.incha.ui.stats;
 
-import org.graphstream.graph.Graph;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.incha.core.jswingripples.GraphBuilder;
@@ -21,10 +20,17 @@ public class ImpactGraphVisualizationAction implements ActionListener {
 
     private void showGraph()
     {
-        Graph graph = GraphBuilder.getInstance().getImpactSetGraph();
+        /*Graph graph = GraphBuilder.getInstance().getImpactSetGraph();
 
         Viewer v = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
-        v.enableAutoLayout();
+
+        ViewerPipe pipe = v.newViewerPipe();
+        pipe.addViewerListener(new ImpactGraphViewerListener(pipe));
+        pipe.addSink(graph);
+
+        v.enableAutoLayout();*/
+
+        Viewer v = GraphBuilder.getInstance().getImpactView();
         ViewPanel view =  v.addDefaultView(false);
         JInternalFrame frame = new JInternalFrame("Graph: Impact Set");
         frame.getContentPane().setLayout(new BorderLayout());

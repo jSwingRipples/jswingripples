@@ -4,12 +4,13 @@ import org.apache.commons.logging.LogFactory;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.DefaultGraph;
+import org.graphstream.ui.view.Viewer;
+import org.graphstream.ui.view.ViewerPipe;
 import org.incha.core.jswingripples.eig.*;
 import org.incha.ui.JSwingRipplesApplication;
 import org.incha.ui.TaskProgressMonitor;
 import org.incha.ui.jripples.EIGStatusMarks;
-
-import java.util.Objects;
+import org.incha.ui.stats.ImpactGraphViewerListener;
 
 /**
  * Created by Manuel Olguín (molguin@dcc.uchile.cl) on 4/26/2016.
@@ -23,6 +24,8 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
     private JSwingRipplesEIG eig;
     private Graph graph;
     private Graph impactSetGraph;
+    private Viewer impactView;
+    private Viewer dependencyView;
 
     /**
      * Private constructor for singleton instance.
@@ -50,6 +53,19 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
             LogFactory.getLog(this.getClass()).error("Missing graph stylesheet! - graph.css");
             System.exit(1);
         }
+
+        impactView = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
+
+        ViewerPipe pipe = impactView.newViewerPipe();
+        pipe.addViewerListener(new ImpactGraphViewerListener(pipe));
+        pipe.addSink(graph);
+        impactView.enableAutoLayout();
+
+    }
+
+    public Viewer getImpactView()
+    {
+        return impactView;
     }
 
     /**
