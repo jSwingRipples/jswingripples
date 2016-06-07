@@ -4,23 +4,31 @@ import org.apache.commons.logging.LogFactory;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.DefaultGraph;
-import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
-import org.incha.core.jswingripples.eig.JSwingRipplesEIGEdge;
-import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
+import org.graphstream.ui.view.Viewer;
+import org.graphstream.ui.view.ViewerPipe;
+import org.incha.core.jswingripples.eig.*;
 import org.incha.ui.JSwingRipplesApplication;
 import org.incha.ui.TaskProgressMonitor;
+import org.incha.ui.jripples.EIGStatusMarks;
+import org.incha.ui.stats.DependencyGraphViewerListener;
+import org.incha.ui.stats.ImpactGraphViewerListener;
 
 /**
  * Created by Manuel Olguín (molguin@dcc.uchile.cl) on 4/26/2016.
  * Part of org.incha.core.jswingripples.
  */
 
-public class GraphBuilder {
+public class GraphBuilder implements JSwingRipplesEIGListener{
 
     private static GraphBuilder instance = null; // singleton
 
     private JSwingRipplesEIG eig;
     private Graph graph;
+    private Graph impactSetGraph;
+    private Viewer impactViewer;
+    private Viewer dependencyViewer;
+    private DependencyGraphViewerListener depListener;
+    private ImpactGraphViewerListener impListener;
 
     /**
      * Private constructor for singleton instance.
@@ -28,18 +36,27 @@ public class GraphBuilder {
     private GraphBuilder()
     {
         eig = null;
-        resetGraph();
+        resetGraphs();
     }
 
     /**
-     * Resets the internal graph and returns it.
-     * @return Graph object.
+     * Resets the internal graphs.
      */
-    public Graph resetGraph()
+    public void resetGraphs()
     {
+
+        //stop viewers
+        if(depListener != null)
+            depListener.stopPumpThread();
+        if(impListener != null)
+            impListener.stopPumpThread();
+
         graph = new DefaultGraph("Dependencies");
+        impactSetGraph = new DefaultGraph("Impact Set");
         try {
             graph.addAttribute("ui.stylesheet", "url(file://" + GraphBuilder.class.getClassLoader()
+                    .getResource("graph.css").toString().substring(5) + ")");
+            impactSetGraph.addAttribute("ui.stylesheet", "url(file://" + GraphBuilder.class.getClassLoader()
                     .getResource("graph.css").toString().substring(5) + ")");
         }
         catch (NullPointerException e) {
@@ -47,7 +64,30 @@ public class GraphBuilder {
             System.exit(1);
         }
 
-        return graph;
+        impactViewer = new Viewer(impactSetGraph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
+        ViewerPipe pipe = impactViewer.newViewerPipe();
+        impListener = new ImpactGraphViewerListener(pipe);
+        pipe.addViewerListener(impListener);
+        pipe.addSink(impactSetGraph);
+        impactViewer.enableAutoLayout();
+
+        dependencyViewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
+        ViewerPipe piped = dependencyViewer.newViewerPipe();
+        depListener = new DependencyGraphViewerListener(piped);
+        piped.addViewerListener(depListener);
+        piped.addSink(graph);
+        dependencyViewer.enableAutoLayout();
+
+    }
+
+    public Viewer getImpactViewer()
+    {
+        return impactViewer;
+    }
+
+    public Viewer getDependencyViewer()
+    {
+        return dependencyViewer;
     }
 
     /**
@@ -67,22 +107,18 @@ public class GraphBuilder {
      * Associates this GraphBuilder instance with the provided EIG.
      * @param eig The EIG from which we want to build a visual graph.
      */
-    public void addEIG(JSwingRipplesEIG eig)
-    {
-        this.eig = eig;
-    }
+    public void addEIG(JSwingRipplesEIG eig) { this.eig = eig; }
 
     /**
-     * Constructs a Graph object from the previously provided EIG instance and returns it.
-     * @return Graph object representing the EIG model, or null if no EIG instance has been provided.
+     * Constructs the Graph objects from the previously provided EIG instance.
      */
-    public void prepareGraph()
+    public void prepareGraphs()
     {
 
         if ( eig == null )
             return;
 
-        //resetGraph();
+        //resetGraphs();
 
         JSwingRipplesEIGNode[] eigNodes = eig.getAllNodes();
         JSwingRipplesEIGEdge[] eigEdges = eig.getAllEdges();
@@ -113,5 +149,125 @@ public class GraphBuilder {
         monitor.done();
     }
 
-    public Graph getGraph() { return graph; }
+    public Graph getDependencyGraph() { return graph; }
+    public Graph getImpactSetGraph() { return impactSetGraph; }
+
+    @Override
+    public void jRipplesEIGChanged(JSwingRipplesEIGEvent event) {
+
+        if (!event.hasNodeEvents()) return;
+
+        final JSwingRipplesEIGNodeEvent[] nodeEvents=event.getNodeTypedEvents(
+                new int[] {JSwingRipplesEIGNodeEvent.NODE_MARK_CHANGED, JSwingRipplesEIGNodeEvent.NODE_REMOVED,
+                        JSwingRipplesEIGNodeEvent.NODE_ADDED});
+        if (nodeEvents.length==0) return;
+
+        for (int i=0;i<nodeEvents.length;i++) {
+            final JSwingRipplesEIGNode changedNode = nodeEvents[i].getSource();
+            Node graphn = graph.getNode(changedNode.getFullName());
+            Node impactn = impactSetGraph.getNode(changedNode.getFullName());
+            switch (nodeEvents[i].getEventType()) {
+                case JSwingRipplesEIGNodeEvent.NODE_REMOVED: {
+                    //TODO
+                    break;
+                }
+                case JSwingRipplesEIGNodeEvent.NODE_ADDED: {
+                    //TODO
+                    break;
+                }
+                case JSwingRipplesEIGNodeEvent.NODE_MARK_CHANGED: {
+                    final String mark=changedNode.getMark();
+                    if (mark!=null)
+                    {
+                        switch (mark)
+                        {
+                            case EIGStatusMarks.CHANGED:
+                                graphn.setAttribute("ui.class", "changed");
+
+                                if ( impactn == null ) {
+                                    impactn = impactSetGraph.addNode(changedNode.getFullName());
+                                    impactn.setAttribute("ui.class", "changed");
+                                    impactn.setAttribute("label", changedNode.getShortName());
+                                }
+                                else
+                                    impactn.setAttribute("ui.class", "changed");
+                                break;
+                            case EIGStatusMarks.IMPACTED:
+                                graphn.setAttribute("ui.class", "impacted");
+
+                                if ( impactn == null ) {
+                                    impactn = impactSetGraph.addNode(changedNode.getFullName());
+                                    impactn.setAttribute("ui.class", "impacted");
+                                    impactn.setAttribute("label", changedNode.getShortName());
+                                }
+                                else
+                                    impactn.setAttribute("ui.class", "impacted");
+
+                                break;
+                            case EIGStatusMarks.NEXT_VISIT:
+                                graphn.setAttribute("ui.class", "next");
+
+                                if ( impactn == null ) {
+                                    impactn = impactSetGraph.addNode(changedNode.getFullName());
+                                    impactn.setAttribute("ui.class", "next");
+                                    impactn.setAttribute("label", changedNode.getShortName());
+                                }
+                                else
+                                    impactn.setAttribute("ui.class", "next");
+
+                                break;
+                            case EIGStatusMarks.VISITED_CONTINUE:
+                                graphn.setAttribute("ui.class", "propagating");
+
+                                if ( impactn == null ) {
+                                    impactn = impactSetGraph.addNode(changedNode.getFullName());
+                                    impactn.setAttribute("ui.class", "propagating");
+                                    impactn.setAttribute("label", changedNode.getShortName());
+                                }
+                                else
+                                    impactn.setAttribute("ui.class", "propagating");
+
+                                break;
+                            default:
+                                graphn.setAttribute("ui.class", "blank");
+
+                                if ( impactn != null ) {
+                                    impactSetGraph.removeNode(impactn);
+                                    impactn = null;
+                                }
+                                break;
+                        }
+
+                    }
+                    break;
+                }
+            }
+
+            updateImpactSetEdges();
+        }
+    }
+
+    private void updateImpactSetEdges()
+    {
+        JSwingRipplesEIGEdge[] edges = eig.getAllEdges();
+        for(JSwingRipplesEIGEdge edge: edges)
+        {
+            String toID = edge.getToNode().getFullName();
+            String fromID = edge.getFromNode().getFullName();
+            String eID = fromID + " -> " + toID;
+            if (impactSetGraph.getEdge(eID) != null) // edge exists
+            {
+                if(impactSetGraph.getNode(toID) == null || impactSetGraph.getNode(fromID) == null)
+                    // edge exists but nodes don't -> remove edge
+                    impactSetGraph.removeEdge(eID);
+            }
+            else // edge doesn't exist
+            {
+                if(impactSetGraph.getNode(toID) != null && impactSetGraph.getNode(fromID) != null)
+                    // nodes exist -> add edge
+                    impactSetGraph.addEdge(eID, fromID, toID);
+            }
+
+        }
+    }
 }

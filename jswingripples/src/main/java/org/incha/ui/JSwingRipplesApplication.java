@@ -28,20 +28,8 @@ import org.apache.commons.logging.LogFactory;
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.StatisticsManager;
-import org.incha.ui.stats.GraphVisualizationAction;
+import org.incha.ui.stats.*;
 import org.incha.ui.search.NewSearchMenu;
-import org.incha.ui.stats.ShowCurrentStateAction;
-import org.incha.ui.stats.StartAnalysisAction;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 
 public class JSwingRipplesApplication extends JFrame {
     private static final long serialVersionUID = 6142679404175274529L;
@@ -53,6 +41,8 @@ public class JSwingRipplesApplication extends JFrame {
     private final ProjectsView projectsView;
     private static JSwingRipplesApplication instance;
     private final ProgressMonitorImpl progressMonitor = new ProgressMonitorImpl();
+
+	
 
     /**
      * Default constructor.
@@ -200,7 +190,8 @@ public class JSwingRipplesApplication extends JFrame {
         bar.add(jRipples);
 
         final JMenuItem startAnalysis = new JMenuItem("Start analysis");
-        startAnalysis.addActionListener(new StartAnalysisAction());
+        StartAnalysisAction act = new StartAnalysisAction();
+        startAnalysis.addActionListener(act);
         jRipples.add(startAnalysis);
 
         jRipples.add(new JSeparator(JSeparator.HORIZONTAL));
@@ -211,6 +202,12 @@ public class JSwingRipplesApplication extends JFrame {
         final JMenuItem currentGraph = new JMenuItem("Current Graph");
         currentGraph.addActionListener(new GraphVisualizationAction());
         jRipples.add(currentGraph);
+
+        final JMenuItem impactGraph = new JMenuItem("Impact Set Graph");
+        impactGraph.addActionListener(new ImpactGraphVisualizationAction());
+        jRipples.add(impactGraph);
+        
+       
 //        final JMenuItem manageStates = new JMenuItem("Manage Statess");
 //        jRipples.add(manageStates);
 //        final JMenuItem saveState = new JMenuItem("Save State");

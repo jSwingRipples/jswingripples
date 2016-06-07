@@ -11,6 +11,7 @@ import org.incha.core.ModuleConfiguration;
 import org.incha.core.StatisticsManager;
 import org.incha.core.jswingripples.GraphBuilder;
 import org.incha.core.jswingripples.JRipplesModuleInterface;
+import org.incha.core.jswingripples.NodeSearchBuilder;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.search.Indexer;
 import org.incha.ui.JSwingRipplesApplication;
@@ -20,6 +21,7 @@ public class StartAnalysisAction implements ActionListener {
     /**
      * Default constructor.
      */
+	
     public StartAnalysisAction() {
         super();
     }
@@ -93,11 +95,18 @@ public class StartAnalysisAction implements ActionListener {
             StatisticsManager.getInstance().addStatistics(config, eig);
 
             GraphBuilder.getInstance().addEIG(eig);
-            GraphBuilder.getInstance().resetGraph();
-            //GraphBuilder.getInstance().prepareGraph();
+            GraphBuilder.getInstance().resetGraphs();
+            //GraphBuilder.getInstance().prepareDependencyGraph();
             Thread t = new Thread(new GraphBuild());
             t.start();
-
+            eig.addJRipplesEIGListener(GraphBuilder.getInstance());
+            try {
+				NodeSearchBuilder.getInstance().addEIG(eig);
+			} catch (CloneNotSupportedException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+           // NodeSearchBuilder.getInstance().setSearch("Node");
             // Set search indexer current project.
             try {
                 //Indexer.getInstance().indexProject(project);
@@ -112,7 +121,9 @@ public class StartAnalysisAction implements ActionListener {
     {
         @Override
         public void run() {
-            GraphBuilder.getInstance().prepareGraph();
+            GraphBuilder.getInstance().prepareGraphs();
         }
     }
+
+
 }
