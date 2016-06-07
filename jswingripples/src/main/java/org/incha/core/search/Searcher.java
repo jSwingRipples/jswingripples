@@ -145,4 +145,8 @@ public class Searcher {
     private String removeJavaExtension(String fileName) {
         return fileName.replace(".java", "");
     }
+    
+    public List<String> getResults() {
+    	return results;
+    }
 }
