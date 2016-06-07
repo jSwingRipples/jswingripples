@@ -22,7 +22,7 @@ public  class JSwingRipplesEIGNode {
 	private String mark = EIGStatusMarks.BLANK;
 	private String probability;
 
-	private final IMember nodeMember; 
+	private final IMember nodeMember;
 
     private JSwingRipplesEIGNode node;
     private JSwingRipplesEIG eig;
@@ -64,7 +64,7 @@ public  class JSwingRipplesEIGNode {
 	public String getShortName() {
 
 		if(nodeMember==null) return "";
-		final String name= nodeMember.getElementName();
+		final String name=nodeMember.getElementName();
 		if (name!=null) return name;
 		return "";
 
