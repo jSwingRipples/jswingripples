@@ -6,11 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import org.incha.core.JavaProject;
 
@@ -32,7 +28,10 @@ public class NewProjectWizard extends JPanel {
 
         //center panel
         final JPanel center = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        center.add(projectName);
+        final JLabel jLabel = new JLabel("Project Name: ",JLabel.LEFT);
+        center.add(jLabel,BorderLayout.WEST);
+        center.add(projectName,BorderLayout.EAST);
+
         add(center, BorderLayout.CENTER);
 
         //buttons panel
