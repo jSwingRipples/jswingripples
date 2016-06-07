@@ -9,7 +9,7 @@ node {
 }
 
 node:clicked {
-    fill-color: red;
+    fill-color: darkmagenta;
 }
 
 node.blank {
@@ -35,7 +35,7 @@ node.changed {
 node.impacted {
     size: 20px, 20px;
     shape: circle;
-    fill-color: magenta;
+    fill-color: darkred;
     text-mode: normal;
     text-background-mode: rounded-box;
     text-visibility-mode: normal;
@@ -45,7 +45,7 @@ node.impacted {
 node.next {
     size: 20px, 20px;
     shape: circle;
-    fill-color: green;
+    fill-color: darkgreen;
     text-mode: normal;
     text-background-mode: rounded-box;
     text-visibility-mode: normal;
@@ -55,7 +55,7 @@ node.next {
 node.propagating {
     size: 20px, 20px;
     shape: circle;
-    fill-color: orange;
+    fill-color: darkorange;
     text-mode: normal;
     text-background-mode: rounded-box;
     text-visibility-mode: normal;
