@@ -112,19 +112,6 @@ public class Indexer {
 
     /**
      * Creates an index of all files in the project.
-     * @param project the JavaProject being indexed.
-     * @throws IOException
-     */
-    public void indexProject(JavaProject project) throws IOException {
-        IndexWriter writer = openWriter();
-        for (File file : project.getSources()) {
-            if(validFileFilter.accept(file)) indexFile(file, writer);
-        }
-        closeWriter(writer);
-    }
-
-    /**
-     * Creates an index of all files in the project.
      * @param eig the eig of the java project being indexed.
      * @throws IOException
      */
