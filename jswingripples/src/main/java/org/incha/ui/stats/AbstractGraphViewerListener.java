@@ -54,6 +54,7 @@ public abstract class AbstractGraphViewerListener implements ViewerListener{
         public void run() {
             while(loop)
                 pipe.pump();
+            //TODO: ELIMINAR BUSY - WAITING
         }
     }
 }
