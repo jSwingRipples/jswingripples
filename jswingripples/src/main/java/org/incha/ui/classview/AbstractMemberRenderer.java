@@ -15,7 +15,6 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 import org.incha.core.jswingripples.eig.JSwingRipplesIMemberServices;
-import org.incha.core.search.Searcher;
 import org.incha.ui.jripples.EIGStatusMarks;
 
 public abstract class AbstractMemberRenderer extends DefaultTableCellRenderer {
@@ -94,11 +93,9 @@ public abstract class AbstractMemberRenderer extends DefaultTableCellRenderer {
         renderOtherColumn(label, node, column);
         return label;
     }
-
     /**
-     * Get the icon corresponding the the node's type.
-     * @param node the EIG node.
-     * @return the corresponding icon.
+     * @param member
+     * @return
      */
     private AbstractJavaElementIcon getIcon(final JSwingRipplesEIGNode node) {
         final IMember member = node.getNodeIMember();
@@ -123,9 +120,8 @@ public abstract class AbstractMemberRenderer extends DefaultTableCellRenderer {
     protected abstract void renderOtherColumn(final JLabel label, final JSwingRipplesEIGNode member,
             final int column);
     /**
-     * Generates the complete name for the given EIG node.
-     * @param node the EIG node.
-     * @return the node's full name.
+     * @param member
+     * @return
      */
     protected String getFullName(final JSwingRipplesEIGNode node) {
         final IMember member = node.getNodeIMember();

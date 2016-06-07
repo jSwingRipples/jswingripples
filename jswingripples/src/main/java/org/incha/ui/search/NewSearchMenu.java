@@ -4,14 +4,14 @@ import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
 
-public class SearchMenu {
+public class NewSearchMenu {
 
 	private JPanel searchPanel;
 	
 	/**
      * Default constructor. Se crea un panel de búsqueda para colocarlo en algún menú.
      */
-	public SearchMenu() {
+	public NewSearchMenu() {
 		searchPanel = new JPanel();
 		JTextField searchedWords = new JTextField(15);
         searchPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -19,11 +19,8 @@ public class SearchMenu {
         searchPanel.add(new JLabel("Search:"));
         searchPanel.add(searchedWords);
         JButton searchButton = new JButton("Go");
-        JButton clearButton = new JButton("Clear");
         searchButton.addActionListener(new StartSearchAction(searchedWords));
-        clearButton.addActionListener(new ClearSearchAction(searchedWords));
         searchPanel.add(searchButton);
-        searchPanel.add(clearButton);
 	}
 	
 	public JPanel getSearchPanel() {

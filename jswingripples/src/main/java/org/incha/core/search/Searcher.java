@@ -17,9 +17,9 @@ import org.incha.ui.classview.ClassTreeView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Created by fcocl_000 on 05-05-2016.
@@ -39,22 +39,13 @@ public class Searcher {
      */
     private IndexSearcher indexSearcher;
     /**
-     * Contains all distinct search hits and the number of occurrences of the search
-     * term in each search hit.
+     * Contains all search hits.
      */
-    private Map<String, Integer> results = new HashMap<>();
+    private List<String> results = new ArrayList<>();
     /**
      * Class view UI.
      */
     private ClassTreeView classTreeView;
-    /**
-     * Maximum number of appearances of the search term in a single file.
-     */
-    private int maxFrequency;
-    /**
-     * Minimum number of appearances of the search term in a single file.
-     */
-    private int minFrequency;
 
     /**
      * Returns the current instance.
@@ -127,67 +118,23 @@ public class Searcher {
         Directory indexDirectory = FSDirectory.open(new File(LuceneConstants.INDEX_DIRECTORY_PATH));
         indexSearcher = new IndexSearcher(IndexReader.open(indexDirectory));
         TopDocs topDocs = searchIndexes(searchQuery);
-        results = new HashMap<>();
+        results = new ArrayList<>();
         for(ScoreDoc doc : topDocs.scoreDocs) {
             String aux = removeJavaExtension(getDocument(doc).get(LuceneConstants.FILE_NAME));
-            if(results.containsKey(aux)) {
-                // If contained, update appearance frequency.
-                results.put(aux, results.get(aux) + 1);
-            }
-            else {
-                // Entry added if filename not contained.
-                results.put(aux, 1);
-            }
+            results.add(aux);
         }
-        // Update files with most/least search term occurrences
-        refreshMaxMin();
-
         // Refresh analysis table
         classTreeView.repaint();
-    }
-
-    /**
-     * Updates max and min frequency fields upon a new search. Used to avoid Collections operations
-     * for every hitPercentage() call.
-     */
-    private void refreshMaxMin() {
-        maxFrequency = Collections.max(results.values());
-        minFrequency = Collections.min(results.values());
     }
 
     /**
      * Calculates the proportion of times the last searched term appears in the specified file
-     * to the difference of the maximum and minimum number of search hits in any file for the same term.
+     * to the total number of search hits for the same term.
      * @param fileName the file's name.
-     * @return the percentage of hits.
+     * @return the number of hits.
      */
-    double hitPercentage(String fileName) {
-        return !results.containsKey(fileName) ? -1 : (results.get(fileName) - minFrequency)  * 1.0
-                                                        / (maxFrequency - minFrequency);
-    }
-
-    /**
-     * Returns the total number of term appearance in the file.
-     * @param fileName the file's name.
-     * @return the total number of hits.
-     */
-    public int totalHits (String fileName) {
-        return !results.containsKey(fileName) ? 0 : results.get(fileName);
-    }
-
-    /**
-     * Closes index searcher and clears the result HashMap.
-     */
-    public void clearResults() {
-        try {
-            close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        results = new HashMap<>();
-
-        // Refresh analysis table
-        classTreeView.repaint();
+    double searchHits(String fileName) {
+        return results.size() == 0 ? 0 : Collections.frequency(results, fileName) * 1.0  / results.size();
     }
 
     /**
