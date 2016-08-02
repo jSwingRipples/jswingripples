@@ -38,12 +38,16 @@ class StartSearchAction implements ActionListener {
         final String cleanedText = text.trim();             
         if (text != null && cleanedText.length() > 0) {
             words = getWordList(cleanedText);
-            addToGraph(words);
+            //addToGraph(words);
             // perform search
             for (String word : words) {
                 try {
                     searcher.search(word);
-                    System.out.println("ADD TO GRAPH THE WORD " + word);                                  
+                    addToGraph(word);
+                    //for (String found_word : searcher.getResults()) {
+                    	//System.out.println("ADD TO GRAPH THE WORD " + found_word);
+                        //addToGraph(found_word);
+                    //}                    
                 } catch (IOException | ParseException e1) {
                     e1.printStackTrace();
                 }
@@ -68,8 +72,8 @@ class StartSearchAction implements ActionListener {
         return words;
     }
 
-    public void addToGraph(List<String> list) {//(String s){
-    	NodeSearchBuilder.getInstance().setSearch(list);
+    public void addToGraph(String word) {//(String s){
+    	NodeSearchBuilder.getInstance().setSearch(word);
     }
     public void showGraph()
     {

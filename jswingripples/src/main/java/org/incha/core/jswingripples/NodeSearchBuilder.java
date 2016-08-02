@@ -27,10 +27,10 @@ public class NodeSearchBuilder {
     }
    
    
-   public void setSearch(List<String> list){
+   public void setSearch(String s){
 	  // search = s;
 	   System.out.println("PREPARING GRAPH");
-	   prepareGraph(list);
+	   prepareGraph(s);
 	   System.out.println("GRAPH PREPARED");
    }
    
@@ -97,7 +97,7 @@ public class NodeSearchBuilder {
     	}
     }
 
-    private void prepareGraph(List<String> list)
+    private void prepareGraph(String s)
     {
     	System.out.println("Looking at EIG nodes");
     	if (eig == null){
