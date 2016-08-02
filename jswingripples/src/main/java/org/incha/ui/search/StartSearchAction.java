@@ -23,7 +23,7 @@ import java.util.List;
 class StartSearchAction implements ActionListener {
     private List<String> words;
     private JTextField searchedWords;
-    private Searcher searcher;
+    private Searcher searcher;    
 
     StartSearchAction(JTextField searchedWords) {
         this.searchedWords = searchedWords;
@@ -31,20 +31,19 @@ class StartSearchAction implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-    	
+    public void actionPerformed(ActionEvent e) {    	
         words = new ArrayList<>();
         NodeSearchBuilder.getInstance().clearGraph();
         final String text = searchedWords.getText();
-        final String cleanedText = text.trim();
+        final String cleanedText = text.trim();             
         if (text != null && cleanedText.length() > 0) {
             words = getWordList(cleanedText);
+            addToGraph(words);
             // perform search
             for (String word : words) {
                 try {
                     searcher.search(word);
-                    System.out.println("ADD TO GRAPH THE WORD " + word);
-                    addToGraph(word);
+                    System.out.println("ADD TO GRAPH THE WORD " + word);                                  
                 } catch (IOException | ParseException e1) {
                     e1.printStackTrace();
                 }
@@ -69,15 +68,16 @@ class StartSearchAction implements ActionListener {
         return words;
     }
 
-    public void addToGraph(String s){
-    	NodeSearchBuilder.getInstance().setSearch(s);
+    public void addToGraph(List<String> list) {//(String s){
+    	NodeSearchBuilder.getInstance().setSearch(list);
     }
     public void showGraph()
     {
     	System.out.println("SHOWING GRAPH");
         //NodeSearchBuilder NS = NodeSearchBuilder.getInstance();
         //NS.setSearch(search);
-        //NS.setSearch("Node");
+        //NS.clearGraph();
+       // NS.setSearch("clone");
         Graph graph = NodeSearchBuilder.getInstance().getGraph();
         Viewer v = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         v.enableAutoLayout();
