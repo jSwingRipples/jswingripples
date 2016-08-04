@@ -33,19 +33,13 @@ public abstract class AbstractGraphViewerListener implements ViewerListener{
     }
 
     @Override
-    public void viewClosed(String viewName) {
-    }
+    public abstract void viewClosed(String viewName);
 
     @Override
-    public void buttonPushed(String id) {
-        LogFactory.getLog(this.getClass()).info("Click: " + id);
-
-    }
+    public abstract void buttonPushed(String id);
 
     @Override
-    public void buttonReleased(String id) {
-
-    }
+    public abstract void buttonReleased(String id);
 
     private class PumpRunnable implements Runnable
     {

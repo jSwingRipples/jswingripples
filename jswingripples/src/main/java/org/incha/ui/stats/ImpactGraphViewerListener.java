@@ -10,4 +10,19 @@ public class ImpactGraphViewerListener extends AbstractGraphViewerListener{
     public ImpactGraphViewerListener(ViewerPipe pipe) {
         super(pipe);
     }
+
+    @Override
+    public void viewClosed(String viewName) {
+
+    }
+
+    @Override
+    public void buttonPushed(String id) {
+
+    }
+
+    @Override
+    public void buttonReleased(String id) {
+
+    }
 }

@@ -1,5 +1,6 @@
 package org.incha.ui.stats;
 
+import org.apache.commons.logging.LogFactory;
 import org.graphstream.ui.view.ViewerPipe;
 
 /**
@@ -9,5 +10,21 @@ import org.graphstream.ui.view.ViewerPipe;
 public class DependencyGraphViewerListener extends AbstractGraphViewerListener {
     public DependencyGraphViewerListener(ViewerPipe pipe) {
         super(pipe);
+    }
+
+    @Override
+    public void viewClosed(String viewName) {
+
+    }
+
+    @Override
+    public void buttonPushed(String id) {
+        LogFactory.getFactory().getInstance(this.getClass()).info("Click " + id);
+
+    }
+
+    @Override
+    public void buttonReleased(String id) {
+
     }
 }
