@@ -1,8 +1,8 @@
 package org.incha.ui.stats;
 
-import org.apache.commons.logging.LogFactory;
 import org.graphstream.ui.view.ViewerListener;
 import org.graphstream.ui.view.ViewerPipe;
+import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 
 /**
  * Created by Manuel Olguín (molguin@dcc.uchile.cl) on 6/6/16.
@@ -12,8 +12,9 @@ public abstract class AbstractGraphViewerListener implements ViewerListener{
     private ViewerPipe pipe;
     private boolean loop;
     private Thread pumpt;
+    protected JSwingRipplesEIG eig;
 
-    AbstractGraphViewerListener(ViewerPipe pipe)
+    AbstractGraphViewerListener(ViewerPipe pipe, JSwingRipplesEIG eig)
     {
         this.pipe = pipe;
         this.loop = true;
