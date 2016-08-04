@@ -66,14 +66,14 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
 
         impactViewer = new Viewer(impactSetGraph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         ViewerPipe pipe = impactViewer.newViewerPipe();
-        impListener = new ImpactGraphViewerListener(pipe);
+        impListener = new ImpactGraphViewerListener(pipe, eig);
         pipe.addViewerListener(impListener);
         pipe.addSink(impactSetGraph);
         impactViewer.enableAutoLayout();
 
         dependencyViewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         ViewerPipe piped = dependencyViewer.newViewerPipe();
-        depListener = new DependencyGraphViewerListener(piped);
+        depListener = new DependencyGraphViewerListener(piped, eig);
         piped.addViewerListener(depListener);
         piped.addSink(graph);
         dependencyViewer.enableAutoLayout();
@@ -131,6 +131,7 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
             monitor.setTaskName("Adding node " + node.getShortName());
             if (graph.getNode(node.getFullName()) == null) {
                 Node n = graph.addNode(node.getFullName());
+                n.addAttribute("IMember", node.getNodeIMember());
                 n.addAttribute("label", node.getShortName());
             }
         }
@@ -188,6 +189,7 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
                                     impactn = impactSetGraph.addNode(changedNode.getFullName());
                                     impactn.setAttribute("ui.class", "changed");
                                     impactn.setAttribute("label", changedNode.getShortName());
+                                    impactn.setAttribute("IMember", changedNode.getNodeIMember());
                                 }
                                 else
                                     impactn.setAttribute("ui.class", "changed");
@@ -199,6 +201,7 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
                                     impactn = impactSetGraph.addNode(changedNode.getFullName());
                                     impactn.setAttribute("ui.class", "impacted");
                                     impactn.setAttribute("label", changedNode.getShortName());
+                                    impactn.setAttribute("IMember", changedNode.getNodeIMember());
                                 }
                                 else
                                     impactn.setAttribute("ui.class", "impacted");
@@ -211,6 +214,7 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
                                     impactn = impactSetGraph.addNode(changedNode.getFullName());
                                     impactn.setAttribute("ui.class", "next");
                                     impactn.setAttribute("label", changedNode.getShortName());
+                                    impactn.setAttribute("IMember", changedNode.getNodeIMember());
                                 }
                                 else
                                     impactn.setAttribute("ui.class", "next");
@@ -223,6 +227,7 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
                                     impactn = impactSetGraph.addNode(changedNode.getFullName());
                                     impactn.setAttribute("ui.class", "propagating");
                                     impactn.setAttribute("label", changedNode.getShortName());
+                                    impactn.setAttribute("IMember", changedNode.getNodeIMember());
                                 }
                                 else
                                     impactn.setAttribute("ui.class", "propagating");
