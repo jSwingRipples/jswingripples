@@ -1,5 +1,6 @@
 package org.incha.ui.stats;
 
+import org.graphstream.graph.Node;
 import org.graphstream.ui.view.ViewerPipe;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 
@@ -19,6 +20,7 @@ public class ImpactGraphViewerListener extends AbstractGraphViewerListener{
 
     @Override
     public void buttonPushed(String id) {
+
 
     }
 

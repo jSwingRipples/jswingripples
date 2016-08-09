@@ -1,5 +1,6 @@
 package org.incha.ui.stats;
 
+import org.graphstream.graph.Graph;
 import org.graphstream.ui.view.ViewerListener;
 import org.graphstream.ui.view.ViewerPipe;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
@@ -13,15 +14,19 @@ public abstract class AbstractGraphViewerListener implements ViewerListener{
     private boolean loop;
     private Thread pumpt;
     protected JSwingRipplesEIG eig;
+    protected Graph graph;
 
     AbstractGraphViewerListener(ViewerPipe pipe, JSwingRipplesEIG eig)
     {
         this.pipe = pipe;
         this.loop = true;
+        this.eig = eig;
 
         pumpt = new Thread(new PumpRunnable());
         pumpt.start();
     }
+
+    public void setGraph(Graph g) { this.graph = g; }
 
     public void stopPumpThread()
     {

@@ -78,6 +78,9 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
         piped.addSink(graph);
         dependencyViewer.enableAutoLayout();
 
+        depListener.setGraph(graph);
+        impListener.setGraph(impactSetGraph);
+
     }
 
     public Viewer getImpactViewer()
