@@ -114,6 +114,11 @@ public class StartAnalysisAction implements ActionListener {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+            try {
+                t.join();
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
