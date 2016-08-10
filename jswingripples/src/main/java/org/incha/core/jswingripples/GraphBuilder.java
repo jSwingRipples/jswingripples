@@ -4,6 +4,7 @@ import org.apache.commons.logging.LogFactory;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.DefaultGraph;
+import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerPipe;
 import org.incha.core.jswingripples.eig.*;
@@ -19,6 +20,8 @@ import org.incha.ui.stats.ImpactGraphViewerListener;
  */
 
 public class GraphBuilder implements JSwingRipplesEIGListener{
+	
+	String style = "graph{fill-color:bisque;} edge {shape:blob;} node {size-mode:dyn-size; size: 40px, 40px;shape: circle;fill-color: mediumslateblue;text-mode: normal;text-background-mode: rounded-box;text-background-color: beige;text-visibility-mode: normal;text-alignment: at-right;text-size:20;}      node:clicked { fill-color: darkmagenta;}       node:selected{stroke-mode:plain; stroke-color:black; stroke-width:5;} node.blank {size: 20px, 20px;shape: circle;fill-color: black;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.changed {size: 20px, 20px;shape: circle;fill-color: red;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.impacted {size: 20px, 20px;shape: circle;fill-color: darkred;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.next {size: 20px, 20px;shape: circle;fill-color: darkgreen;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.propagating {size: 20px, 20px;shape: circle;fill-color: darkorange;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}";
 
     private static GraphBuilder instance = null; // singleton
 
@@ -44,20 +47,23 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
      */
     public void resetGraphs()
     {
-
+    	
         //stop viewers
         if(depListener != null)
             depListener.stopPumpThread();
         if(impListener != null)
             impListener.stopPumpThread();
 
-        graph = new DefaultGraph("Dependencies");
+        graph = new MultiGraph("Dependencies");
         impactSetGraph = new DefaultGraph("Impact Set");
         try {
-            graph.addAttribute("ui.stylesheet", "url(file://" + GraphBuilder.class.getClassLoader()
-                    .getResource("graph.css").toString().substring(5) + ")");
-            impactSetGraph.addAttribute("ui.stylesheet", "url(file://" + GraphBuilder.class.getClassLoader()
-                    .getResource("graph.css").toString().substring(5) + ")");
+        	
+            /*graph.addAttribute("ui.stylesheet", "url(file://" + GraphBuilder.class.getClassLoader()
+                    .getResource("graph.css").toString().substring(5) + ")"); */
+        	graph.addAttribute("ui.stylesheet", style);
+            /*impactSetGraph.addAttribute("ui.stylesheet", "url(file://" + GraphBuilder.class.getClassLoader()
+                    .getResource("graph.css").toString().substring(5) + ")"); */
+        	impactSetGraph.addAttribute("ui.stylesheet", style);
         }
         catch (NullPointerException e) {
             LogFactory.getLog(this.getClass()).error("Missing graph stylesheet! - graph.css");
@@ -132,6 +138,8 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
             if (graph.getNode(node.getFullName()) == null) {
                 Node n = graph.addNode(node.getFullName());
                 n.addAttribute("label", node.getShortName());
+                n.addAttribute("incident-edges", 0);
+                n.addAttribute("outgoing-edges", 0);
             }
         }
         monitor.done();
@@ -143,9 +151,44 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
             monitor.worked(i);
             String eid = edge.getFromNode().getFullName() + " -> " + edge.getToNode().getFullName();
             monitor.setTaskName("Adding edge " + eid);
-            if ( graph.getEdge(eid) == null)
+            if ( graph.getEdge(eid) == null){
+            	Node out = graph.getNode(edge.getFromNode().getFullName());
+            	Node in = graph.getNode(edge.getToNode().getFullName());
+            	out.changeAttribute("outgoing-edges", (int) out.getAttribute("outgoing-edges") + 1);
+            	in.changeAttribute("incident-edges", (int) in.getAttribute("incident-edges") + 1);
                 graph.addEdge(eid, edge.getFromNode().getFullName(), edge.getToNode().getFullName());
+            }
         }
+        
+        int s = -1;
+        int b = -1;
+        int maxsize = 60;
+        int minsize = 5;
+        for(Node nn:graph.getEachNode()){
+        	System.out.println(Integer.toString(nn.getDegree()));
+        	if(nn.getDegree() > b || b == -1){
+        	b = nn.getDegree();
+        	}
+        	if(nn.getDegree() < s || s == -1){
+        	s = nn.getDegree();
+        	}
+        }
+        /* for(Node nn:graph.getEachNode()){
+        	if((int) nn.getAttribute("incident-edges") > b || s == -1);
+        	b = nn.getDegree();
+        	if(nn.getDegree() < s || b == -1);
+        	s = nn.getDegree();
+        } */
+        System.out.println("Biggest = " + Integer.toString(b));
+        System.out.println("Smallest = " + Integer.toString(s));
+        for(Node nn:graph.getEachNode()){
+        	double scale = (double)(nn.getDegree() - s) / (double) (b-s);
+        	System.out.println(Double.toString(scale));
+        	nn.addAttribute("ui.size", Math.round((scale*maxsize)+minsize));
+        	/*nn.addAttribute("ui.size", 15);*/
+        }
+        
+        
         monitor.done();
     }
 
