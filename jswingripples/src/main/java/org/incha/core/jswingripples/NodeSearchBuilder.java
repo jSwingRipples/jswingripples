@@ -1,6 +1,5 @@
 package org.incha.core.jswingripples;
 import java.awt.Color;
-import java.util.List;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.DefaultGraph;

@@ -1,6 +1,5 @@
 package org.incha.ui.stats;
 
-import org.graphstream.graph.Graph;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.incha.core.jswingripples.GraphBuilder;
@@ -42,6 +41,10 @@ public class GraphVisualizationAction implements ActionListener{
         frame.moveToFront();
 
     }
+    
+    /*public Node_size_changer get_Node_size(){
+    	return GraphBuilder.getInstance().get_node_size_changer();
+    }*/
 
     @Override
     public void actionPerformed(ActionEvent e) {

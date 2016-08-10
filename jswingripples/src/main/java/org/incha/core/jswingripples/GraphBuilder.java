@@ -14,6 +14,7 @@ import org.incha.ui.jripples.EIGStatusMarks;
 import org.incha.ui.stats.DependencyGraphViewerListener;
 import org.incha.ui.stats.ImpactGraphViewerListener;
 
+
 /**
  * Created by Manuel Olguín (molguin@dcc.uchile.cl) on 4/26/2016.
  * Part of org.incha.core.jswingripples.
@@ -21,7 +22,8 @@ import org.incha.ui.stats.ImpactGraphViewerListener;
 
 public class GraphBuilder implements JSwingRipplesEIGListener{
 	
-	String style = "graph{fill-color:bisque;} edge {shape:blob;} node {size-mode:dyn-size; size: 40px, 40px;shape: circle;fill-color: mediumslateblue;text-mode: normal;text-background-mode: rounded-box;text-background-color: beige;text-visibility-mode: normal;text-alignment: at-right;text-size:20;}      node:clicked { fill-color: darkmagenta;}       node:selected{stroke-mode:plain; stroke-color:black; stroke-width:5;} node.blank {size: 20px, 20px;shape: circle;fill-color: black;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.changed {size: 20px, 20px;shape: circle;fill-color: red;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.impacted {size: 20px, 20px;shape: circle;fill-color: darkred;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.next {size: 20px, 20px;shape: circle;fill-color: darkgreen;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.propagating {size: 20px, 20px;shape: circle;fill-color: darkorange;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}";
+	String style = "graph{fill-color:bisque;} edge {shape:blob;} node {size-mode:dyn-size; size: 40px, 40px;shape: circle;fill-color: mediumslateblue;text-alignment: at-right;text-size:20;}      node:clicked { fill-color: darkmagenta;}       node:selected{stroke-mode:plain; stroke-color:black; stroke-width:5;} node.blank {size: 20px, 20px;shape: circle;fill-color: black;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.changed {size: 20px, 20px;shape: circle;fill-color: red;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.impacted {size: 20px, 20px;shape: circle;fill-color: darkred;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.next {size: 20px, 20px;shape: circle;fill-color: darkgreen;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.propagating {size: 20px, 20px;shape: circle;fill-color: darkorange;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}";
+	/*String style = "graph { canvas-color: black; fill-mode: gradient-vertical; fill-color: black, #004; padding: 20px; } node { text-visibility-mode: under-zoom; text-visibility: 0.5;text-size: 18; text-color: white;shape: circle; size-mode: dyn-size; size: 10px; fill-mode: gradient-radial; fill-color: #FFFC, #FFF0; stroke-mode: none; shadow-mode: gradient-radial; shadow-color: #FFF5, #FFF0; shadow-width: 5px; shadow-offset: 0px, 0px; } node:clicked { fill-color: #F00A, #F000; } node:selected { fill-color: #00FA, #00F0; } edge { shape: L-square-line; size: 1px; fill-color: #FFF3; fill-mode: plain; arrow-shape: none; } sprite { shape: circle; fill-mode: gradient-radial; fill-color: #FFF8, #FFF0; }";*/
 
     private static GraphBuilder instance = null; // singleton
 
@@ -32,6 +34,8 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
     private Viewer dependencyViewer;
     private DependencyGraphViewerListener depListener;
     private ImpactGraphViewerListener impListener;
+    private int size;
+
 
     /**
      * Private constructor for singleton instance.
@@ -76,7 +80,7 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
         pipe.addViewerListener(impListener);
         pipe.addSink(impactSetGraph);
         impactViewer.enableAutoLayout();
-
+        
         dependencyViewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         ViewerPipe piped = dependencyViewer.newViewerPipe();
         depListener = new DependencyGraphViewerListener(piped);
@@ -94,6 +98,12 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
     public Viewer getDependencyViewer()
     {
         return dependencyViewer;
+    }
+    public int getSize(){
+    	return size;
+    }
+    public void setSize(int newsize){
+    	size = newsize;
     }
 
     /**
@@ -123,9 +133,8 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
 
         if ( eig == null )
             return;
-
+        size = 40;
         //resetGraphs();
-
         JSwingRipplesEIGNode[] eigNodes = eig.getAllNodes();
         JSwingRipplesEIGEdge[] eigEdges = eig.getAllEdges();
 
@@ -160,33 +169,8 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
             }
         }
         
-        int s = -1;
-        int b = -1;
-        int maxsize = 60;
-        int minsize = 5;
-        for(Node nn:graph.getEachNode()){
-        	System.out.println(Integer.toString(nn.getDegree()));
-        	if(nn.getDegree() > b || b == -1){
-        	b = nn.getDegree();
-        	}
-        	if(nn.getDegree() < s || s == -1){
-        	s = nn.getDegree();
-        	}
-        }
-        /* for(Node nn:graph.getEachNode()){
-        	if((int) nn.getAttribute("incident-edges") > b || s == -1);
-        	b = nn.getDegree();
-        	if(nn.getDegree() < s || b == -1);
-        	s = nn.getDegree();
-        } */
-        System.out.println("Biggest = " + Integer.toString(b));
-        System.out.println("Smallest = " + Integer.toString(s));
-        for(Node nn:graph.getEachNode()){
-        	double scale = (double)(nn.getDegree() - s) / (double) (b-s);
-        	System.out.println(Double.toString(scale));
-        	nn.addAttribute("ui.size", Math.round((scale*maxsize)+minsize));
-        	/*nn.addAttribute("ui.size", 15);*/
-        }
+       
+
         
         
         monitor.done();
@@ -194,6 +178,7 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
 
     public Graph getDependencyGraph() { return graph; }
     public Graph getImpactSetGraph() { return impactSetGraph; }
+  
 
     @Override
     public void jRipplesEIGChanged(JSwingRipplesEIGEvent event) {

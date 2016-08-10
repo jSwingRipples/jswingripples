@@ -28,6 +28,7 @@ import org.apache.commons.logging.LogFactory;
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.StatisticsManager;
+
 import org.incha.ui.stats.*;
 import org.incha.ui.search.NewSearchMenu;
 
@@ -200,12 +201,34 @@ public class JSwingRipplesApplication extends JFrame {
         jRipples.add(currentState);
 
         final JMenuItem currentGraph = new JMenuItem("Current Graph");
+        
         currentGraph.addActionListener(new GraphVisualizationAction());
         jRipples.add(currentGraph);
 
         final JMenuItem impactGraph = new JMenuItem("Impact Set Graph");
         impactGraph.addActionListener(new ImpactGraphVisualizationAction());
         jRipples.add(impactGraph);
+        
+        final JMenu Graph_style = new JMenu("Graph Style");
+        bar.add(Graph_style);
+        
+        final JMenuItem nodesize = new JMenuItem("Toggle - Node size by rank");
+        nodesize.addActionListener(new Node_size_changer());
+        Graph_style.add(nodesize);
+        
+        final JMenuItem bigger_nodes = new JMenuItem("Bigger Nodes");
+        bigger_nodes.addActionListener(new Bigger_node_changer());
+        Graph_style.add(bigger_nodes);
+        
+        final JMenuItem smaller_nodes = new JMenuItem("Smaller Nodes");
+        smaller_nodes.addActionListener(new Smaller_node_changer());
+        Graph_style.add(smaller_nodes);
+        
+        final JMenuItem zoomed_text = new JMenuItem("Toggle - Zoomed text");
+        zoomed_text.addActionListener(new Zoomed_text_changer());
+        Graph_style.add(zoomed_text);
+        
+        
         
        
 //        final JMenuItem manageStates = new JMenuItem("Manage Statess");
