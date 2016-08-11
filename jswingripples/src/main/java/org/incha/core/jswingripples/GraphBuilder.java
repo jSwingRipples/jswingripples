@@ -22,7 +22,7 @@ import org.incha.ui.stats.ImpactGraphViewerListener;
 
 public class GraphBuilder implements JSwingRipplesEIGListener{
 	
-	String style = "graph{fill-color:bisque;} edge {shape:blob;} node {size-mode:dyn-size; size: 40px, 40px;shape: circle;fill-color: mediumslateblue;text-alignment: at-right;text-size:20;}      node:clicked { fill-color: darkmagenta;}       node:selected{stroke-mode:plain; stroke-color:black; stroke-width:5;} node.blank {size: 20px, 20px;shape: circle;fill-color: black;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.changed {size: 20px, 20px;shape: circle;fill-color: red;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.impacted {size: 20px, 20px;shape: circle;fill-color: darkred;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.next {size: 20px, 20px;shape: circle;fill-color: darkgreen;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.propagating {size: 20px, 20px;shape: circle;fill-color: darkorange;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}";
+	String style = "graph{fill-color:bisque;} edge {shape:angle;size:10;} node {size-mode:dyn-size; size: 40px, 40px;shape: circle;fill-color: mediumslateblue;text-alignment: at-right;text-size:20;}      node:clicked { fill-color: darkmagenta;}       node:selected{stroke-mode:plain; stroke-color:black; stroke-width:5;} node.blank {size: 20px, 20px;shape: circle;fill-color: black;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.changed {size: 20px, 20px;shape: circle;fill-color: red;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.impacted {size: 20px, 20px;shape: circle;fill-color: darkred;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.next {size: 20px, 20px;shape: circle;fill-color: darkgreen;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}      node.propagating {size: 20px, 20px;shape: circle;fill-color: darkorange;text-mode: normal;text-background-mode: rounded-box;text-visibility-mode: normal;text-alignment: at-right;}";
 	/*String style = "graph { canvas-color: black; fill-mode: gradient-vertical; fill-color: black, #004; padding: 20px; } node { text-visibility-mode: under-zoom; text-visibility: 0.5;text-size: 18; text-color: white;shape: circle; size-mode: dyn-size; size: 10px; fill-mode: gradient-radial; fill-color: #FFFC, #FFF0; stroke-mode: none; shadow-mode: gradient-radial; shadow-color: #FFF5, #FFF0; shadow-width: 5px; shadow-offset: 0px, 0px; } node:clicked { fill-color: #F00A, #F000; } node:selected { fill-color: #00FA, #00F0; } edge { shape: L-square-line; size: 1px; fill-color: #FFF3; fill-mode: plain; arrow-shape: none; } sprite { shape: circle; fill-mode: gradient-radial; fill-color: #FFF8, #FFF0; }";*/
 
     private static GraphBuilder instance = null; // singleton
@@ -35,6 +35,7 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
     private DependencyGraphViewerListener depListener;
     private ImpactGraphViewerListener impListener;
     private int size;
+    private int text_size;
 
 
     /**
@@ -134,6 +135,7 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
         if ( eig == null )
             return;
         size = 40;
+        text_size = 15;
         //resetGraphs();
         JSwingRipplesEIGNode[] eigNodes = eig.getAllNodes();
         JSwingRipplesEIGEdge[] eigEdges = eig.getAllEdges();
@@ -292,4 +294,13 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
 
         }
     }
+
+	public int getTextsize() {
+		return text_size;
+	}
+
+	public void setTextSize(int text_size2) {
+		text_size = text_size2;
+		
+	}
 }

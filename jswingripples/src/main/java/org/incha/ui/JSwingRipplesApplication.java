@@ -220,12 +220,12 @@ public class JSwingRipplesApplication extends JFrame {
         nodesize.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.ALT_MASK));
         
         final JMenuItem bigger_nodes = new JMenuItem("Bigger Nodes");
-        bigger_nodes.addActionListener(new Bigger_node_changer());
+        bigger_nodes.addActionListener(new Node_changer(0));
         Graph_style.add(bigger_nodes);
         bigger_nodes.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, ActionEvent.ALT_MASK));
         
         final JMenuItem smaller_nodes = new JMenuItem("Smaller Nodes");
-        smaller_nodes.addActionListener(new Smaller_node_changer());
+        smaller_nodes.addActionListener(new Node_changer(1));
         Graph_style.add(smaller_nodes);
         smaller_nodes.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.ALT_MASK));
         
@@ -233,6 +233,17 @@ public class JSwingRipplesApplication extends JFrame {
         zoomed_text.addActionListener(new Zoomed_text_changer());
         Graph_style.add(zoomed_text);
         zoomed_text.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.ALT_MASK));
+        
+        final JMenuItem bigger_text = new JMenuItem("Bigger text");
+        bigger_text.addActionListener(new Text_size_changer(0));
+        Graph_style.add(bigger_text);
+        bigger_text.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.ALT_MASK));
+        
+        final JMenuItem smaller_text = new JMenuItem("Smaller text");
+        smaller_text.addActionListener(new Text_size_changer(1));
+        Graph_style.add(smaller_text);
+        smaller_text.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, ActionEvent.ALT_MASK));
+        
         
         JMenu submenu1 = new JMenu("Colors");
         
@@ -286,12 +297,16 @@ public class JSwingRipplesApplication extends JFrame {
         JMenuItem t4 = new JMenuItem("T4");
         t4.addActionListener(new Theme_changer(4));
         
+        JMenuItem t5 = new JMenuItem("T5");
+        t5.addActionListener(new Theme_changer(5));
+        
         Graph_style.add(submenu2);
         submenu2.add(t0);
         submenu2.add(t1);
         submenu2.add(t2);
         submenu2.add(t3);
         submenu2.add(t4);
+        submenu2.add(t5);
 //        final JMenuItem manageStates = new JMenuItem("Manage Statess");
 //        jRipples.add(manageStates);
 //        final JMenuItem saveState = new JMenuItem("Save State");
