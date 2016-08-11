@@ -6,9 +6,9 @@ import java.awt.event.ActionListener;
 import org.graphstream.graph.Graph;
 import org.incha.core.jswingripples.GraphBuilder;
 
-public class Node_changer implements ActionListener {
+public class NodeChangeAction implements ActionListener {
 	int type;
-	public Node_changer(int i){
+	public NodeChangeAction(int i){
 		type = i;
 	}
 	@Override

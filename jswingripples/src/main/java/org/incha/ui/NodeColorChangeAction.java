@@ -5,9 +5,9 @@ import java.awt.event.ActionListener;
 
 import org.incha.core.jswingripples.GraphBuilder;
 
-public class Node_color_changer implements ActionListener {
+public class NodeColorChangeAction implements ActionListener {
 	String c;
-	public Node_color_changer(String color){
+	public NodeColorChangeAction(String color){
 		c = color;
 	}
 

@@ -42,7 +42,7 @@ public class GraphVisualizationAction implements ActionListener{
 
     }
     
-    /*public Node_size_changer get_Node_size(){
+    /*public NodeSizeChangeAction get_Node_size(){
     	return GraphBuilder.getInstance().get_node_size_changer();
     }*/
 

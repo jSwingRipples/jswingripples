@@ -9,14 +9,14 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.incha.core.jswingripples.GraphBuilder;
 
-public class Node_size_changer implements ActionListener {
+public class NodeSizeChangeAction implements ActionListener {
 	int state;
 	int s;
 	int b;
 	double alfa;
 	double maxsize;
 	double minsize;
-	public Node_size_changer(){
+	public NodeSizeChangeAction(){
 		state = 0;
 		s = -1;
 		b = -1;
