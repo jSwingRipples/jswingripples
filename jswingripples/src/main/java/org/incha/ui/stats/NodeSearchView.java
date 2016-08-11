@@ -23,7 +23,7 @@ public class NodeSearchView implements ActionListener{
     {
     	System.out.println("SHOWING GRAPH");
         NodeSearchBuilder NS = NodeSearchBuilder.getInstance();
-        NS.setSearch("Node");
+        //NS.setSearch();
         //NS.setSearch("Node");
         Graph graph = NS.getGraph();
         Viewer v = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);

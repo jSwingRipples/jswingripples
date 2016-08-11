@@ -1,5 +1,6 @@
 package org.incha.core.jswingripples;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -16,7 +17,7 @@ public class NodeSearchBuilder {
     private static NodeSearchBuilder instance = null; // singleton
     private Graph graph;    
     private JSwingRipplesEIGNode[] eigNodes;    
-    
+    private List<String> actual_nodes = new ArrayList<String>();
         
     
    private NodeSearchBuilder()
@@ -27,10 +28,10 @@ public class NodeSearchBuilder {
     }
    
    
-   public void setSearch(String s){
+   public void setSearch(){
 	  // search = s;
 	   System.out.println("PREPARING GRAPH");
-	   prepareGraph(s);
+	   prepareGraph();
 	   System.out.println("GRAPH PREPARED");
    }
    
@@ -69,8 +70,11 @@ public class NodeSearchBuilder {
     private void addNode(JSwingRipplesEIGNode node){
     	System.out.println("Current Nodes : " + String.valueOf(graph.getNodeCount()));
     	if (graph.getNode(node.getShortName()) == null){
-    	Node n = graph.addNode(node.getShortName());
-    	n.addAttribute("label", node.getShortName());   	
+    		if (!actual_nodes.contains(node.getShortName())) {
+    			Node n = graph.addNode(node.getShortName());
+    	    	n.addAttribute("label", node.getShortName());   	
+    	    	actual_nodes.add(node.getShortName());
+    		}    	   	
     	
     	}
     	System.out.println("After add : " +  String.valueOf(graph.getNodeCount()));
@@ -92,12 +96,14 @@ public class NodeSearchBuilder {
     	}
     	for (JSwingRipplesEIGNode n : neighbors){
     		for (JSwingRipplesEIGNode m : neighbors){
-    			addEdgeIfExisting(n,m);
+    			if (!m.getShortName().equals(node.getShortName()) && !m.getShortName().equals(n.getShortName())) {
+    				addEdgeIfExisting(n,m);
+    			}    			
     		}
     	}
     }
 
-    private void prepareGraph(String s)
+    private void prepareGraph()
     {
     	System.out.println("Looking at EIG nodes");
     	if (eig == null){
@@ -108,17 +114,19 @@ public class NodeSearchBuilder {
         for ( JSwingRipplesEIGNode node : eigNodes ){
         	for (String searched_node : Searcher.getInstance().getResults()) {
             	if (searched_node.equals(node.getShortName())) {
-            		computeAndAddEdges(node,addRelatedNodes(node));                    
-                    openNode(graph.getNode(node.getShortName()), Searcher.getInstance().getResults().size()); 
+            		computeAndAddEdges(node,addRelatedNodes(node));   
+            		int result_index = Searcher.getInstance().getResults().indexOf(searched_node);
+                    openNode(node, Searcher.getInstance().getResults().size(), result_index);  
             	}
             }
         }           	
         System.out.println("No more to look");
     }
     
-    private void openNode(Node node, int total_words) {
-    	int node_size;
-    	Color color = Highlight.getColor(node.getId());
+    private void openNode(JSwingRipplesEIGNode node, int total_words, int result_index) { //Node node, int total_words) {
+    	String filename = node.getShortName();
+		int node_size;
+    	Color color = Highlight.getColor(filename);
         String rgb = "rgb(" + color.getRed() + 
         		     "," + color.getGreen() + 
         		     "," + color.getBlue() + ")";
@@ -126,21 +134,28 @@ public class NodeSearchBuilder {
     		node_size = 50;
     	}
     	else {
-    		node_size = 100 - 20*(total_words - 1);
-    	}    	
-    	node.addAttribute("ui.style", "fill-color: " + rgb + "; "
+    		node_size = 300 - 20*(total_words - 1);
+    	}
+    	
+    	int num_lin = (int)Searcher.getInstance().getResInfo().get(result_index)[2];
+    	String result_line = (String)Searcher.getInstance().getResInfo().get(result_index)[0];
+    	int char_num = 25; //número de caracteres que se verán de result_line
+    	if (result_line.length()> char_num) {
+    		result_line = result_line.substring(0, char_num) + "...";
+    	}
+    	graph.getNode(filename).setAttribute("label", node.getShortName().toUpperCase() + " \nline " + num_lin + ": " + result_line); // Se coloca el nombre del nodo y la línea comprometida con el searchquery
+    	graph.getNode(filename).addAttribute("ui.style", "fill-color: " + rgb + "; "
     			                      + "size: " + node_size + "px;"
     			                      + "text-style: bold; "
     			                      + "text-size: 15px; "
     			                      + "stroke-mode: plain;"
     			                      + "stroke-color: black;");
-    }
+    }   
     
-    /*private boolean patternCheck(String searched_word, String node_name) {
-    	Pattern pattern = Pattern.compile(".*" + searched_word + ".*");
-    	Matcher matcher = pattern.matcher(node_name);
-    	return matcher.matches();    	
-    }*/
+    
+    private void cleanActualNodes() {
+		actual_nodes.clear();		
+	}
     
     public Graph getGraph(){
     	return graph;

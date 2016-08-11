@@ -15,11 +15,17 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.incha.ui.classview.ClassTreeView;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by fcocl_000 on 05-05-2016.
@@ -46,6 +52,12 @@ public class Searcher {
      * Class view UI.
      */
     private ClassTreeView classTreeView;
+    
+    /**
+     * Contains information about the part of the file where 
+     * the word was found. 
+     */
+    private List<Object []> res_information = new ArrayList<Object []>();
 
     /**
      * Returns the current instance.
@@ -122,6 +134,8 @@ public class Searcher {
         for(ScoreDoc doc : topDocs.scoreDocs) {
             String aux = removeJavaExtension(getDocument(doc).get(LuceneConstants.FILE_NAME));
             results.add(aux);
+            int index_query = results.indexOf(aux);
+            readFileAndLook(getDocument(doc).get(LuceneConstants.FILE_PATH), searchQuery, index_query);
         }
         // Refresh analysis table
         classTreeView.repaint();
@@ -146,7 +160,55 @@ public class Searcher {
         return fileName.replace(".java", "");
     }
     
+    /**
+     * Returns the results of the query
+     * @return
+     */
     public List<String> getResults() {
     	return results;
     }
+    
+    /**
+     * Return a list of the lines where the words were found
+     */
+    public List<Object []> getResInfo() {
+    	return res_information;
+    }
+    
+    /**
+     * Deletes the elements of the list res_information
+     */
+    public void clearResInfo() {
+    	res_information.clear();
+    }
+    
+    /**
+     * Reads the file where the word was found to provide information
+     * @throws FileNotFoundException 
+     * 
+     */
+    public void readFileAndLook(String path, String searchQuery, int index_query) throws FileNotFoundException {
+        RandomAccessFile file = new RandomAccessFile(path.replace('\\', '/'), "r");    	
+    	String line; 
+    	int num_line = 0;    	
+    	try{    	      	   
+           while ((line = file.readLine()) != null) {   
+        	  ++num_line; 
+              if (line.contains(" " + searchQuery.trim() + " ")) {
+            	  Object [] new_info = {line, index_query, num_line};
+            	  res_information.add(new_info);
+            	  break; //Sólo se toma 1 línea
+              }
+            }   
+         }catch(Exception e){
+            e.printStackTrace();            
+         }
+    	try {
+    		if (file != null) file.close();     		
+    	}
+        catch(Exception e){
+            e.printStackTrace();            
+        }
+    }
+    
 }

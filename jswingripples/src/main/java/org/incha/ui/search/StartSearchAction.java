@@ -43,7 +43,7 @@ class StartSearchAction implements ActionListener {
             for (String word : words) {
                 try {
                     searcher.search(word);
-                    addToGraph(word);
+                    addToGraph();
                     //for (String found_word : searcher.getResults()) {
                     	//System.out.println("ADD TO GRAPH THE WORD " + found_word);
                         //addToGraph(found_word);
@@ -72,8 +72,8 @@ class StartSearchAction implements ActionListener {
         return words;
     }
 
-    public void addToGraph(String word) {//(String s){
-    	NodeSearchBuilder.getInstance().setSearch(word);
+    public void addToGraph() {//(String s){
+    	NodeSearchBuilder.getInstance().setSearch();
     }
     public void showGraph()
     {
