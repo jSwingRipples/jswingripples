@@ -112,11 +112,11 @@ public class NodeSearchBuilder {
         //JSwingRipplesEIGNode[] eigNodes = eig.getAllNodes();
         System.out.println("Looking at EIG nodes");
         for ( JSwingRipplesEIGNode node : eigNodes ){
-        	for (String searched_node : Searcher.getInstance().getResults()) {
+        	for (String searched_node : Searcher.getInstance().getResults().keySet()) {
             	if (searched_node.equals(node.getShortName())) {
             		computeAndAddEdges(node,addRelatedNodes(node));   
-            		int result_index = Searcher.getInstance().getResults().indexOf(searched_node);
-                    openNode(node, Searcher.getInstance().getResults().size(), result_index);  
+            		int result_index = Searcher.getInstance().getResults().get(searched_node);
+                    openNode(node, Searcher.getInstance().getResults().size(), result_index);
             	}
             }
         }           	
