@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
@@ -215,18 +217,56 @@ public class JSwingRipplesApplication extends JFrame {
         final JMenuItem nodesize = new JMenuItem("Toggle - Node size by rank");
         nodesize.addActionListener(new Node_size_changer());
         Graph_style.add(nodesize);
+        nodesize.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.ALT_MASK));
         
         final JMenuItem bigger_nodes = new JMenuItem("Bigger Nodes");
         bigger_nodes.addActionListener(new Bigger_node_changer());
         Graph_style.add(bigger_nodes);
+        bigger_nodes.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, ActionEvent.ALT_MASK));
         
         final JMenuItem smaller_nodes = new JMenuItem("Smaller Nodes");
         smaller_nodes.addActionListener(new Smaller_node_changer());
         Graph_style.add(smaller_nodes);
+        smaller_nodes.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.ALT_MASK));
         
         final JMenuItem zoomed_text = new JMenuItem("Toggle - Zoomed text");
         zoomed_text.addActionListener(new Zoomed_text_changer());
         Graph_style.add(zoomed_text);
+        zoomed_text.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.ALT_MASK));
+        
+        JMenu submenu1 = new JMenu("Colors");
+        
+        
+        JMenuItem c1 = new JMenuItem("SandyBrown");
+        c1.addActionListener(new Node_color_changer("sandybrown"));
+        JMenuItem c2 = new JMenuItem("Sienna");
+        c2.addActionListener(new Node_color_changer("sienna"));
+        JMenuItem c3 = new JMenuItem("Salmon");
+        c3.addActionListener(new Node_color_changer("salmon"));
+        JMenuItem c4 = new JMenuItem("MediumOrchid");
+        c4.addActionListener(new Node_color_changer("mediumorchid"));
+        JMenuItem c5 = new JMenuItem("NavyBlue");
+        c5.addActionListener(new Node_color_changer("navyblue"));
+        JMenuItem c6 = new JMenuItem("SkyBlue");
+        c6.addActionListener(new Node_color_changer("skyblue"));
+        JMenuItem c7 = new JMenuItem("Aquamarine");
+        c7.addActionListener(new Node_color_changer("aquamarine"));
+        JMenuItem c8 = new JMenuItem("LimeGreen");
+        c8.addActionListener(new Node_color_changer("limegreen"));
+        JMenuItem c9 = new JMenuItem("Black");
+        c9.addActionListener(new Node_color_changer("black"));
+        
+        Graph_style.add(submenu1);
+        submenu1.add(c1);
+        submenu1.add(c2);
+        submenu1.add(c3);
+        submenu1.add(c4);
+        submenu1.add(c5);
+        submenu1.add(c6);
+        submenu1.add(c7);
+        submenu1.add(c8);
+        submenu1.add(c9);
+        
         
         
         
