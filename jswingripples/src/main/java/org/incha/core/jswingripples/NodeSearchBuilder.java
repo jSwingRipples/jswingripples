@@ -148,7 +148,7 @@ public class NodeSearchBuilder {
     			                      + "size: " + node_size + "px;"
     			                      + "text-style: bold; "
     			                      + "text-size: 15px; "
-    			                      + "stroke-mode: plain;"
+    			                      + "stroke-mode: plain;" + "text-color: rgb(122,187,74);" //text-background-mode: plain; text-padding: 10px; text-background-color: " + rgb + ";"
     			                      + "stroke-color: black;");
     }   
     

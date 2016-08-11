@@ -197,7 +197,7 @@ public class Searcher {
               if (line.contains(" " + searchQuery.trim() + " ")) {
             	  Object [] new_info = {line, index_query, num_line};
             	  res_information.add(new_info);
-            	  break; //Sólo se toma 1 línea
+            	  break; //Sólo se toma la primera línea
               }
             }   
          }catch(Exception e){
