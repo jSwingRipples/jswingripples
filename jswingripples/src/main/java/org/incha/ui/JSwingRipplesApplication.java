@@ -282,22 +282,22 @@ public class JSwingRipplesApplication extends JFrame {
         
         JMenu submenu2 = new JMenu("Themes");
         
-        JMenuItem t0 = new JMenuItem("Plain");
+        JMenuItem t0 = new JMenuItem("Cappuccino");
         t0.addActionListener(new Theme_changer(0));
         
         JMenuItem t1 = new JMenuItem("Stars");
         t1.addActionListener(new Theme_changer(1));
        
-        JMenuItem t2 = new JMenuItem("Line");
+        JMenuItem t2 = new JMenuItem("Blob");
         t2.addActionListener(new Theme_changer(2));
         
-        JMenuItem t3 = new JMenuItem("T3");
+        JMenuItem t3 = new JMenuItem("Perimeter");
         t3.addActionListener(new Theme_changer(3));
         
-        JMenuItem t4 = new JMenuItem("T4");
+        JMenuItem t4 = new JMenuItem("Glow");
         t4.addActionListener(new Theme_changer(4));
         
-        JMenuItem t5 = new JMenuItem("T5");
+        JMenuItem t5 = new JMenuItem("Bond");
         t5.addActionListener(new Theme_changer(5));
         
         Graph_style.add(submenu2);
