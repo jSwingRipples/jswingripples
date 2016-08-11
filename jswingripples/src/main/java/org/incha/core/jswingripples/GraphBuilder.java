@@ -80,7 +80,7 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
         pipe.addViewerListener(impListener);
         pipe.addSink(impactSetGraph);
         impactViewer.enableAutoLayout();
-        
+        /* dependencyViewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD); */
         dependencyViewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         ViewerPipe piped = dependencyViewer.newViewerPipe();
         depListener = new DependencyGraphViewerListener(piped);

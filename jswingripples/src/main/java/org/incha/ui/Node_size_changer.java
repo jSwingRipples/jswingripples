@@ -58,6 +58,7 @@ public class Node_size_changer implements ActionListener {
 	 private void revertSize(){
 		 Graph g = GraphBuilder.getInstance().getDependencyGraph();
 		 for(Node nn:g.getEachNode()){
+			  	nn.addAttribute("ui.size", 5);
 	        	nn.removeAttribute("ui.size");
 	        	/*nn.addAttribute("ui.size", 15);*/
 	        }
