@@ -43,6 +43,9 @@ public class Searcher {
      * term in each search hit.
      */
     private Map<String, Integer> results = new HashMap<>();
+
+    private List<String> resultsList = new ArrayList<>();
+
     /**
      * Class view UI.
      */
@@ -136,15 +139,18 @@ public class Searcher {
         results = new HashMap<>();
         for(ScoreDoc doc : topDocs.scoreDocs) {
             String aux = removeJavaExtension(getDocument(doc).get(LuceneConstants.FILE_NAME));
-            if(results.containsKey(aux)) {
+            if (results.containsKey(aux)) {
                 // If contained, update appearance frequency.
                 results.put(aux, results.get(aux) + 1);
-            }
-            else {
+            } else {
                 // Entry added if filename not contained.
                 results.put(aux, 1);
             }
+            resultsList.add(aux);
+            int index_query = resultsList.indexOf(aux);
+            readFileAndLook(getDocument(doc).get(LuceneConstants.FILE_PATH), searchQuery, index_query);
         }
+
         // Update files with most/least search term occurrences
         refreshMaxMin();
 
@@ -212,6 +218,8 @@ public class Searcher {
     public Map<String, Integer> getResults() {
     	return results;
     }
+
+    public List<String> getResultsList() { return resultsList; }
     
     /**
      * Return a list of the lines where the words were found

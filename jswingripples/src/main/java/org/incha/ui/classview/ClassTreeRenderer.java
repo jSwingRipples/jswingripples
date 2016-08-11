@@ -27,8 +27,7 @@ public class ClassTreeRenderer extends AbstractMemberRenderer {
             final int column) {
         final String mark = node.getMark();
         switch (column) {
-            case 0:            	
-                label.setBackground(Highlight.getColor(node.getShortName()));                
+            case 0:
             break;
             case 1:
                 if (mark != null && !mark.isEmpty()) {
