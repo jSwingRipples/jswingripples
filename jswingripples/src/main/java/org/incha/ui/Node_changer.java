@@ -13,7 +13,8 @@ public class Node_changer implements ActionListener {
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Graph g = GraphBuilder.getInstance().getDependencyGraph();
+		Graph g1 = GraphBuilder.getInstance().getDependencyGraph();
+		Graph g2 = GraphBuilder.getInstance().getImpactSetGraph();
 		int size = GraphBuilder.getInstance().getSize();
 		if (type == 0){
 		size = size + 4;
@@ -23,7 +24,9 @@ public class Node_changer implements ActionListener {
 				}
 		}
 		GraphBuilder.getInstance().setSize(size);
-		g.addAttribute("ui.stylesheet", "node {size:" + Integer.toString(size) + "px," + Integer.toString(size) + "px;}");
+		String style = "node {size:" + Integer.toString(size) + "px," + Integer.toString(size) + "px;} node.blank {size:" + Integer.toString(size) + "px," + Integer.toString(size) + "px;} node.changed {size:" + Integer.toString(size) + "px," + Integer.toString(size) + "px;} node.impacted {size:" + Integer.toString(size) + "px," + Integer.toString(size) + "px;} node.next {size:" + Integer.toString(size) + "px," + Integer.toString(size) + "px;} node.propagating {size:" + Integer.toString(size) + "px," + Integer.toString(size) + "px;}";
+		g1.addAttribute("ui.stylesheet", style);
+		g2.addAttribute("ui.stylesheet", style);
 
 	}
 

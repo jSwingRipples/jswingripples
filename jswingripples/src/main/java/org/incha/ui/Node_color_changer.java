@@ -13,8 +13,9 @@ public class Node_color_changer implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		GraphBuilder.getInstance().getDependencyGraph().addAttribute("ui.stylesheet", "node {fill-color:"+c+";}");
-		GraphBuilder.getInstance().getImpactSetGraph().addAttribute("ui.stylesheet", "node {fill-color:"+c+";}");
+		String style = "node {fill-color:"+c+";} node.blank {fill-color:"+c+";} node.changed {fill-color:"+c+";} node.impacted {fill-color:"+c+";}  node.next {fill-color:"+c+";}  node.propagating {fill-color:"+c+";}";
+		GraphBuilder.getInstance().getDependencyGraph().addAttribute("ui.stylesheet", style);
+		GraphBuilder.getInstance().getImpactSetGraph().addAttribute("ui.stylesheet", style);
 	}
 
 }

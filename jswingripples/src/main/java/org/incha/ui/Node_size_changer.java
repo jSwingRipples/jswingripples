@@ -25,6 +25,7 @@ public class Node_size_changer implements ActionListener {
 		minsize = alfa*10;
 	}
 	
+	
 	 private void changeSize()
 	    {
 	        /*Graph graph = GraphBuilder.getInstance().getDependencyGraph();
