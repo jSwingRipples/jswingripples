@@ -236,7 +236,8 @@ public class JSwingRipplesApplication extends JFrame {
         
         JMenu submenu1 = new JMenu("Colors");
         
-        
+        JMenuItem c0 = new JMenuItem("White");
+        c0.addActionListener(new Node_color_changer("white"));
         JMenuItem c1 = new JMenuItem("SandyBrown");
         c1.addActionListener(new Node_color_changer("sandybrown"));
         JMenuItem c2 = new JMenuItem("Sienna");
@@ -257,6 +258,7 @@ public class JSwingRipplesApplication extends JFrame {
         c9.addActionListener(new Node_color_changer("black"));
         
         Graph_style.add(submenu1);
+        submenu1.add(c0);
         submenu1.add(c1);
         submenu1.add(c2);
         submenu1.add(c3);
@@ -266,6 +268,21 @@ public class JSwingRipplesApplication extends JFrame {
         submenu1.add(c7);
         submenu1.add(c8);
         submenu1.add(c9);
+        
+        JMenu submenu2 = new JMenu("Themes");
+        
+        JMenuItem t0 = new JMenuItem("Plain");
+        t0.addActionListener(new Theme_changer(0));
+        
+        JMenuItem t1 = new JMenuItem("Stars");
+        t1.addActionListener(new Theme_changer(1));
+        
+
+        
+        Graph_style.add(submenu2);
+        submenu2.add(t0);
+        submenu2.add(t1);
+        
         
         
         
