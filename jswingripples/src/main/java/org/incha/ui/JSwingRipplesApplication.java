@@ -276,18 +276,22 @@ public class JSwingRipplesApplication extends JFrame {
         
         JMenuItem t1 = new JMenuItem("Stars");
         t1.addActionListener(new Theme_changer(1));
+       
+        JMenuItem t2 = new JMenuItem("Line");
+        t2.addActionListener(new Theme_changer(2));
         
-
+        JMenuItem t3 = new JMenuItem("T3");
+        t3.addActionListener(new Theme_changer(3));
+        
+        JMenuItem t4 = new JMenuItem("T4");
+        t4.addActionListener(new Theme_changer(4));
         
         Graph_style.add(submenu2);
         submenu2.add(t0);
         submenu2.add(t1);
-        
-        
-        
-        
-        
-       
+        submenu2.add(t2);
+        submenu2.add(t3);
+        submenu2.add(t4);
 //        final JMenuItem manageStates = new JMenuItem("Manage Statess");
 //        jRipples.add(manageStates);
 //        final JMenuItem saveState = new JMenuItem("Save State");

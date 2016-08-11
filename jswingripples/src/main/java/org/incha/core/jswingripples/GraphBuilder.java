@@ -147,8 +147,6 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
             if (graph.getNode(node.getFullName()) == null) {
                 Node n = graph.addNode(node.getFullName());
                 n.addAttribute("label", node.getShortName());
-                n.addAttribute("incident-edges", 0);
-                n.addAttribute("outgoing-edges", 0);
             }
         }
         monitor.done();
@@ -161,11 +159,7 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
             String eid = edge.getFromNode().getFullName() + " -> " + edge.getToNode().getFullName();
             monitor.setTaskName("Adding edge " + eid);
             if ( graph.getEdge(eid) == null){
-            	Node out = graph.getNode(edge.getFromNode().getFullName());
-            	Node in = graph.getNode(edge.getToNode().getFullName());
-            	out.changeAttribute("outgoing-edges", (int) out.getAttribute("outgoing-edges") + 1);
-            	in.changeAttribute("incident-edges", (int) in.getAttribute("incident-edges") + 1);
-                graph.addEdge(eid, edge.getFromNode().getFullName(), edge.getToNode().getFullName());
+                graph.addEdge(eid, edge.getFromNode().getFullName(), edge.getToNode().getFullName(), true);
             }
         }
         
