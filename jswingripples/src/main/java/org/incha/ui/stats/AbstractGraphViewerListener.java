@@ -53,8 +53,16 @@ public abstract class AbstractGraphViewerListener implements ViewerListener{
         @Override
         public void run() {
             while(loop)
+            {
                 pipe.pump();
-            //TODO: ELIMINAR BUSY - WAITING
+                try
+                {
+                    Thread.sleep(10);
+                } catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
