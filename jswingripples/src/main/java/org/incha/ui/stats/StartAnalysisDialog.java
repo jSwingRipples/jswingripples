@@ -29,7 +29,7 @@ public class StartAnalysisDialog extends JDialog {
     private static final long serialVersionUID = 6788138046337076311L;
     final JComboBox<String> projects;
     final JTextField className = new JTextField(30);
-    private boolean isOk;
+    private StartAnalysisAction startAnalysisCallback;
     final JComboBox<String> incrementalChange = new JComboBox<String>(new DefaultComboBoxModel<String>(
         new String[]{
             JRipplesDefaultModulesConstants.MODULE_IMPACT_ANALYSIS_TITLE,
@@ -40,12 +40,6 @@ public class StartAnalysisDialog extends JDialog {
             JRipplesDefaultModulesConstants.MODULE_CONCEPT_LOCATION_RELAXED_TITLE
         }
     ));
-//    JComboBox<String> presentation = new JComboBox<String>(new DefaultComboBoxModel<String>(
-//        new String[]{
-//            JRipplesDefaultModulesConstants.MODULE_VIEW_HIERARCHY_TITLE,
-//            JRipplesDefaultModulesConstants.MODULE_VIEW_TREE_TITLE
-//        }
-//    ));
     JComboBox<String> analysis = new JComboBox<String>(new DefaultComboBoxModel<String>(
         new String[]{
             JRipplesDefaultModulesConstants.MODULE_IMPACT_ANALYSIS_TITLE
@@ -61,8 +55,9 @@ public class StartAnalysisDialog extends JDialog {
     /**
      * Default constructor.
      */
-    public StartAnalysisDialog(final Window owner) {
+    public StartAnalysisDialog(final Window owner, final StartAnalysisAction callback) {
         super(owner);
+        startAnalysisCallback = callback;
         setModal(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout(0, 5));
@@ -211,23 +206,16 @@ public class StartAnalysisDialog extends JDialog {
      *
      */
     protected void doCancel() {
-        isOk = false;
         dispose();
     }
     /**
      *
      */
     protected void doOk() {
-        isOk = true;
         dispose();
+        startAnalysisCallback.startAnalysis(this);
     }
 
-    /**
-     * @return the isOk
-     */
-    public boolean isOk() {
-        return isOk;
-    }
     /**
      * @return the className
      */
