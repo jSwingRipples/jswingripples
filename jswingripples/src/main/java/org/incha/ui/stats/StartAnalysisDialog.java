@@ -116,8 +116,8 @@ public class StartAnalysisDialog extends JDialog {
      *
      */
     protected void projectChanged() {
-        final String projectName = (String) projects.getSelectedItem();
-        final JavaProject project = JavaProjectsModel.getInstance().getProject(projectName);
+        final JavaProject project =
+                JavaProjectsModel.getInstance().getProject((String) projects.getSelectedItem());
 
         if (project != null) {
             //set current module configuration
