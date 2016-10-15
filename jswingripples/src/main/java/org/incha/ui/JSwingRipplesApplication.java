@@ -402,12 +402,6 @@ public class JSwingRipplesApplication extends JFrame {
     public TaskProgressMonitor getProgressMonitor() {
         return this.progressMonitor;
     }
-    /**
-     * @return the viewArea
-     */
-    public JTabbedPane getViewArea() {
-        return viewArea;
-    }
 
     public void addComponentAsTab(JComponent component, String tabTitle) {
         JInternalFrame internalFrame = new JInternalFrame(tabTitle);
