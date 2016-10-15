@@ -40,20 +40,12 @@ import org.incha.ui.stats.StartAnalysisAction;
 
 public class JSwingRipplesApplication extends JFrame {
     private static final long serialVersionUID = 6142679404175274529L;
-
-    /**
-     * The view area
-     */
     private final JDesktopPane viewArea = new JDesktopPane();
     private final ProjectsView projectsView;
     private static JSwingRipplesApplication instance;
     private final ProgressMonitorImpl progressMonitor = new ProgressMonitorImpl();
 
 
-
-    /**
-     * Default constructor.
-     */
     public JSwingRipplesApplication() {
         super("JSwingRipples");
         instance = this;
