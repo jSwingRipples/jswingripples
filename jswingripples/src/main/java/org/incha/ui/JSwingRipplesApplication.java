@@ -1,9 +1,18 @@
 package org.incha.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Toolkit;
+import org.apache.commons.logging.LogFactory;
+import org.incha.core.JavaProject;
+import org.incha.core.JavaProjectsModel;
+import org.incha.core.StatisticsManager;
+import org.incha.ui.search.SearchMenu;
+import org.incha.ui.stats.GraphVisualizationAction;
+import org.incha.ui.stats.ImpactGraphVisualizationAction;
+import org.incha.ui.stats.ShowCurrentStateAction;
+import org.incha.ui.stats.StartAnalysisAction;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -11,21 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
-import org.apache.commons.logging.LogFactory;
-import org.incha.core.JavaProject;
-import org.incha.core.JavaProjectsModel;
-import org.incha.core.StatisticsManager;
-
-import org.incha.ui.stats.*;
-import org.incha.ui.search.SearchMenu;
-
-import org.incha.ui.stats.GraphVisualizationAction;
-import org.incha.ui.stats.ShowCurrentStateAction;
-import org.incha.ui.stats.StartAnalysisAction;
 
 public class JSwingRipplesApplication extends JFrame {
     private static final long serialVersionUID = 6142679404175274529L;

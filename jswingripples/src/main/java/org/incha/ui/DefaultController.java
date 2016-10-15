@@ -1,15 +1,7 @@
 package org.incha.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.swing.*;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.jdt.core.IMember;
 import org.incha.core.JavaProject;
 import org.incha.core.Statistics;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
@@ -18,6 +10,11 @@ import org.incha.core.jswingripples.eig.StatisticsChangeListener;
 import org.incha.ui.stats.HierarchicalView;
 import org.incha.ui.util.ModalContext;
 import org.incha.ui.util.RunnableWithProgress;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class DefaultController implements StatisticsChangeListener {
