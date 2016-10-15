@@ -46,9 +46,8 @@ public class JSwingRipplesApplication extends JFrame {
     private final ProgressMonitorImpl progressMonitor = new ProgressMonitorImpl();
 
 
-    public JSwingRipplesApplication() {
+    private JSwingRipplesApplication() {
         super("JSwingRipples");
-        instance = this;
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         final JPanel contentPane = new JPanel(new BorderLayout(0, 5));
@@ -360,7 +359,7 @@ public class JSwingRipplesApplication extends JFrame {
             LogFactory.getLog(JSwingRipplesApplication.class).error("Missing properties file!");
             System.exit(1);
         }
-        final JFrame f = new JSwingRipplesApplication();
+        final JFrame f = JSwingRipplesApplication.getInstance();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //set frame location
