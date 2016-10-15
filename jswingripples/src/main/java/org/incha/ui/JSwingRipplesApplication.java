@@ -12,18 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import javax.swing.JButton;
-import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
-import javax.swing.JSplitPane;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.commons.logging.LogFactory;
@@ -40,7 +29,7 @@ import org.incha.ui.stats.StartAnalysisAction;
 
 public class JSwingRipplesApplication extends JFrame {
     private static final long serialVersionUID = 6142679404175274529L;
-    private final JDesktopPane viewArea = new JDesktopPane();
+    private final JTabbedPane viewArea = new JTabbedPane();
     private final ProjectsView projectsView;
     private static JSwingRipplesApplication instance;
     private final ProgressMonitorImpl progressMonitor = new ProgressMonitorImpl();
@@ -416,7 +405,15 @@ public class JSwingRipplesApplication extends JFrame {
     /**
      * @return the viewArea
      */
-    public JDesktopPane getViewArea() {
+    public JTabbedPane getViewArea() {
         return viewArea;
+    }
+
+    public void addComponentAsTab(JComponent component, String tabTitle) {
+        JInternalFrame internalFrame = new JInternalFrame(tabTitle);
+        internalFrame.getContentPane().setLayout(new BorderLayout());
+        internalFrame.getContentPane().add(component);
+        internalFrame.setVisible(true);
+        viewArea.add(internalFrame);
     }
 }
