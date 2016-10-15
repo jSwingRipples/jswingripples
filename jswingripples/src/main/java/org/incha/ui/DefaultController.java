@@ -5,9 +5,7 @@ import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,9 +37,6 @@ public class DefaultController implements StatisticsChangeListener {
         openAnalysisView(stats);
     }
 
-    /**
-     * @param eig
-     */
     protected void openAnalysisView(final Statistics stats) {
         final JavaProject project = stats.getEIG().getJavaProject();
         if (project != null) {
@@ -68,11 +63,6 @@ public class DefaultController implements StatisticsChangeListener {
         }
     }
 
-    /**
-     * @param provider
-     * @param projectName
-     * @param monitor
-     */
     protected void openView(final Statistics stats, final TaskProgressMonitor monitor) {
         final JavaProject project = stats.getEIG().getJavaProject();
         final List<JSwingRipplesEIGNode> members = getMembers(stats.getEIG());
@@ -85,21 +75,9 @@ public class DefaultController implements StatisticsChangeListener {
             monitor.done();
         }
 
-        final JInternalFrame frame = new JInternalFrame(project.getName() + " (" + stats.getId() + ")");
-        frame.getContentPane().setLayout(new BorderLayout());
-
         final JScrollPane comp = new JScrollPane(view);
         comp.getViewport().setBackground(Color.WHITE);
-        frame.getContentPane().add(comp);
-
-        final JDesktopPane viewArea = JSwingRipplesApplication.getInstance().getViewArea();
-        frame.setBounds(0, 0, viewArea.getWidth(), viewArea.getHeight());
-        frame.setClosable(true);
-        frame.setMaximizable(true);
-        frame.setVisible(true);
-        frame.setResizable(true);
-
-        viewArea.add(frame);
+        JSwingRipplesApplication.getInstance().addComponentAsTab(comp, "Project: " + project.getName());
     }
 
     /**
@@ -127,17 +105,5 @@ public class DefaultController implements StatisticsChangeListener {
      */
     @Override
     public void statisticsRemoved(final String id, final Statistics stats) {
-    }
-
-    /**
-     * @param nodeMembers
-     * @return
-     */
-    protected IMember[] getMembers(final JSwingRipplesEIGNode[] nodeMembers) {
-        final List<IMember> members = new LinkedList<IMember>();
-        for (final JSwingRipplesEIGNode node : nodeMembers) {
-            members.add(node.getNodeIMember());
-        }
-        return members.toArray(new IMember[members.size()]);
     }
 }
