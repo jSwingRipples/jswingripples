@@ -23,14 +23,15 @@ import java.util.Properties;
 
 public class JSwingRipplesApplication extends JFrame {
     private static final long serialVersionUID = 6142679404175274529L;
-    private final JTabbedPane viewArea = new JTabbedPane();
+    private JComponent viewArea;
     private final ProjectsView projectsView;
     private static JSwingRipplesApplication instance;
     private final ProgressMonitorImpl progressMonitor = new ProgressMonitorImpl();
 
 
-    private JSwingRipplesApplication() {
+    private JSwingRipplesApplication(JComponent viewArea) {
         super("JSwingRipples");
+        this.viewArea = viewArea;
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         final JPanel contentPane = new JPanel(new BorderLayout(0, 5));
@@ -385,7 +386,7 @@ public class JSwingRipplesApplication extends JFrame {
      */
     public static JSwingRipplesApplication getInstance() {
     	if(instance==null){
-    		instance=new JSwingRipplesApplication();
+    		instance=new JSwingRipplesApplication(new JTabbedPane());
     	}
         return instance;
     }
