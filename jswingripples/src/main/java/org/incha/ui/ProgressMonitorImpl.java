@@ -1,21 +1,16 @@
 package org.incha.ui;
 
+import org.incha.ui.jripples.JRipplesResources;
+
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.border.BevelBorder;
 
-import org.incha.ui.jripples.JRipplesResources;
-
-
-public class ProgressMonitorImpl extends JPanel implements TaskProgressMonitor {
+public class ProgressMonitorImpl extends TaskProgressMonitor {
     private static final long serialVersionUID = -3979008622445178343L;
 
     private int maximum;

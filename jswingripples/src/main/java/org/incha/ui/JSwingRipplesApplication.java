@@ -26,12 +26,13 @@ public class JSwingRipplesApplication extends JFrame {
     private JComponent viewArea;
     private final ProjectsView projectsView;
     private static JSwingRipplesApplication instance;
-    private final ProgressMonitorImpl progressMonitor = new ProgressMonitorImpl();
+    private TaskProgressMonitor progressMonitor;
 
 
-    private JSwingRipplesApplication(JComponent viewArea) {
+    private JSwingRipplesApplication(JComponent viewArea, TaskProgressMonitor progressMonitor) {
         super("JSwingRipples");
         this.viewArea = viewArea;
+        this.progressMonitor = progressMonitor;
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         final JPanel contentPane = new JPanel(new BorderLayout(0, 5));
@@ -386,7 +387,7 @@ public class JSwingRipplesApplication extends JFrame {
      */
     public static JSwingRipplesApplication getInstance() {
     	if(instance==null){
-    		instance=new JSwingRipplesApplication(new JTabbedPane());
+    		instance = new JSwingRipplesApplication(new JTabbedPane(), new ProgressMonitorImpl());
     	}
         return instance;
     }
