@@ -1,45 +1,55 @@
 package org.incha.ui;
 
-public interface TaskProgressMonitor {
+import javax.swing.JPanel;
+import java.awt.LayoutManager;
+
+public abstract class TaskProgressMonitor extends JPanel {
+
+    public TaskProgressMonitor() {}
+
+    public TaskProgressMonitor(LayoutManager layoutManager) {
+        super(layoutManager);
+    }
+
     /**
      * @param name task name.
      */
-    void setTaskName(String name);
+    public abstract void setTaskName(String name);
     /**
      * @return task name.
      */
-    String getTaskName();
+    public abstract String getTaskName();
     /**
      * @param taskName task name.
      * @param max max value.
      */
-    void beginTask(String taskName, int max);
+    public abstract void beginTask(String taskName, int max);
     /**
      * @return maximum value.
      */
-    int getMaximum();
+    public abstract int getMaximum();
     /**
      * @return progress value.
      */
-    int getProgress();
+    public abstract int getProgress();
     /**
      * Notify task finished.
      */
-    void done();
+    public abstract void done();
     /**
      * @return check task canceled.
      */
-    boolean isCanceled();
+    public abstract boolean isCanceled();
     /**
      * @param value sets the task finished.
      */
-    void setCanceled(boolean value);
+    public abstract void setCanceled(boolean value);
     /**
      * @param value new current value.
      */
-    void worked(int value);
+    public abstract void worked(int value);
     /**
      * @param max
      */
-    void setMaximum(int max);
+    public abstract void setMaximum(int max);
 }

@@ -1,9 +1,18 @@
 package org.incha.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Toolkit;
+import org.apache.commons.logging.LogFactory;
+import org.incha.core.JavaProject;
+import org.incha.core.JavaProjectsModel;
+import org.incha.core.StatisticsManager;
+import org.incha.ui.search.SearchMenu;
+import org.incha.ui.stats.GraphVisualizationAction;
+import org.incha.ui.stats.ImpactGraphVisualizationAction;
+import org.incha.ui.stats.ShowCurrentStateAction;
+import org.incha.ui.stats.StartAnalysisAction;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -12,51 +21,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import javax.swing.JButton;
-import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
-import javax.swing.JSplitPane;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
-
-import org.apache.commons.logging.LogFactory;
-import org.incha.core.JavaProject;
-import org.incha.core.JavaProjectsModel;
-import org.incha.core.StatisticsManager;
-
-import org.incha.ui.stats.*;
-import org.incha.ui.search.SearchMenu;
-
-import org.incha.ui.stats.GraphVisualizationAction;
-import org.incha.ui.stats.ShowCurrentStateAction;
-import org.incha.ui.stats.StartAnalysisAction;
-
 public class JSwingRipplesApplication extends JFrame {
     private static final long serialVersionUID = 6142679404175274529L;
-
-    /**
-     * The view area
-     */
-    private final JDesktopPane viewArea = new JDesktopPane();
+    private JComponent viewArea;
     private final ProjectsView projectsView;
     private static JSwingRipplesApplication instance;
-    private final ProgressMonitorImpl progressMonitor = new ProgressMonitorImpl();
+    private TaskProgressMonitor progressMonitor;
 
 
-
-    /**
-     * Default constructor.
-     */
-    public JSwingRipplesApplication() {
+    private JSwingRipplesApplication(JComponent viewArea, TaskProgressMonitor progressMonitor) {
         super("JSwingRipples");
-        instance = this;
+        this.viewArea = viewArea;
+        this.progressMonitor = progressMonitor;
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         final JPanel contentPane = new JPanel(new BorderLayout(0, 5));
@@ -368,7 +344,7 @@ public class JSwingRipplesApplication extends JFrame {
             LogFactory.getLog(JSwingRipplesApplication.class).error("Missing properties file!");
             System.exit(1);
         }
-        final JFrame f = new JSwingRipplesApplication();
+        final JFrame f = JSwingRipplesApplication.getInstance();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //set frame location
@@ -411,7 +387,7 @@ public class JSwingRipplesApplication extends JFrame {
      */
     public static JSwingRipplesApplication getInstance() {
     	if(instance==null){
-    		instance=new JSwingRipplesApplication();
+    		instance = new JSwingRipplesApplication(new JTabbedPane(), new ProgressMonitorImpl());
     	}
         return instance;
     }
@@ -422,10 +398,12 @@ public class JSwingRipplesApplication extends JFrame {
     public TaskProgressMonitor getProgressMonitor() {
         return this.progressMonitor;
     }
-    /**
-     * @return the viewArea
-     */
-    public JDesktopPane getViewArea() {
-        return viewArea;
+
+    public void addComponentAsTab(JComponent component, String tabTitle) {
+        JInternalFrame internalFrame = new JInternalFrame(tabTitle);
+        internalFrame.getContentPane().setLayout(new BorderLayout());
+        internalFrame.getContentPane().add(component);
+        internalFrame.setVisible(true);
+        viewArea.add(internalFrame);
     }
 }
