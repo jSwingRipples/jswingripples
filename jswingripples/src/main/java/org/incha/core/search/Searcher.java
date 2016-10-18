@@ -117,7 +117,9 @@ public class Searcher {
      * Sets SearchMenu reference.
      * @param searchMenu Search Menu in UI.
      */
-    public void setSearchMenu(SearchMenu searchMenu) {this.searchMenu = searchMenu; }
+    public void setSearchMenu(SearchMenu searchMenu) {
+        this.searchMenu = searchMenu;
+    }
 
     /**
      * Searches the indexes in the Directory.

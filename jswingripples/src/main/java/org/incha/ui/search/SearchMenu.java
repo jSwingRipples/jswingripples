@@ -11,8 +11,8 @@ public class SearchMenu {
 	/**
      * Default constructor. Se crea un panel de búsqueda para colocarlo en algún menú.
      */
-	protected JButton searchButton;
-    protected JButton clearButton;
+	private JButton searchButton;
+    private JButton clearButton;
 
     public JButton getSearchButton(){return searchButton;}
     public JButton getClearbutton() {return clearButton;}
