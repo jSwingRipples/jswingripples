@@ -109,7 +109,7 @@ public class Searcher {
      */
     public void setClassTreeView(ClassTreeView classTreeView) {
         searchMenu.getSearchButton().setEnabled(true);
-        searchMenu.getClearbutton().setEnabled(true);
+        searchMenu.getClearButton().setEnabled(true);
         this.classTreeView = classTreeView;
     }
 
@@ -173,7 +173,6 @@ public class Searcher {
         if(results.size() > 0){
             refreshMaxMin();
         }
-
 
         // Refresh analysis table
         classTreeView.repaint();

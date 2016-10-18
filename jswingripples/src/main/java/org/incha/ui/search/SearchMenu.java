@@ -11,11 +11,11 @@ public class SearchMenu {
 	/**
      * Default constructor. Se crea un panel de búsqueda para colocarlo en algún menú.
      */
-	private JButton searchButton;
+    private JButton searchButton;
     private JButton clearButton;
 
     public JButton getSearchButton(){return searchButton;}
-    public JButton getClearbutton() {return clearButton;}
+    public JButton getClearButton() {return clearButton;}
 
 	public SearchMenu() {
 		searchPanel = new JPanel();
