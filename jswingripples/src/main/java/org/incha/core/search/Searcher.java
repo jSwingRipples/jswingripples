@@ -14,6 +14,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.incha.ui.classview.ClassTreeView;
+import org.incha.ui.search.SearchMenu;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -66,6 +67,11 @@ public class Searcher {
     private int minFrequency;
 
     /**
+     * Reference to SearchMenu in UI.
+     */
+    private SearchMenu searchMenu;
+
+    /**
      * Returns the current instance.
      * @return the current Indexer instance.
      */
@@ -101,7 +107,19 @@ public class Searcher {
      * Set current class view.
      * @param classTreeView the current class view.
      */
-    public void setClassTreeView(ClassTreeView classTreeView) { this.classTreeView = classTreeView; }
+    public void setClassTreeView(ClassTreeView classTreeView) {
+        searchMenu.getSearchButton().setEnabled(true);
+        searchMenu.getClearButton().setEnabled(true);
+        this.classTreeView = classTreeView;
+    }
+
+    /**
+     * Sets SearchMenu reference.
+     * @param searchMenu Search Menu in UI.
+     */
+    public void setSearchMenu(SearchMenu searchMenu) {
+        this.searchMenu = searchMenu;
+    }
 
     /**
      * Searches the indexes in the Directory.
@@ -152,7 +170,9 @@ public class Searcher {
         }
 
         // Update files with most/least search term occurrences
-        refreshMaxMin();
+        if(results.size() > 0){
+            refreshMaxMin();
+        }
 
         // Refresh analysis table
         classTreeView.repaint();
