@@ -152,7 +152,10 @@ public class Searcher {
         }
 
         // Update files with most/least search term occurrences
-        refreshMaxMin();
+        if(results.size() > 0){
+            refreshMaxMin();
+        }
+
 
         // Refresh analysis table
         classTreeView.repaint();
