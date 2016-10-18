@@ -4,6 +4,7 @@ import org.apache.commons.logging.LogFactory;
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.StatisticsManager;
+import org.incha.core.search.Searcher;
 import org.incha.ui.search.SearchMenu;
 import org.incha.ui.stats.GraphVisualizationAction;
 import org.incha.ui.stats.ImpactGraphVisualizationAction;
@@ -292,8 +293,9 @@ public class JSwingRipplesApplication extends JFrame {
 //        jRipples.add(saveState);
 //        final JMenuItem loadState = new JMenuItem("Load State");
 //        jRipples.add(loadState);        
-        
-        bar.add(new SearchMenu().getSearchPanel());  //Se agrega el menu de búsqueda
+        SearchMenu searchMenu = new SearchMenu();
+        Searcher.getInstance().setSearchMenu(searchMenu);
+        bar.add(searchMenu.getSearchPanel());  //Se agrega el menu de búsqueda
         
         return bar;
     }

@@ -11,6 +11,12 @@ public class SearchMenu {
 	/**
      * Default constructor. Se crea un panel de búsqueda para colocarlo en algún menú.
      */
+	protected JButton searchButton;
+    protected JButton clearButton;
+
+    public JButton getSearchButton(){return searchButton;}
+    public JButton getClearbutton() {return clearButton;}
+
 	public SearchMenu() {
 		searchPanel = new JPanel();
 		JTextField searchedWords = new JTextField(15);
@@ -18,8 +24,10 @@ public class SearchMenu {
         searchPanel.setLayout(new FlowLayout());
         searchPanel.add(new JLabel("Search:"));
         searchPanel.add(searchedWords);
-        JButton searchButton = new JButton("Go");
-        JButton clearButton = new JButton("Clear");
+        searchButton = new JButton("Go");
+        clearButton = new JButton("Clear");
+        searchButton.setEnabled(false);
+        clearButton.setEnabled(false);
         searchButton.addActionListener(new StartSearchAction(searchedWords));
         clearButton.addActionListener(new ClearSearchAction(searchedWords));
         searchPanel.add(searchButton);
