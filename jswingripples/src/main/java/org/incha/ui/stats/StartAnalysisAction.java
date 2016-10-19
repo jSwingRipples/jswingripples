@@ -11,6 +11,7 @@ import org.incha.core.ModuleConfiguration;
 import org.incha.core.StatisticsManager;
 import org.incha.core.jswingripples.GraphBuilder;
 import org.incha.core.jswingripples.JRipplesModuleInterface;
+import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.NodeSearchBuilder;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.search.Indexer;
@@ -81,11 +82,19 @@ public class StartAnalysisAction implements ActionListener {
 
         project.setModuleConfiguration(config);
         final List<JRipplesModuleInterface> m = config.buildModules(eig);
-        for (final JRipplesModuleInterface i : m) {
-            i.runModule();
-        }
 
-        StatisticsManager.getInstance().addStatistics(config, eig);
+        new JRipplesModuleRunner(new JRipplesModuleRunner.ModuleRunnerListener() {
+            @Override
+            public void runSuccessful() {
+                System.out.printf("run success");
+                StatisticsManager.getInstance().addStatistics(config, eig);
+            }
+
+            @Override
+            public void runFailure() {
+                System.out.println("run failure");
+            }
+        }).runModules(m);
 
         GraphBuilder.getInstance().addEIG(eig);
         GraphBuilder.getInstance().resetGraphs();
