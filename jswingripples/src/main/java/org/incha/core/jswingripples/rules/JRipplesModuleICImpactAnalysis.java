@@ -106,7 +106,7 @@ public class JRipplesModuleICImpactAnalysis implements
 	}
 
 	@Override
-	public void InitializeStage(JRipplesModuleRunner.ModuleRunnerListener moduleRunner) {
+	public void InitializeStage(JRipplesModuleRunner moduleRunner) {
 		// TODO
 	}
 

@@ -72,6 +72,11 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
 	 */
 	@Override
     public void InitializeStage() {
+
+	}
+
+    @Override
+    public void InitializeStage(JRipplesModuleRunner moduleRunner) {
         final JSwingRipplesEIGNode[] nodes = eig.getAllNodes();
         if (nodes != null) {
             for (int i = 0; i < nodes.length; i++) {
@@ -88,11 +93,6 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
         }
 
         eig.getHistory().clear();
-	}
-
-    @Override
-    public void InitializeStage(JRipplesModuleRunner.ModuleRunnerListener moduleRunner) {
-        // TODO
     }
 
     @Override
@@ -155,7 +155,7 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
 
     @Override
     public void runModuleWithinRunner(JRipplesModuleRunner moduleRunner) {
-        // TODO
+        InitializeStage(moduleRunner);
     }
 
     private JSwingRipplesEIGNode getType(final JSwingRipplesEIGNode[] nodes) {

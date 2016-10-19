@@ -21,7 +21,7 @@ public interface JRipplesICModuleInterface extends JRipplesModuleInterface {
 	 */
 	public void InitializeStage();
 
-	public void InitializeStage(JRipplesModuleRunner.ModuleRunnerListener moduleRunner);
+	public void InitializeStage(JRipplesModuleRunner moduleRunner);
 	/**
 	 * Returns a set of marks (names of propagation rules), available for a node with the supplied current mark. This is called to determine which propagation rules can still be applied to a particular node and display this rules in GUI.
 	 * @param mark
