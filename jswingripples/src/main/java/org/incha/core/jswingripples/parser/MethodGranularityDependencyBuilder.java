@@ -62,7 +62,7 @@ public class MethodGranularityDependencyBuilder implements  JRipplesDependencyGr
             monitor.beginTask("Building call graph",10);
             new Analyzer(eig, monitor, new InteractiveTask.TaskListener() {
                 @Override
-                public void taskSucessful() {
+                public void taskSuccessful() {
                     monitor.done();
                     monitor.setTaskName("Analysis Successful");
                 }

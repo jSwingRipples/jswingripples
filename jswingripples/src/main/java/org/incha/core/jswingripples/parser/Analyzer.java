@@ -66,7 +66,7 @@ class Analyzer extends InteractiveTask {
         } catch (Exception e) {
             listener.taskFailure();
         }
-        listener.taskSucessful();
+        listener.taskSuccessful();
 	}
 
 	private Map<IMethod,HashSet <IMethod>> loadMembers(final ICompilationUnit[] units) {

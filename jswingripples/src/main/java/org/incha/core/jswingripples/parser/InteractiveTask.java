@@ -5,7 +5,7 @@ package org.incha.core.jswingripples.parser;
  */
 public abstract class InteractiveTask extends Thread {
     public interface TaskListener {
-        void taskSucessful();
+        void taskSuccessful();
         void taskFailure();
     }
 
@@ -14,7 +14,7 @@ public abstract class InteractiveTask extends Thread {
     public static TaskListener getDummyListener() {
         return new TaskListener() {
             @Override
-            public void taskSucessful() { }
+            public void taskSuccessful() { }
             @Override
             public void taskFailure() { }
         };
