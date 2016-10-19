@@ -87,9 +87,38 @@ public class MethodGranularityDependencyBuilder implements  JRipplesDependencyGr
 	 */
 	@Override
     public void AnalyzeProject() {
+		AnalysisJob job=null;
+		final Window window = JSwingRipplesApplication.getInstance();
+		if (window != null) {
+			try {
+				job=new AnalysisJob(null);
+				final JSwingRipplesApplication app = JSwingRipplesApplication.getInstance();
+				try {
+					ModalContext.run(job, false, app.getProgressMonitor());
+				} finally {
+					app.getProgressMonitor().done();
+				}
+			}
+			catch (final Exception e) {
+				log.error(e);
+			}
+		} else {
+			final NullMonitor monitor=new NullMonitor();
+			job=new AnalysisJob(null);
+			try {
+				job.run(monitor);
+			} catch (final Exception e) {
+				log.error(e);
+			}
+		}
 
-	//	if (!JRipplesEIG.isLocked())
-		runn(null);
+		if (job==null) return;
+		if (job.canceled) {
+			JOptionPane.showMessageDialog(JSwingRipplesApplication.getInstance(),
+					"Parser analysis was canceled.", "Parsing canceled",
+					JOptionPane.ERROR_MESSAGE);
+			return ;
+		}
 	}
 
     /**
@@ -114,47 +143,6 @@ public class MethodGranularityDependencyBuilder implements  JRipplesDependencyGr
     public void shutDown(final int controllerType) {
 	}
 
-//	----------------------------------------------------------------------
-	private void runn(final Set<IMember> changed_nodes){
-		AnalysisJob job=null;
-		final Window window = JSwingRipplesApplication.getInstance();
-        if (window != null) {
-
-     		try {
-     			job=new AnalysisJob(changed_nodes);
-     			final JSwingRipplesApplication app = JSwingRipplesApplication.getInstance();
-     			try {
-     			    ModalContext.run(job, false, app.getProgressMonitor());
-     			} finally {
-     			    app.getProgressMonitor().done();
-     			}
-     		}
-     		catch (final Exception e) {
-     			log.error(e);
-     		};
-
-
-        } else {
-        	final NullMonitor monitor=new NullMonitor();
-        	job=new AnalysisJob(changed_nodes);
-        	try {
-        		job.run(monitor);
-        	} catch (final Exception e) {
-     			log.error(e);
-     		};
-        }
-
-        if (job==null) return;
- 		if (job.canceled) {
- 		    JOptionPane.showMessageDialog(JSwingRipplesApplication.getInstance(),
- 		           "Parser analysis was canceled.", "Parsing canceled",
- 		            JOptionPane.ERROR_MESSAGE);
- 		    return ;
- 		}
-	}
-	/* (non-Javadoc)
-	 * @see org.incha.core.jswingripples.JRipplesModuleInterface#initializeStage()
-	 */
 	@Override
 	public void runInAnalize() {
 	    AnalyzeProject();
