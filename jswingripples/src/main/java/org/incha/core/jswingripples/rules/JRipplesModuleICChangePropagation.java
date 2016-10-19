@@ -60,13 +60,13 @@ public class JRipplesModuleICChangePropagation implements
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesICModuleInterface#initializeStage()
-	 */
 	@Override
     public void InitializeStage() {
+        // TODO: delete this
+	}
+
+    @Override
+    public void InitializeStage(JRipplesModuleRunner moduleRunner) {
         final JSwingRipplesEIGNode[] nodes = eig.getAllNodes();
         final Set<JSwingRipplesEIGNode> impactedMemberNodes = new LinkedHashSet<JSwingRipplesEIGNode>();
         final Set<JSwingRipplesEIGNode> impactedTopNodes = new LinkedHashSet<JSwingRipplesEIGNode>();
@@ -75,8 +75,8 @@ public class JRipplesModuleICChangePropagation implements
                 if ((nodes[i].getMark().compareTo(EIGStatusMarks.LOCATED) != 0) && (nodes[i].getMark().compareTo(EIGStatusMarks.IMPACTED) != 0) && (nodes[i].getMark().compareTo(EIGStatusMarks.CHANGED) != 0))
                     nodes[i].setMark(EIGStatusMarks.BLANK);
                 else
-                    if (!nodes[i].isTop()) impactedMemberNodes.add(nodes[i]);
-                    else impactedTopNodes.add(nodes[i]);
+                if (!nodes[i].isTop()) impactedMemberNodes.add(nodes[i]);
+                else impactedTopNodes.add(nodes[i]);
             }
             //          Process members first
             for (final Iterator<JSwingRipplesEIGNode> iter = impactedMemberNodes.iterator(); iter.hasNext();) {
@@ -96,13 +96,8 @@ public class JRipplesModuleICChangePropagation implements
             }
 
         }
-
         eig.getHistory().clear();
-	}
-
-    @Override
-    public void InitializeStage(JRipplesModuleRunner moduleRunner) {
-
+        moduleRunner.moduleFinished();
     }
 
     @Override
@@ -157,6 +152,6 @@ public class JRipplesModuleICChangePropagation implements
 
     @Override
     public void runModuleWithinRunner(JRipplesModuleRunner moduleRunner) {
-        // TODO
+        InitializeStage(moduleRunner);
     }
 }
