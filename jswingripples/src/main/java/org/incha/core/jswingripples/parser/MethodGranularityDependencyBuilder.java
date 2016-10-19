@@ -112,13 +112,7 @@ public class MethodGranularityDependencyBuilder implements  JRipplesDependencyGr
     protected Analyzer createAnalizer(final TaskProgressMonitor monitor) {
         return new Analyzer(eig, monitor);
     }
-
-	/* (non-Javadoc)
-	 * @see org.severe.jripples.defaultmodules.parsers.interfaces.JRipplesDependencyGraphModuleInterface#ReAnalyzeProjectAtNodes(java.util.Set)
-	 */
-	@Override
-    public void ReAnalyzeProjectAtNodes(final Set<JSwingRipplesEIGNode> changed_nodes) {
-	}
+    
 
 	@Override
 	public void runModule() {
