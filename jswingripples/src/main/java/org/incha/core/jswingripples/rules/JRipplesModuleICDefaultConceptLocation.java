@@ -72,7 +72,7 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
 	 */
 	@Override
     public void InitializeStage() {
-
+        // TODO: delete this method
 	}
 
     @Override
@@ -91,7 +91,7 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
                 }
             }
         }
-
+        moduleRunner.moduleFinished();
         eig.getHistory().clear();
     }
 
@@ -150,7 +150,7 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
      */
     @Override
     public void runModule() {
-        InitializeStage();
+        // TODO: delete this
     }
 
     @Override
