@@ -84,9 +84,8 @@ public class ModuleConfiguration {
         return analysis;
     }
 
-    public List<JRipplesModuleInterface> buildModules(
-            final JSwingRipplesEIG eig, final JavaProject project) {
-        final List<JRipplesModuleInterface> modules = new LinkedList<JRipplesModuleInterface>();
+    public List<JRipplesModuleInterface> buildModules(final JSwingRipplesEIG eig) {
+        final List<JRipplesModuleInterface> modules = new LinkedList<>();
 
         modules.add(createDependencyBuilderModule(eig));
         modules.add(createIncrementalChangeModule(eig));
