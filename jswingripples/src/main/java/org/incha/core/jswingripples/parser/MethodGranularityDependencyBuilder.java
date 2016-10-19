@@ -38,8 +38,6 @@ public class MethodGranularityDependencyBuilder implements  JRipplesDependencyGr
 
 	private class AnalysisJob implements RunnableWithProgress {
 
-		public boolean canceled=false;
-
 		public AnalysisJob(final Set<IMember> EIGNodes) {
 			if (EIGNodes==null) return;
 			if (EIGNodes.size()==0) return;
@@ -61,27 +59,22 @@ public class MethodGranularityDependencyBuilder implements  JRipplesDependencyGr
 		 */
 		@Override
 		public void run(final TaskProgressMonitor monitor) {
-            try {
-                monitor.beginTask("Building call graph",10);
-                new Analyzer(eig, monitor, new InteractiveTask.TaskListener() {
-                    @Override
-                    public void taskSucessful() {
+            monitor.beginTask("Building call graph",10);
+            new Analyzer(eig, monitor, new InteractiveTask.TaskListener() {
+                @Override
+                public void taskSucessful() {
+                    monitor.done();
+                    monitor.setTaskName("Analysis Successful");
+                }
 
-                    }
-
-                    @Override
-                    public void taskFailure() {
-                        monitor.setTaskName("Canceled");
-                        canceled=true;
-                        monitor.done();
-                    }
-                }).start();
-
-                final Thread thread = createAnalizer(monitor);
-                thread.start();
-            } finally {
-                monitor.done();
-            }
+                @Override
+                public void taskFailure() {
+                    JOptionPane.showMessageDialog(JSwingRipplesApplication.getInstance(),
+                            "Parser analysis was canceled.", "Parsing canceled",
+                            JOptionPane.ERROR_MESSAGE);
+                    monitor.done();
+                }
+            }).start();
 		}
 	}
 
@@ -90,7 +83,7 @@ public class MethodGranularityDependencyBuilder implements  JRipplesDependencyGr
 	 */
 	@Override
     public void AnalyzeProject() {
-		AnalysisJob job=null;
+		AnalysisJob job;
 		final Window window = JSwingRipplesApplication.getInstance();
 		if (window != null) {
 			try {
@@ -113,14 +106,6 @@ public class MethodGranularityDependencyBuilder implements  JRipplesDependencyGr
 			} catch (final Exception e) {
 				log.error(e);
 			}
-		}
-
-		if (job==null) return;
-		if (job.canceled) {
-			JOptionPane.showMessageDialog(JSwingRipplesApplication.getInstance(),
-					"Parser analysis was canceled.", "Parsing canceled",
-					JOptionPane.ERROR_MESSAGE);
-			return;
 		}
 	}
 
