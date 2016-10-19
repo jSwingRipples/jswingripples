@@ -155,12 +155,7 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
         // TODO
     }
 
-    /**
-     * @param nodes
-     * @param mainClass
-     * @return
-     */
-    private JSwingRipplesEIGNode getType(final JSwingRipplesEIGNode[] nodes, final String mainClass) {
+    private JSwingRipplesEIGNode getType(final JSwingRipplesEIGNode[] nodes) {
         for (int i = 0; i < nodes.length; i++) {
             final IMember member = nodes[i].getNodeIMember();
             if (member instanceof IType && ((IType) member).getFullyQualifiedName().equals(
