@@ -102,12 +102,6 @@ public class JRipplesModuleICImpactAnalysis implements
 	}
 
 	@Override
-    public Set<String> getAllMarks() {
-		final String marks[] = { EIGStatusMarks.IMPACTED, EIGStatusMarks.VISITED_CONTINUE, EIGStatusMarks.VISITED,EIGStatusMarks.BLANK ,EIGStatusMarks.NEXT_VISIT};
-		return (new LinkedHashSet<String>(Arrays.asList(marks)));
-	}
-
-	@Override
     public void ApplyRuleAtNode(final String rule,  final JSwingRipplesEIGNode nodeFrom, final JSwingRipplesEIGNode nodeTo) {
         if ((rule.compareTo(EIGStatusMarks.IMPACTED) == 0) || (rule.compareTo(EIGStatusMarks.VISITED_CONTINUE) == 0)) {
             CommonEIGRules.assignMarkToNodeAndNeighbor(eig, nodeFrom, nodeTo,rule,EIGStatusMarks.NEXT_VISIT);
@@ -131,16 +125,6 @@ public class JRipplesModuleICImpactAnalysis implements
         } catch (final Exception e) {
             log.error(e);
         }
-	}
-
-	@Override
-    public Image getImageDescriptorForMark(final String mark) {
-		return EIGStatusMarks.getImageDescriptorForMark(mark);
-	}
-
-	@Override
-    public Color getColorForMark(final String mark) {
-		return EIGStatusMarks.getColorForMark(mark);
 	}
 
 	@Override

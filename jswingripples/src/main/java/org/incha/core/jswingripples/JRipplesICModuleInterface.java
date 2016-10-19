@@ -47,28 +47,4 @@ public interface JRipplesICModuleInterface extends JRipplesModuleInterface {
 
 	 */
 	void ApplyRuleAtNode(String rule, JSwingRipplesEIGNode nodeFrom, JSwingRipplesEIGNode nodeTo);
-
-
-	/**
-	 * Returns a set of all marks (names of propagation rules), used by an Incremental Change stage that is supported in this module.
-	 * @return
-	 * a set of marks (of type String)
-	 */
-	Set<String> getAllMarks();
-	/**
-	 * Returns image descriptor that is used to display the supplied mark in a GUI.
-	 * @param mark
-	 *  mark, for which image descriptor is needed
-	 * @return
-	 *  image descriptor if any, <br><code>null</code> otherwise
-	 */
-	Image getImageDescriptorForMark(String mark);
-	/**
-	 * Returns color that is used to decorate rows of the tables in a GUI.
-	 * @param mark
-	 *  mark, for which color is needed
-	 * @return
-	 *  Color if any, <br><code>null</code> otherwise
-	 */
-	Color getColorForMark(String mark) ;
 }

@@ -86,12 +86,6 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
         eig.getHistory().clear();
     }
 
-    @Override
-    public Set<String> getAllMarks() {
-		final String marks[] = { EIGStatusMarks.LOCATED, EIGStatusMarks.VISITED_CONTINUE, EIGStatusMarks.VISITED,EIGStatusMarks.BLANK ,EIGStatusMarks.NEXT_VISIT};
-		return (new LinkedHashSet<String>(Arrays.asList(marks)));
-
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -126,15 +120,6 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
 
             CommonEIGRules.applyRuleToNode(eig, nodeFrom,rule,0);
         }
-	}
-
-	@Override
-    public Image getImageDescriptorForMark(final String mark) {
-		return EIGStatusMarks.getImageDescriptorForMark(mark);
-	}
-	@Override
-    public Color getColorForMark(final String mark) {
-		return EIGStatusMarks.getColorForMark(mark);
 	}
 
     @Override

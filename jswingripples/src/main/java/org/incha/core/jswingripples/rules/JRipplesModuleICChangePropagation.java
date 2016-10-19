@@ -95,12 +95,6 @@ public class JRipplesModuleICChangePropagation implements
         moduleRunner.moduleFinished();
     }
 
-    @Override
-    public Set<String> getAllMarks() {
-		final String marks[] = { EIGStatusMarks.CHANGED, EIGStatusMarks.VISITED_CONTINUE, EIGStatusMarks.VISITED,EIGStatusMarks.BLANK ,EIGStatusMarks.NEXT_VISIT};
-		return (new LinkedHashSet<String>(Arrays.asList(marks)));
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -126,16 +120,6 @@ public class JRipplesModuleICChangePropagation implements
 
             CommonEIGRules.applyRuleToNode(eig, nodeFrom,rule,0);
         }
-	}
-
-	@Override
-    public  Image getImageDescriptorForMark(final String mark) {
-		return EIGStatusMarks.getImageDescriptorForMark(mark);
-	}
-
-	@Override
-    public Color getColorForMark(final String mark) {
-		return EIGStatusMarks.getColorForMark(mark);
 	}
 
     @Override
