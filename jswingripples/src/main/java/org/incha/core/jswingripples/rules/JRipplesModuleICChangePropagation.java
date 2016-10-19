@@ -14,6 +14,7 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.incha.core.jswingripples.JRipplesICModuleInterface;
+import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 import org.incha.ui.jripples.EIGStatusMarks;
@@ -148,4 +149,9 @@ public class JRipplesModuleICChangePropagation implements
 	public void runModule() {
 	    InitializeStage();
 	}
+
+    @Override
+    public void runModuleWithinRunner(JRipplesModuleRunner moduleRunner) {
+        // TODO
+    }
 }

@@ -31,9 +31,10 @@ public class JRipplesModuleRunner {
     public void runModules(Collection<JRipplesModuleInterface> modules) {
         modulesFinished = 0;
         targetModulesRunning = modules.size();
+        System.out.println("Running modules. Target = " + targetModulesRunning);
         for (JRipplesModuleInterface module : modules) {
             try {
-                module.runModule();
+                module.runModuleWithinRunner(this);
             } catch (Exception e) {
                 listener.runFailure();
             }

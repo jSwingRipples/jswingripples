@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.incha.core.ModuleConfiguration;
 import org.incha.core.jswingripples.JRipplesAnalysisModuleInterface;
+import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGEdge;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGEvent;
@@ -214,5 +215,10 @@ public class JRipplesModuleAnalysisDefaultImpactSetConnections implements
 	@Override
 	public void runModule() {
 	    AnalyzeProject();
+	}
+
+	@Override
+	public void runModuleWithinRunner(JRipplesModuleRunner moduleRunner) {
+		// TODO
 	}
 }

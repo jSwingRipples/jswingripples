@@ -13,6 +13,7 @@ import java.util.Set;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IType;
 import org.incha.core.jswingripples.JRipplesICModuleInterface;
+import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 import org.incha.ui.jripples.EIGStatusMarks;
@@ -163,5 +164,10 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
     @Override
     public void runModule() {
         InitializeStage();
+    }
+
+    @Override
+    public void runModuleWithinRunner(JRipplesModuleRunner moduleRunner) {
+        // TODO
     }
 }

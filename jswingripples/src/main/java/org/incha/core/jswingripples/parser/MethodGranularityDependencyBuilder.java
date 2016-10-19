@@ -67,12 +67,14 @@ public class MethodGranularityDependencyBuilder implements JRipplesModuleInterfa
     }
 
     @Override
-    public void runModule() {
-        AnalysisJob job;
+    public void runModule() { }
+
+    @Override
+    public void runModuleWithinRunner(JRipplesModuleRunner moduleRunner) {
         final Window window = JSwingRipplesApplication.getInstance();
         if (window != null) {
             try {
-                job=new AnalysisJob(null);
+                AnalysisJob job=new AnalysisJob(moduleRunner);
                 final JSwingRipplesApplication app = JSwingRipplesApplication.getInstance();
                 try {
                     ModalContext.run(job, false, app.getProgressMonitor());
@@ -85,7 +87,7 @@ public class MethodGranularityDependencyBuilder implements JRipplesModuleInterfa
             }
         } else {
             final NullMonitor monitor=new NullMonitor();
-            job=new AnalysisJob(null);
+            AnalysisJob job =new AnalysisJob(moduleRunner);
             try {
                 job.run(monitor);
             } catch (final Exception e) {
