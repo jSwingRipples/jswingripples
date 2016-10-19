@@ -65,15 +65,6 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
 		return currentNode;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesICModuleInterface#initializeStage()
-	 */
-	@Override
-    public void InitializeStage() {
-        // TODO: delete this method
-	}
 
     @Override
     public void InitializeStage(JRipplesModuleRunner moduleRunner) {
@@ -145,13 +136,6 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
     public Color getColorForMark(final String mark) {
 		return EIGStatusMarks.getColorForMark(mark);
 	}
-    /* (non-Javadoc)
-     * @see org.incha.core.jswingripples.JRipplesModuleInterface#initializeStage()
-     */
-    @Override
-    public void runModule() {
-        // TODO: delete this
-    }
 
     @Override
     public void runModuleWithinRunner(JRipplesModuleRunner moduleRunner) {

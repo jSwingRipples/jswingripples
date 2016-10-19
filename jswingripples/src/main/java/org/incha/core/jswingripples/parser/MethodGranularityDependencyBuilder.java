@@ -67,9 +67,6 @@ public class MethodGranularityDependencyBuilder implements JRipplesModuleInterfa
     }
 
     @Override
-    public void runModule() { }
-
-    @Override
     public void runModuleWithinRunner(JRipplesModuleRunner moduleRunner) {
         final Window window = JSwingRipplesApplication.getInstance();
         if (window != null) {

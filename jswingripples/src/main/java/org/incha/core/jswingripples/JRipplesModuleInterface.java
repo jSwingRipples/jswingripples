@@ -14,11 +14,5 @@ package org.incha.core.jswingripples;
  *
  */
 public interface JRipplesModuleInterface {
-    /**
-     * Runs module.
-     */
-    void runModule();
-
     void runModuleWithinRunner(JRipplesModuleRunner moduleRunner);
-
 }

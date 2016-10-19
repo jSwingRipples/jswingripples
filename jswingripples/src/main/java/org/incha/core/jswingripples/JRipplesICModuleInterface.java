@@ -16,12 +16,8 @@ import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
  *
  */
 public interface JRipplesICModuleInterface extends JRipplesModuleInterface {
-	/**
-	 * Called to initialize Incremental Change stage that this module supports. Typically is called either on EIG initialization or upon switching to the next stage of Incremental Change.
-	 */
-	public void InitializeStage();
 
-	public void InitializeStage(JRipplesModuleRunner moduleRunner);
+	void InitializeStage(JRipplesModuleRunner moduleRunner);
 	/**
 	 * Returns a set of marks (names of propagation rules), available for a node with the supplied current mark. This is called to determine which propagation rules can still be applied to a particular node and display this rules in GUI.
 	 * @param mark
@@ -29,7 +25,7 @@ public interface JRipplesICModuleInterface extends JRipplesModuleInterface {
 	 * @return
 	 * 	a set of marks (of type String)
 	 */
-	public Set<String> GetAvailableRulesForMark(String mark);
+	Set<String> GetAvailableRulesForMark(String mark);
 	/**
 	 * Applies the selected propagation rule at the selected node.
 	 * @param rule
@@ -39,7 +35,7 @@ public interface JRipplesICModuleInterface extends JRipplesModuleInterface {
 	 * @param granularity
 	 * granularity at which the rule is applied
 	 */
-	public void ApplyRuleAtNode(String rule, JSwingRipplesEIGNode node, int granularity);
+	void ApplyRuleAtNode(String rule, JSwingRipplesEIGNode node, int granularity);
 	/**
 	 * Applies the selected propagation rule at the selected node using the particular dependency instead of the whole dependency graph.
 	 * @param rule
@@ -50,7 +46,7 @@ public interface JRipplesICModuleInterface extends JRipplesModuleInterface {
 	 * node, to which the rule propagates
 
 	 */
-	public void ApplyRuleAtNode(String rule, JSwingRipplesEIGNode nodeFrom, JSwingRipplesEIGNode nodeTo);
+	void ApplyRuleAtNode(String rule, JSwingRipplesEIGNode nodeFrom, JSwingRipplesEIGNode nodeTo);
 
 
 	/**
@@ -58,7 +54,7 @@ public interface JRipplesICModuleInterface extends JRipplesModuleInterface {
 	 * @return
 	 * a set of marks (of type String)
 	 */
-	public Set<String> getAllMarks();
+	Set<String> getAllMarks();
 	/**
 	 * Returns image descriptor that is used to display the supplied mark in a GUI.
 	 * @param mark
@@ -66,7 +62,7 @@ public interface JRipplesICModuleInterface extends JRipplesModuleInterface {
 	 * @return
 	 *  image descriptor if any, <br><code>null</code> otherwise
 	 */
-	public Image getImageDescriptorForMark(String mark);
+	Image getImageDescriptorForMark(String mark);
 	/**
 	 * Returns color that is used to decorate rows of the tables in a GUI.
 	 * @param mark
@@ -74,5 +70,5 @@ public interface JRipplesICModuleInterface extends JRipplesModuleInterface {
 	 * @return
 	 *  Color if any, <br><code>null</code> otherwise
 	 */
-	public Color getColorForMark(String mark) ;
+	Color getColorForMark(String mark) ;
 }

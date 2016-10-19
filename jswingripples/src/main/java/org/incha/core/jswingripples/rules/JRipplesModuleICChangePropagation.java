@@ -60,11 +60,6 @@ public class JRipplesModuleICChangePropagation implements
 		}
 	}
 
-	@Override
-    public void InitializeStage() {
-        // TODO: delete this
-	}
-
     @Override
     public void InitializeStage(JRipplesModuleRunner moduleRunner) {
         final JSwingRipplesEIGNode[] nodes = eig.getAllNodes();
@@ -141,13 +136,6 @@ public class JRipplesModuleICChangePropagation implements
 	@Override
     public Color getColorForMark(final String mark) {
 		return EIGStatusMarks.getColorForMark(mark);
-	}
-	/* (non-Javadoc)
-	 * @see org.incha.core.jswingripples.JRipplesModuleInterface#initializeStage()
-	 */
-	@Override
-	public void runModule() {
-	    InitializeStage();
 	}
 
     @Override

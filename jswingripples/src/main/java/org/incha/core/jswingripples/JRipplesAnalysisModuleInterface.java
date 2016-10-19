@@ -17,17 +17,10 @@ import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
  */
 public interface JRipplesAnalysisModuleInterface extends
 		JRipplesModuleInterface {
+
 	/**
 	 * Called to calculate estimations for all nodes in the JRipple EIG. Typically is called upon EIG initialization.
-	 * @see JRipplesEIG
-	 * @see JRipplesEIGNode.getProbability()
 	 */
-	public void AnalyzeProject();
-	/**
-	 * Called to reestimate probability values of a set of JRipple EIG nodes. Typically is called to reflect changes in particular nodes.
-	 * @param changed_nodes
-	 * set of {@link JRipplesEIGNode} nodes to be displayed in the GUI
-	 */
-	public void ReAnalyzeProjectAtNodes(Set<JSwingRipplesEIGNode> changed_nodes);
+	void AnalyzeProjectWithinModuleRunner(JRipplesModuleRunner moduleRunner);
 }
 
