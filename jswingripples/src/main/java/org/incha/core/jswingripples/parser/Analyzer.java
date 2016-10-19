@@ -39,33 +39,26 @@ class Analyzer extends Thread {
 	public void setAccountForPolymorphismMode(final boolean accountForPolymorphism) {
 		this.accountForPolymorphism=accountForPolymorphism;
 	}
-	public boolean getAccountForPolymorphismMode() {
-		return accountForPolymorphism;
-	}
 
 	@Override
     public void run() {
         try {
-            try {
-                final ICompilationUnit[] units = JavaDomUtils.getCompilationUnits(
-                        eig.getJavaProject(), monitor);
-
-                if (units.length > 0) {
-                    //initially add all nodes
-                    for (final ICompilationUnit u : units) {
-                        final List<IJavaElement> allNodes = JavaDomUtils.getAllNodes(u);
-                        for (final IJavaElement el : allNodes) {
-                            if (el instanceof IMember) {
-                                eig.addNode((IMember) el);
-                            }
+            final ICompilationUnit[] units = JavaDomUtils.getCompilationUnits(eig.getJavaProject(), monitor);
+            if (units.length > 0) {
+                //initially add all nodes
+                for (final ICompilationUnit u : units) {
+                    final List<IJavaElement> allNodes = JavaDomUtils.getAllNodes(u);
+                    for (final IJavaElement el : allNodes) {
+                        if (el instanceof IMember) {
+                            eig.addNode((IMember) el);
                         }
                     }
-                    final Map<IMethod, HashSet<IMethod>> overrides = loadMembers(units);
-                    processEdges(units, overrides);
                 }
-            } catch (final Exception e) {
+                final Map<IMethod, HashSet<IMethod>> overrides = loadMembers(units);
+                processEdges(units, overrides);
             }
-        } catch (final Exception e) {
+        } catch (Exception e) {
+            // TODO: handle exception
         }
 	}
 
@@ -149,12 +142,11 @@ class Analyzer extends Thread {
             //----------------------
             for (int i=0;i<units.length;i++) {
                 final ICompilationUnit unit = units[i];
-                processEdges(unit, eig.getJavaProject().getName(), units, overrides);
+                processEdges(unit, units, overrides);
                 subMonitor.worked(i);
                 subMonitor.setTaskName("Analyzing "+unit.getElementName()+" ("+ i +" out of "+units.length+")");
 
             }
-
             subMonitor.done();
         } catch (final Exception e) {
             log.error(e);
@@ -163,13 +155,14 @@ class Analyzer extends Thread {
 
     /**
      * @param unit
-     * @param projectName
      * @param units
      * @param overrides
      * @throws JavaModelException
      */
-    public void processEdges(final ICompilationUnit unit, final String projectName,
-            final ICompilationUnit[] units, final Map<IMethod, HashSet<IMethod>> overrides) throws JavaModelException {
+    private void processEdges(
+            final ICompilationUnit unit,
+            final ICompilationUnit[] units,
+            final Map<IMethod, HashSet<IMethod>> overrides) throws JavaModelException {
         if (monitor.isCanceled()) {
             return;
         }
