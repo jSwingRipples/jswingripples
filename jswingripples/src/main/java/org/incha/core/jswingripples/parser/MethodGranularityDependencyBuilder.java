@@ -109,11 +109,10 @@ public class MethodGranularityDependencyBuilder implements  JRipplesDependencyGr
 		}
 	}
 
-    protected Analyzer createAnalizer(final TaskProgressMonitor monitor) {
+    protected Analyzer createAnalyzer(final TaskProgressMonitor monitor) {
         return new Analyzer(eig, monitor);
     }
     
-
 	@Override
 	public void runModule() {
 	    AnalyzeProject();

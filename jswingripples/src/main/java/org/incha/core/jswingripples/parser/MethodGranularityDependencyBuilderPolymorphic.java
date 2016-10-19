@@ -26,11 +26,11 @@ public class MethodGranularityDependencyBuilderPolymorphic extends   MethodGranu
         this.accountForPolymorphismMode = b;
     }
     /* (non-Javadoc)
-     * @see org.incha.core.jswingripples.parser.MethodGranularityDependencyBuilder#createAnalizer(java.util.HashSet, org.incha.ui.core.TaskProgressMonitor)
+     * @see org.incha.core.jswingripples.parser.MethodGranularityDependencyBuilder#createAnalyzer(java.util.HashSet, org.incha.ui.core.TaskProgressMonitor)
      */
     @Override
-    protected Analyzer createAnalizer(final TaskProgressMonitor monitor) {
-        final Analyzer analizer = super.createAnalizer(monitor);
+    protected Analyzer createAnalyzer(final TaskProgressMonitor monitor) {
+        final Analyzer analizer = super.createAnalyzer(monitor);
         analizer.setAccountForPolymorphismMode(accountForPolymorphismMode);
         return analizer;
     }
