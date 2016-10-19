@@ -20,7 +20,7 @@ public abstract class TaskProgressMonitor extends JPanel {
             return;
         }
         if (currentTask.isAlive() && !currentTask.isInterrupted()) {
-            currentTask.interrupt();
+            currentTask.stop();
         }
         currentTask.getListener().taskFailure();
     }
