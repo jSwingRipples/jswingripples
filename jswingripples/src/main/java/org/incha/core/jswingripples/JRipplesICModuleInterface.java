@@ -13,8 +13,6 @@ import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 /**
  * Interface of JRipples modules that provide and execute Incremental Change (IC) propagation rules for JRipplesEIG nodes.
  * @author Maksym Petrenko
- * @see JRipplesEIG
- * @see JRipplesEIGNode
  *
  */
 public interface JRipplesICModuleInterface extends JRipplesModuleInterface {
@@ -22,6 +20,8 @@ public interface JRipplesICModuleInterface extends JRipplesModuleInterface {
 	 * Called to initialize Incremental Change stage that this module supports. Typically is called either on EIG initialization or upon switching to the next stage of Incremental Change.
 	 */
 	public void InitializeStage();
+
+	public void InitializeStage(JRipplesModuleRunner.ModuleRunnerListener moduleRunner);
 	/**
 	 * Returns a set of marks (names of propagation rules), available for a node with the supplied current mark. This is called to determine which propagation rules can still be applied to a particular node and display this rules in GUI.
 	 * @param mark

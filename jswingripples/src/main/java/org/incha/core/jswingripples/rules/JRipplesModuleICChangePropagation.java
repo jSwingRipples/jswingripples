@@ -100,7 +100,12 @@ public class JRipplesModuleICChangePropagation implements
         eig.getHistory().clear();
 	}
 
-	@Override
+    @Override
+    public void InitializeStage(JRipplesModuleRunner.ModuleRunnerListener moduleRunner) {
+
+    }
+
+    @Override
     public Set<String> getAllMarks() {
 		final String marks[] = { EIGStatusMarks.CHANGED, EIGStatusMarks.VISITED_CONTINUE, EIGStatusMarks.VISITED,EIGStatusMarks.BLANK ,EIGStatusMarks.NEXT_VISIT};
 		return (new LinkedHashSet<String>(Arrays.asList(marks)));

@@ -91,6 +91,11 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
 	}
 
     @Override
+    public void InitializeStage(JRipplesModuleRunner.ModuleRunnerListener moduleRunner) {
+        // TODO
+    }
+
+    @Override
     public Set<String> getAllMarks() {
 		final String marks[] = { EIGStatusMarks.LOCATED, EIGStatusMarks.VISITED_CONTINUE, EIGStatusMarks.VISITED,EIGStatusMarks.BLANK ,EIGStatusMarks.NEXT_VISIT};
 		return (new LinkedHashSet<String>(Arrays.asList(marks)));
