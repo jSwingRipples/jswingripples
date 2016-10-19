@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.jdt.core.IMember;
 import org.incha.core.jswingripples.JRipplesDependencyGraphModuleInterface;
 import org.incha.core.jswingripples.JRipplesModuleInterface;
+import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 import org.incha.ui.JSwingRipplesApplication;
@@ -30,21 +31,9 @@ public class MethodGranularityDependencyBuilder implements JRipplesModuleInterfa
     private final JSwingRipplesEIG eig;
 
     private class AnalysisJob implements RunnableWithProgress {
-
-        public AnalysisJob(final Set<IMember> EIGNodes) {
-            if (EIGNodes==null) return;
-            if (EIGNodes.size()==0) return;
-
-            for (final Iterator<IMember> iter=EIGNodes.iterator();iter.hasNext();) {
-                final JSwingRipplesEIGNode EIGnode=(JSwingRipplesEIGNode) iter.next();
-                if (EIGnode.getNodeIMember()!=null) {
-                    final JSwingRipplesEIGNode[] refferedNodes=eig.getOutgoingAnyNodeNeighbors(EIGnode);
-                    if (refferedNodes!=null)
-                        for (int i=0;i<refferedNodes.length;i++) {
-                            eig.removeEdge(eig.getEdge(EIGnode, refferedNodes[i]));
-                        }
-                }
-            }
+        private JRipplesModuleRunner moduleRunner;
+        public AnalysisJob(JRipplesModuleRunner moduleRunner) {
+            this.moduleRunner = moduleRunner;
         }
 
         @Override
@@ -55,6 +44,7 @@ public class MethodGranularityDependencyBuilder implements JRipplesModuleInterfa
                 public void taskSuccessful() {
                     monitor.done();
                     monitor.setTaskName("Analysis Successful");
+                    moduleRunner.moduleFinished(); // tells the moduleRunner this thread is done
                 }
 
                 @Override
