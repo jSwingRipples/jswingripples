@@ -4,10 +4,6 @@
  */
 package org.incha.core.jswingripples;
 
-import java.util.Set;
-
-import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
-
 /**
  * Interface of JRipples modules that build a dependency graph and populate JRipples EIG database.
  * @author Maksym Petrenko
