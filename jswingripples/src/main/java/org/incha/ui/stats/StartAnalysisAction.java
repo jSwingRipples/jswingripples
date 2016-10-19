@@ -80,9 +80,9 @@ public class StartAnalysisAction implements ActionListener {
         }
 
         project.setModuleConfiguration(config);
-        final List<JRipplesModuleInterface> m = config.buildModules(eig, project);
+        final List<JRipplesModuleInterface> m = config.buildModules(eig);
         for (final JRipplesModuleInterface i : m) {
-            i.runInAnalize();
+            i.runModule();
         }
 
         StatisticsManager.getInstance().addStatistics(config, eig);

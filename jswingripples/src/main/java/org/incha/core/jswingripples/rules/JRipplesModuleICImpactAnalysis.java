@@ -63,14 +63,6 @@ public class JRipplesModuleICImpactAnalysis implements
 			return null;
 		}
 	}
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesModuleInterface#shutDown(int controllerType)
-	 */
-	@Override
-    public void shutDown(final int controllerType) {
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -156,7 +148,7 @@ public class JRipplesModuleICImpactAnalysis implements
      * @see org.incha.core.jswingripples.JRipplesModuleInterface#initializeStage()
      */
     @Override
-    public void runInAnalize() {
+    public void runModule() {
         InitializeStage();
     }
 }

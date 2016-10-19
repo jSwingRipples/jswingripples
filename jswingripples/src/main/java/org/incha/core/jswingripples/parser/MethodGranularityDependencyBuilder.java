@@ -136,15 +136,9 @@ public class MethodGranularityDependencyBuilder implements  JRipplesDependencyGr
 	@Override
     public void ReAnalyzeProjectAtNodes(final Set<JSwingRipplesEIGNode> changed_nodes) {
 	}
-	/* (non-Javadoc)
-	 * @see org.severe.jripples.defaultmodules.parsers.interfaces.JRipplesModuleInterface#shutDown(int controllerType)
-	 */
-	@Override
-    public void shutDown(final int controllerType) {
-	}
 
 	@Override
-	public void runInAnalize() {
+	public void runModule() {
 	    AnalyzeProject();
 	}
 }

@@ -107,15 +107,6 @@ public class JRipplesModuleAnalysisDefaultImpactSetConnections implements
 		if (dirty)
 			calculateCouplingAndUpdateNodes();
 	}
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesModuleInterface#shutDown(int controllerType)
-	 */
-	@Override
-    public void shutDown(final int controllerType) {
-	    eig.removeJRipplesEIGListener(this);
-	}
 
 	@Override
     public void jRipplesEIGChanged(final JSwingRipplesEIGEvent event) {
@@ -218,10 +209,10 @@ public class JRipplesModuleAnalysisDefaultImpactSetConnections implements
 		if (oldProbability.compareTo(newProbability)!=0) node.setProbability(newProbability);
 	}
 	/* (non-Javadoc)
-	 * @see org.incha.core.jswingripples.JRipplesModuleInterface#runInAnalize()
+	 * @see org.incha.core.jswingripples.JRipplesModuleInterface#runModule()
 	 */
 	@Override
-	public void runInAnalize() {
+	public void runModule() {
 	    AnalyzeProject();
 	}
 }
