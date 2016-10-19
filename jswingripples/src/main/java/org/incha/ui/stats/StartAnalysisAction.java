@@ -81,7 +81,6 @@ public class StartAnalysisAction implements ActionListener {
         }
 
         project.setModuleConfiguration(config);
-        final List<JRipplesModuleInterface> m = config.buildModules(eig);
 
         new JRipplesModuleRunner(new JRipplesModuleRunner.ModuleRunnerListener() {
             @Override
@@ -94,7 +93,7 @@ public class StartAnalysisAction implements ActionListener {
             public void runFailure() {
                 System.out.println("run failure");
             }
-        }).runModules(m);
+        }).runModules(config.buildModules(eig));
 
         GraphBuilder.getInstance().addEIG(eig);
         GraphBuilder.getInstance().resetGraphs();
