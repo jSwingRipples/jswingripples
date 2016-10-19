@@ -1,14 +1,30 @@
 package org.incha.ui;
 
+import org.incha.core.jswingripples.parser.InteractiveTask;
+
 import javax.swing.JPanel;
 import java.awt.LayoutManager;
 
 public abstract class TaskProgressMonitor extends JPanel {
 
+    public InteractiveTask currentTask;
+
     public TaskProgressMonitor() {}
 
     public TaskProgressMonitor(LayoutManager layoutManager) {
         super(layoutManager);
+    }
+
+    protected void doCancel() {
+        if (currentTask == null) {
+            return;
+        }
+        currentTask.interrupt();
+        currentTask.getListener().taskFailure();
+    }
+
+    public void setTask(InteractiveTask task) {
+        this.currentTask = task;
     }
 
     /**
@@ -48,8 +64,6 @@ public abstract class TaskProgressMonitor extends JPanel {
      * @param value new current value.
      */
     public abstract void worked(int value);
-    /**
-     * @param max
-     */
+
     public abstract void setMaximum(int max);
 }

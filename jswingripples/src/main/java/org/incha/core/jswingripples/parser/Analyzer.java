@@ -34,6 +34,7 @@ class Analyzer extends InteractiveTask {
 	public Analyzer(final JSwingRipplesEIG eig, final TaskProgressMonitor mon) {
 		this.monitor=mon;
 		this.eig = eig;
+        this.monitor.setTask(this);
 	}
 
 	public Analyzer(final JSwingRipplesEIG eig, final TaskProgressMonitor mon, TaskListener listener) {
@@ -63,8 +64,9 @@ class Analyzer extends InteractiveTask {
                 processEdges(units, overrides);
             }
         } catch (Exception e) {
-            // TODO: handle exception
+            listener.taskFailure();
         }
+        listener.taskSucessful();
 	}
 
 	private Map<IMethod,HashSet <IMethod>> loadMembers(final ICompilationUnit[] units) {

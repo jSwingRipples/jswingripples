@@ -61,6 +61,7 @@ public class ProgressMonitorImpl extends TaskProgressMonitor {
      *
      */
     protected void doCancel() {
+        super.doCancel(); // interrupts the task thread!
         isCanceled.set(true);
         cancel.setEnabled(false);
     }
