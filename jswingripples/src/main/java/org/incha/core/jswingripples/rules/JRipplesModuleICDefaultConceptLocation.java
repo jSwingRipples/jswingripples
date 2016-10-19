@@ -92,22 +92,6 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
         eig.getHistory().clear();
 	}
 
-	/**
-     * @param nodes
-     * @param mainClass
-     * @return
-     */
-    private JSwingRipplesEIGNode getType(final JSwingRipplesEIGNode[] nodes, final String mainClass) {
-        for (int i = 0; i < nodes.length; i++) {
-            final IMember member = nodes[i].getNodeIMember();
-            if (member instanceof IType && ((IType) member).getFullyQualifiedName().equals(
-                    eig.getMainClass())) {
-                return nodes[i];
-            }
-        }
-        return null;
-    }
-
     @Override
     public Set<String> getAllMarks() {
 		final String marks[] = { EIGStatusMarks.LOCATED, EIGStatusMarks.VISITED_CONTINUE, EIGStatusMarks.VISITED,EIGStatusMarks.BLANK ,EIGStatusMarks.NEXT_VISIT};
@@ -169,5 +153,21 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
     @Override
     public void runModuleWithinRunner(JRipplesModuleRunner moduleRunner) {
         // TODO
+    }
+
+    /**
+     * @param nodes
+     * @param mainClass
+     * @return
+     */
+    private JSwingRipplesEIGNode getType(final JSwingRipplesEIGNode[] nodes, final String mainClass) {
+        for (int i = 0; i < nodes.length; i++) {
+            final IMember member = nodes[i].getNodeIMember();
+            if (member instanceof IType && ((IType) member).getFullyQualifiedName().equals(
+                    eig.getMainClass())) {
+                return nodes[i];
+            }
+        }
+        return null;
     }
 }
