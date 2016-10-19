@@ -65,8 +65,6 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
 		return currentNode;
 	}
 
-
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -81,7 +79,7 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
             }
 
             if (eig.getMainClass() != null) {
-                final JSwingRipplesEIGNode mainType = getType(nodes, eig.getMainClass());
+                final JSwingRipplesEIGNode mainType = getType(nodes);
                 if (mainType != null) {
                     mainType.setMark(EIGStatusMarks.NEXT_VISIT);
                     currentNode = mainType;
