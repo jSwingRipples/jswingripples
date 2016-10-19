@@ -63,19 +63,22 @@ public class MethodGranularityDependencyBuilder implements  JRipplesDependencyGr
 		public void run(final TaskProgressMonitor monitor) {
             try {
                 monitor.beginTask("Building call graph",10);
-                final Thread thread = createAnalizer(monitor);
-                thread.start();
+                new Analyzer(eig, monitor, new InteractiveTask.TaskListener() {
+                    @Override
+                    public void taskSucessful() {
 
-                while (thread.isAlive())  {
-                    if (monitor.isCanceled()) {
-                        thread.interrupt();
+                    }
+
+                    @Override
+                    public void taskFailure() {
                         monitor.setTaskName("Canceled");
                         canceled=true;
                         monitor.done();
-                        return;
                     }
-                    Thread.yield();; //XXX Make this more general
-                }
+                }).start();
+
+                final Thread thread = createAnalizer(monitor);
+                thread.start();
             } finally {
                 monitor.done();
             }
@@ -117,15 +120,10 @@ public class MethodGranularityDependencyBuilder implements  JRipplesDependencyGr
 			JOptionPane.showMessageDialog(JSwingRipplesApplication.getInstance(),
 					"Parser analysis was canceled.", "Parsing canceled",
 					JOptionPane.ERROR_MESSAGE);
-			return ;
+			return;
 		}
 	}
 
-    /**
-     * @param nodes
-     * @param monitor
-     * @return
-     */
     protected Analyzer createAnalizer(final TaskProgressMonitor monitor) {
         return new Analyzer(eig, monitor);
     }

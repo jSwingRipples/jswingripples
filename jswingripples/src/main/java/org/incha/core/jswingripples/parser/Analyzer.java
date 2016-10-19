@@ -24,7 +24,7 @@ import org.incha.ui.JSwingRipplesApplication;
 import org.incha.ui.TaskProgressMonitor;
 import org.incha.ui.util.SubProgressMonitor;
 
-class Analyzer extends Thread {
+class Analyzer extends InteractiveTask {
     private static final Log log = LogFactory.getLog(Analyzer.class);
 
 	private boolean accountForPolymorphism=false;
@@ -35,6 +35,11 @@ class Analyzer extends Thread {
 		this.monitor=mon;
 		this.eig = eig;
 	}
+
+	public Analyzer(final JSwingRipplesEIG eig, final TaskProgressMonitor mon, TaskListener listener) {
+        this(eig, mon);
+        this.listener = listener;
+    }
 
 	public void setAccountForPolymorphismMode(final boolean accountForPolymorphism) {
 		this.accountForPolymorphism=accountForPolymorphism;
