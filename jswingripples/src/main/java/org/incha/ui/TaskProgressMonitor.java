@@ -4,11 +4,12 @@ import org.incha.core.jswingripples.parser.InteractiveTask;
 
 import javax.swing.JPanel;
 import java.awt.LayoutManager;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public abstract class TaskProgressMonitor extends JPanel {
-    
-    public Collection<InteractiveTask> threadedTasks;
+
+    public Collection<InteractiveTask> threadedTasks = new ArrayList<>();
 
     public TaskProgressMonitor() {}
 
