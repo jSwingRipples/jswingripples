@@ -52,7 +52,7 @@ class StartSearchAction implements ActionListener {
                     e1.printStackTrace();
                 }
             }
-            //showGraph();
+            //showGraph(); This is temporary until the graph works again!
         }
     }
 
