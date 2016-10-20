@@ -4,8 +4,6 @@
  */
 package org.incha.core.jswingripples.rules;
 
-import java.awt.Color;
-import java.awt.Image;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -50,21 +48,17 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
 
 		} else if (mark.compareTo(EIGStatusMarks.NEXT_VISIT) == 0) {
 			final String marks[] = { EIGStatusMarks.LOCATED, EIGStatusMarks.VISITED_CONTINUE, EIGStatusMarks.VISITED };
-			return (new LinkedHashSet<String>(Arrays.asList(marks)));
+			return (new LinkedHashSet<>(Arrays.asList(marks)));
 		} else if (mark.compareTo(EIGStatusMarks.LOCATED) == 0) {
 			final String marks[] = { EIGStatusMarks.LOCATED};
-			return (new LinkedHashSet<String>(Arrays.asList(marks)));
+			return (new LinkedHashSet<>(Arrays.asList(marks)));
 		} else if (mark.compareTo(EIGStatusMarks.VISITED_CONTINUE) == 0) {
 			final String marks[] = { EIGStatusMarks.LOCATED,EIGStatusMarks.VISITED_CONTINUE};
-			return (new LinkedHashSet<String>(Arrays.asList(marks)));
+			return (new LinkedHashSet<>(Arrays.asList(marks)));
 		} else {
 			return null;
 		}
 	}
-	public JSwingRipplesEIGNode getCurrentNode() {
-		return currentNode;
-	}
-
 
     @Override
     public void InitializeStage(JRipplesModuleRunner moduleRunner) {
