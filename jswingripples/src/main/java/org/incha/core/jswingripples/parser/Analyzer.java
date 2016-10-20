@@ -34,7 +34,7 @@ class Analyzer extends InteractiveTask {
     public Analyzer(final JSwingRipplesEIG eig, final TaskProgressMonitor mon) {
         this.monitor=mon;
         this.eig = eig;
-        this.monitor.setTask(this);
+        this.monitor.addThreadedTask(this); // tell the monitor to watch this thread
     }
 
     public Analyzer(final JSwingRipplesEIG eig, final TaskProgressMonitor mon, TaskListener listener) {

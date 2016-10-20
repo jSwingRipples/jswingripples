@@ -4,10 +4,11 @@ import org.incha.core.jswingripples.parser.InteractiveTask;
 
 import javax.swing.JPanel;
 import java.awt.LayoutManager;
+import java.util.Collection;
 
 public abstract class TaskProgressMonitor extends JPanel {
-
-    public InteractiveTask currentTask;
+    
+    public Collection<InteractiveTask> threadedTasks;
 
     public TaskProgressMonitor() {}
 
@@ -16,18 +17,17 @@ public abstract class TaskProgressMonitor extends JPanel {
     }
 
     protected void doCancel() {
-        if (currentTask == null) {
-            return;
+        for (InteractiveTask threadedTask : threadedTasks) {
+            if (threadedTask.isAlive() && !threadedTask.isInterrupted()) {
+                // actually kills the thread
+                threadedTask.stop();
+            }
+            threadedTask.getListener().taskFailure();
         }
-        if (currentTask.isAlive() && !currentTask.isInterrupted()) {
-            // actually kills the thread
-            currentTask.stop();
-        }
-        currentTask.getListener().taskFailure();
     }
 
-    public void setTask(InteractiveTask task) {
-        this.currentTask = task;
+    public void addThreadedTask(InteractiveTask task) {
+        threadedTasks.add(task);
     }
 
     /**
