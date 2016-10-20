@@ -47,12 +47,12 @@ class StartSearchAction implements ActionListener {
                     //for (String found_word : searcher.getResults()) {
                     	//System.out.println("ADD TO GRAPH THE WORD " + found_word);
                         //addToGraph(found_word);
-                    //}                    
+                    //}
                 } catch (IOException | ParseException e1) {
                     e1.printStackTrace();
                 }
             }
-            showGraph();
+            //showGraph();
         }
     }
 
