@@ -4,8 +4,6 @@
  */
 package org.incha.core.jswingripples;
 
-import java.awt.Color;
-import java.awt.Image;
 import java.util.Set;
 
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
@@ -15,7 +13,7 @@ import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
  * @author Maksym Petrenko
  *
  */
-public interface JRipplesICModuleInterface extends JRipplesModuleInterface {
+public interface JRipplesICModuleInterface extends JRipplesModule {
 
 	void InitializeStage(JRipplesModuleRunner moduleRunner);
 	/**

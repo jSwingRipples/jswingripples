@@ -15,7 +15,7 @@ import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
  *
  */
 public interface JRipplesPresentationModuleInterface extends
-		JRipplesModuleInterface {
+		JRipplesModule {
 	/**
 	 * Called to display the whole JRipple EIG in the GUI of this module. Typically is called upon EIG initialization.
 	 * @see JRipplesEIG

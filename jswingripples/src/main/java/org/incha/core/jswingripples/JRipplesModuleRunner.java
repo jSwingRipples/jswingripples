@@ -28,11 +28,11 @@ public class JRipplesModuleRunner {
         }
     }
 
-    public void runModules(Collection<JRipplesModuleInterface> modules) {
+    public void runModules(Collection<JRipplesModule> modules) {
         modulesFinished = 0;
         targetModulesRunning = modules.size();
         System.out.println("Running modules. Target = " + targetModulesRunning);
-        for (JRipplesModuleInterface module : modules) {
+        for (JRipplesModule module : modules) {
             try {
                 module.runModuleWithinRunner(this);
             } catch (Exception e) {

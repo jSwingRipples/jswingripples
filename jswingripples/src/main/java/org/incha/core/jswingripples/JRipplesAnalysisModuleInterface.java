@@ -4,10 +4,6 @@
  */
 package org.incha.core.jswingripples;
 
-import java.util.Set;
-
-import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
-
 /**
  * Interface of JRipples modules that provide various estimations for JRipplesEIG nodes.
  * @author Maksym Petrenko
@@ -16,7 +12,7 @@ import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
  *
  */
 public interface JRipplesAnalysisModuleInterface extends
-		JRipplesModuleInterface {
+		JRipplesModule {
 
 	/**
 	 * Called to calculate estimations for all nodes in the JRipple EIG. Typically is called upon EIG initialization.

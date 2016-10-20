@@ -4,19 +4,14 @@ package org.incha.core.jswingripples.parser;
  *
  */
 import java.awt.Window;
-import java.util.Iterator;
-import java.util.Set;
 
 import javax.swing.JOptionPane;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.jdt.core.IMember;
-import org.incha.core.jswingripples.JRipplesDependencyGraphModuleInterface;
-import org.incha.core.jswingripples.JRipplesModuleInterface;
+import org.incha.core.jswingripples.JRipplesModule;
 import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
-import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 import org.incha.ui.JSwingRipplesApplication;
 import org.incha.ui.TaskProgressMonitor;
 import org.incha.ui.util.ModalContext;
@@ -26,7 +21,7 @@ import org.incha.ui.util.RunnableWithProgress;
  * @author Maksym Petrenko
  *
  */
-public class MethodGranularityDependencyBuilder implements JRipplesModuleInterface {
+public class MethodGranularityDependencyBuilder implements JRipplesModule {
     private static final Log log = LogFactory.getLog(MethodGranularityDependencyBuilder.class);
     private final JSwingRipplesEIG eig;
 
