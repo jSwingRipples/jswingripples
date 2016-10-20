@@ -1,3 +1,5 @@
 language: java
 
-script: mvn test
+script:
+        -cd jswingripples
+        -mvn test
