@@ -83,13 +83,12 @@ public class StartAnalysisAction implements ActionListener {
         new JRipplesModuleRunner(new JRipplesModuleRunner.ModuleRunnerListener() {
             @Override
             public void runSuccessful() {
-                System.out.printf("run success");
                 StatisticsManager.getInstance().addStatistics(config, eig);
             }
 
             @Override
             public void runFailure() {
-                System.out.println("run failure");
+
             }
         }).runModules(config.buildModules(eig));
 

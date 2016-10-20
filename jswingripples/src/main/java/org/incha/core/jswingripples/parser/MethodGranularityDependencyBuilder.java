@@ -44,9 +44,8 @@ public class MethodGranularityDependencyBuilder implements JRipplesModule {
 
                 @Override
                 public void taskFailure() {
-                    JOptionPane.showMessageDialog(JSwingRipplesApplication.getInstance(),
-                            "Parser analysis was canceled.", "Parsing canceled",
-                            JOptionPane.ERROR_MESSAGE);
+                    // report failure peacefully, without notifying the module runner!
+                    // TODO: Should anything happen if this module fails?
                     monitor.done();
                 }
             }).start();
