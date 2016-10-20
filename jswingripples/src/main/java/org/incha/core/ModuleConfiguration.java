@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.incha.core.jswingripples.JRipplesICModuleInterface;
-import org.incha.core.jswingripples.JRipplesModuleInterface;
+import org.incha.core.jswingripples.JRipplesModule;
 import org.incha.core.jswingripples.analysis.JRipplesModuleAnalysisDefaultImpactSetConnections;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.parser.MethodGranularityDependencyBuilder;
@@ -84,9 +84,8 @@ public class ModuleConfiguration {
         return analysis;
     }
 
-    public List<JRipplesModuleInterface> buildModules(
-            final JSwingRipplesEIG eig, final JavaProject project) {
-        final List<JRipplesModuleInterface> modules = new LinkedList<JRipplesModuleInterface>();
+    public List<JRipplesModule> buildModules(final JSwingRipplesEIG eig) {
+        final List<JRipplesModule> modules = new LinkedList<>();
 
         modules.add(createDependencyBuilderModule(eig));
         modules.add(createIncrementalChangeModule(eig));
@@ -120,7 +119,7 @@ public class ModuleConfiguration {
      * @param eig
      * @return
      */
-    public JRipplesModuleInterface createDependencyBuilderModule(
+    public JRipplesModule createDependencyBuilderModule(
             final JSwingRipplesEIG eig) {
         return createDependencyBuilderModule(getDependencyGraphModule(), eig);
     }
@@ -130,7 +129,7 @@ public class ModuleConfiguration {
      * @param eig
      * @return
      */
-    public static JRipplesModuleInterface createDependencyBuilderModule(
+    public static JRipplesModule createDependencyBuilderModule(
             final int moduleType, final JSwingRipplesEIG eig) {
         if (moduleType == MODULE_DEPENDENCY_BUILDER) {
             return new MethodGranularityDependencyBuilder(eig);
