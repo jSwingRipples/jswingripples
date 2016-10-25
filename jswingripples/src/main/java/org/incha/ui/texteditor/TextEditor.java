@@ -156,35 +156,18 @@ public class TextEditor extends JFrame {
                             exception.printStackTrace();
                         }
                     }                                                                    
-                    instance=null;
-                    setVisible(false);
-                    dispose();
-                	
-//                    int confirm = JOptionPane.showConfirmDialog(instance,"Would you like to save the changes?","Confirm",JOptionPane.YES_NO_CANCEL_OPTION);
-//
-//                    if(confirm == JOptionPane.OK_OPTION){
-//                        for (int i=0;i<jTabbedPane.getTabCount();i++){
-//                            try{
-//                                openFiles.get((i)).save();
-//                            }
-//                            catch (Exception exception)
-//                            {
-//                                exception.printStackTrace();
-//                            }
-//                        }
-//                        JOptionPane.showMessageDialog(instance,"Saved");                                                
-//                        instance=null;
-//                        setVisible(false);
-//                        dispose();
-//                    }
-//                    else if(confirm == JOptionPane.NO_OPTION){
-//                    	instance=null;
-//                        setVisible(false);
-//                        dispose();                        
-//                    }                 
-                                        
+                    disposeFrame();  
+                }
+                else { //No tabs open
+                	disposeFrame();
                 }
                 
+            }
+            
+            private void disposeFrame(){
+            	instance=null;
+                setVisible(false);
+                dispose(); 
             }
         });
     }
