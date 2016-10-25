@@ -60,7 +60,6 @@ public class JSwingRipplesApplication extends JFrame {
         final DefaultController controller = new DefaultController();
         StatisticsManager.getInstance().addStatisticsChangeListener(controller);
 
-
         //create model saver, this class will watch for model
         //and save it when model state changed
         new ModelSaver(JavaProjectsModel.getInstance(), JavaProjectsModel.getModelFile());
@@ -107,6 +106,7 @@ public class JSwingRipplesApplication extends JFrame {
             menu.show(projectsView, e.getX(), e.getY());
         }
     }
+    
     /**
      * @param project
      */
@@ -138,17 +138,20 @@ public class JSwingRipplesApplication extends JFrame {
         //show frame
         f.setVisible(true);
     }
-
+    
     /**
-     * @return
+     * Method to create Aplication Menu
+     * 
+     * @return 
      */
-    private JMenuBar createMenuBar() {    	
-        final JMenuBar bar = new JMenuBar();       
+    private JMenuBar createMenuBar() {
+        final JMenuBar bar = new JMenuBar();
         
-        //file menu
+        /* Start: File Menu */
         final JMenu file = new JMenu("File");
         bar.add(file);
-
+        
+        //File Menu ---> Submenu: New Project
         final JMenuItem newProject = new JMenuItem("New Project");
         newProject.addActionListener(new ActionListener() {
             @Override
@@ -157,9 +160,8 @@ public class JSwingRipplesApplication extends JFrame {
             }
         });
         file.add(newProject);
-
-        //Import Project option.
-        //Imports a project into the workspace
+        
+        //File Menu ---> Submenu: Import Project
         final JMenuItem importProject = new JMenuItem("Import Project");
         importProject.addActionListener(new ActionListener() {
             @Override
@@ -168,65 +170,78 @@ public class JSwingRipplesApplication extends JFrame {
             }
         });
         file.add(importProject);
-
-        //JRipples menu
+        /* End: File Menu */
+        
+        /* Start: JRipples Menu */
         final JMenu jRipples = new JMenu("JRipples");
         bar.add(jRipples);
-
+        
+        //JRipples Menu ---> Submenu: Start analysis
         final JMenuItem startAnalysis = new JMenuItem("Start analysis");
         startAnalysis.addActionListener(new StartAnalysisAction());
         jRipples.add(startAnalysis);
-
+        
+        //JRipples Menu ---> Submenu: Current state - statistics
         jRipples.add(new JSeparator(JSeparator.HORIZONTAL));
         final JMenuItem currentState = new JMenuItem("Current state - statistics");
         currentState.addActionListener(new ShowCurrentStateAction());
         jRipples.add(currentState);
-
-        final JMenuItem currentGraph = new JMenuItem("Current Graph");
         
+        //JRipples Menu ---> Submenu: Current Graph
+        final JMenuItem currentGraph = new JMenuItem("Current Graph");        
         currentGraph.addActionListener(new GraphVisualizationAction());
         jRipples.add(currentGraph);
-
+        
+        //JRipples Menu ---> Submenu: Impact Set Graph
         final JMenuItem impactGraph = new JMenuItem("Impact Set Graph");
         impactGraph.addActionListener(new ImpactGraphVisualizationAction());
         jRipples.add(impactGraph);
+        /* End: JRipples Menu */
         
+        /* Start: Graph Style Menu */
         final JMenu Graph_style = new JMenu("Graph Style");
         bar.add(Graph_style);
         
+        //Graph Style Menu Menu ---> Submenu: Toggle - Node size by rank
         final JMenuItem nodesize = new JMenuItem("Toggle - Node size by rank");
         nodesize.addActionListener(new NodeSizeChangeAction());
         Graph_style.add(nodesize);
         nodesize.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.ALT_MASK));
         
+        //Graph Style Menu Menu ---> Submenu: Bigger Nodes
         final JMenuItem bigger_nodes = new JMenuItem("Bigger Nodes");
         bigger_nodes.addActionListener(new NodeChangeAction(0));
         Graph_style.add(bigger_nodes);
         bigger_nodes.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, ActionEvent.ALT_MASK));
         
+        //Graph Style Menu Menu ---> Submenu: Smaller Nodes
         final JMenuItem smaller_nodes = new JMenuItem("Smaller Nodes");
         smaller_nodes.addActionListener(new NodeChangeAction(1));
         Graph_style.add(smaller_nodes);
         smaller_nodes.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.ALT_MASK));
         
+        //Graph Style Menu Menu ---> Submenu: Toggle - Zoomed text
         final JMenuItem zoomed_text = new JMenuItem("Toggle - Zoomed text");
         zoomed_text.addActionListener(new Zoomed_text_changer());
         Graph_style.add(zoomed_text);
         zoomed_text.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.ALT_MASK));
         
+        //Graph Style Menu Menu ---> Submenu: Bigger text
         final JMenuItem bigger_text = new JMenuItem("Bigger text");
         bigger_text.addActionListener(new Text_size_changer(0));
         Graph_style.add(bigger_text);
         bigger_text.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.ALT_MASK));
         
+        //Graph Style Menu Menu ---> Submenu: Smaller text
         final JMenuItem smaller_text = new JMenuItem("Smaller text");
         smaller_text.addActionListener(new Text_size_changer(1));
         Graph_style.add(smaller_text);
         smaller_text.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, ActionEvent.ALT_MASK));
         
-        
+        //Graph Style Menu Menu ---> Submenu: Colors
         JMenu submenu1 = new JMenu("Colors");
         
+        //Graph Style Menu Menu ---> Submenu: Colors ---> Colors list
         JMenuItem c0 = new JMenuItem("White");
         c0.addActionListener(new NodeColorChangeAction("white"));
         JMenuItem c1 = new JMenuItem("SandyBrown");
@@ -260,8 +275,10 @@ public class JSwingRipplesApplication extends JFrame {
         submenu1.add(c8);
         submenu1.add(c9);
         
+        //Graph Style Menu Menu ---> Submenu: Themes
         JMenu submenu2 = new JMenu("Themes");
         
+        //Graph Style Menu Menu ---> Submenu: Colors ---> Themes list
         JMenuItem t0 = new JMenuItem("Cappuccino");
         t0.addActionListener(new Theme_changer(0));
         
@@ -287,15 +304,24 @@ public class JSwingRipplesApplication extends JFrame {
         submenu2.add(t3);
         submenu2.add(t4);
         submenu2.add(t5);
+        /* End: Graph Style Menu */
 //        final JMenuItem manageStates = new JMenuItem("Manage Statess");
 //        jRipples.add(manageStates);
 //        final JMenuItem saveState = new JMenuItem("Save State");
 //        jRipples.add(saveState);
 //        final JMenuItem loadState = new JMenuItem("Load State");
 //        jRipples.add(loadState);        
+        
+        /* Start: Help Menu */
+        final JMenu Help = new JMenu("Help");
+        bar.add(Help);
+        /* Start: Help Menu */
+        
+        /* Start: Search Menu */
         SearchMenu searchMenu = new SearchMenu();
         Searcher.getInstance().setSearchMenu(searchMenu);
-        bar.add(searchMenu.getSearchPanel());  //Se agrega el menu de búsqueda
+        bar.add(searchMenu.getSearchPanel());
+        /* End: Search Menu */
         
         return bar;
     }
