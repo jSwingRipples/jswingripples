@@ -108,20 +108,23 @@ public class TextEditor extends JFrame {
      * Close a Tab in the JTabbedPane.
      * @param tab the index of the Tab that be close.
      */
-    public void closeTab(int tab){
+    public void closeTab(int tab){    	
         jTabbedPane.remove(tab);
+        openFiles.remove(tab);
     }
 
     /**
      * Close the Current tab in the View.
      */
     public void closeSelectedTab(){
-        jTabbedPane.remove(jTabbedPane.getSelectedIndex());
+    	int closedTab = jTabbedPane.getSelectedIndex();
+        jTabbedPane.remove(closedTab);
+        openFiles.remove(closedTab);
     }
 
     /**
      * Constructor.
-     * @param jSwingRipplesApplication in case to be necesary.
+     * @param jSwingRipplesApplication in case to be necessary.
      */
     public TextEditor (JSwingRipplesApplication jSwingRipplesApplication){
         super( "Text Editor" );
@@ -136,30 +139,52 @@ public class TextEditor extends JFrame {
         setVisible( true );
 
         //close option to don't close the program.
-        setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+        setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
         //save files when close the program.
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 if(jTabbedPane.getTabCount()>0)
                 {
-                    int confirm = JOptionPane.showConfirmDialog(instance,"Would you like to save the changes?","Confirm",JOptionPane.YES_NO_OPTION);
-
-                    if(confirm ==0){
-                        for (int i=0;i<jTabbedPane.getTabCount();i++){
-                            try{
-                                openFiles.get((i)).save();
-                            }
-                            catch (Exception exception)
-                            {
-                                exception.printStackTrace();
-                            }
+                	int tabCount = openFiles.size();
+                	for (int tabIndex=tabCount - 1; tabIndex>=0; tabIndex--){
+                        try{
+                            openFiles.get((tabIndex)).close(instance, tabIndex);
                         }
-                        JOptionPane.showMessageDialog(instance,"Saved");
-                    }
+                        catch (Exception exception)
+                        {
+                            exception.printStackTrace();
+                        }
+                    }                                                                    
+                    instance=null;
+                    setVisible(false);
+                    dispose();
+                	
+//                    int confirm = JOptionPane.showConfirmDialog(instance,"Would you like to save the changes?","Confirm",JOptionPane.YES_NO_CANCEL_OPTION);
+//
+//                    if(confirm == JOptionPane.OK_OPTION){
+//                        for (int i=0;i<jTabbedPane.getTabCount();i++){
+//                            try{
+//                                openFiles.get((i)).save();
+//                            }
+//                            catch (Exception exception)
+//                            {
+//                                exception.printStackTrace();
+//                            }
+//                        }
+//                        JOptionPane.showMessageDialog(instance,"Saved");                                                
+//                        instance=null;
+//                        setVisible(false);
+//                        dispose();
+//                    }
+//                    else if(confirm == JOptionPane.NO_OPTION){
+//                    	instance=null;
+//                        setVisible(false);
+//                        dispose();                        
+//                    }                 
+                                        
                 }
-                super.windowClosing(e);
-                instance=null;
+                
             }
         });
     }

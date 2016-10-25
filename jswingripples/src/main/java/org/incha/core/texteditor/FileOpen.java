@@ -5,6 +5,9 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.incha.ui.texteditor.TextEditor;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import java.io.*;
 import java.util.HashMap;
 
@@ -17,6 +20,8 @@ public class FileOpen {
     private String extension;
     private String content;
     private static HashMap< String , String > extensionMap = new HashMap<>();
+    private boolean changed = false;
+    private FileOpenDocListener doclistener; 
 
     /**
      * Constructor to the FileOpen.
@@ -24,7 +29,7 @@ public class FileOpen {
      */
     public FileOpen( String absolutePath ) {
         path = absolutePath;
-        text = new RSyntaxTextArea();
+        text = new RSyntaxTextArea();        
     }
 
     /**
@@ -40,6 +45,8 @@ public class FileOpen {
                 sb.append( line + "\n" );
                 line = reader.readLine();
             }
+            
+            reader.close(); // For performance reasons
 
             // See if we can set its highlighting
             if ( path.indexOf('.') != -1 ) {
@@ -56,6 +63,8 @@ public class FileOpen {
             }
             content = sb.toString();
             text.setText( content );
+            doclistener = new FileOpenDocListener();
+            text.getDocument().addDocumentListener(doclistener);
             return true;
 
         } catch ( Exception e ) {
@@ -92,19 +101,27 @@ public class FileOpen {
      * @param tab The index of the tab that would be close.
      */
     public void close( TextEditor frame , int tab ) {
-        int confirm = JOptionPane.showConfirmDialog( frame , "Would you like to save the changes?" , "Confirm" , JOptionPane.YES_NO_CANCEL_OPTION );
-        if(confirm == 0) {
-            try {
-                save();
-                frame.closeTab(tab);
-            }
-            catch (Exception e){
+    	if(changed){
+    		int confirm = JOptionPane.showConfirmDialog(
+    				frame ,
+    				path + "\nhas been modified, would you like to save the changes?" ,
+    				"Confirm" ,
+    				JOptionPane.YES_NO_CANCEL_OPTION );
+            if(confirm == JOptionPane.OK_OPTION) {
+                try {
+                    save();                    
+                }
+                catch (Exception e){
 
+                }
             }
-        }
-        else if( confirm == 1 ) {
-            frame.closeTab( tab );
-        }
+            else if (confirm == JOptionPane.NO_OPTION){
+            	frame.closeSelectedTab();
+            }
+    	}
+    	else {
+    		frame.closeSelectedTab();
+    	}       
     }
 
     /**
@@ -112,19 +129,29 @@ public class FileOpen {
      * @param frame The TextEditor.
      */
     public void close( TextEditor frame ) {
-        int confirm = JOptionPane.showConfirmDialog( frame , "Would you like to save the changes?" , "Confirm" , JOptionPane.YES_NO_CANCEL_OPTION );
-        if( confirm == 0 ) {
-            try {
-                save();
-                frame.closeSelectedTab();
-            }
-            catch (Exception e){
+    	if(changed){
+    		int confirm = JOptionPane.showConfirmDialog(
+    				frame ,
+    				path + "\nhas been modified, would you like to save the changes?" ,
+    				"Confirm" ,
+    				JOptionPane.YES_NO_CANCEL_OPTION );
+            if( confirm == JOptionPane.OK_OPTION ) {
+                try {
+                    save(); 
+                    frame.closeSelectedTab();
+                }
+                catch (Exception e){
 
+                }
             }
-        }
-        else if( confirm == 1 ){
-            frame.closeSelectedTab();
-        }
+            else if (confirm == JOptionPane.NO_OPTION){
+            	frame.closeSelectedTab();
+            }
+    	}
+    	else {
+    		frame.closeSelectedTab();
+    	}
+    	         
     }
 
     /**
@@ -193,6 +220,41 @@ public class FileOpen {
      */
     public void revertText(){
         text.setText(content);
+    }
+    
+    /**
+     * true if the document was changed, else false
+     * @return
+     */
+    public boolean getChanged(){    	
+    	return changed;    	
+    }
+    
+    public void setChange(){
+    	changed = true;
+    	// The listener isn't needed anymore
+    	text.getDocument().removeDocumentListener(doclistener);
+    }    
+    
+    private class FileOpenDocListener implements DocumentListener{
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			setChange();
+			
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			setChange();
+			
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			// Plain text components don't fire these events.			
+		}
+    	
     }
 }
 
