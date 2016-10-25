@@ -4,17 +4,14 @@ package org.incha.core.jswingripples.parser;
  *
  */
 import java.awt.Window;
-import java.util.Iterator;
-import java.util.Set;
 
 import javax.swing.JOptionPane;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.jdt.core.IMember;
-import org.incha.core.jswingripples.JRipplesDependencyGraphModuleInterface;
+import org.incha.core.jswingripples.JRipplesModule;
+import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
-import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 import org.incha.ui.JSwingRipplesApplication;
 import org.incha.ui.TaskProgressMonitor;
 import org.incha.ui.util.ModalContext;
@@ -24,9 +21,36 @@ import org.incha.ui.util.RunnableWithProgress;
  * @author Maksym Petrenko
  *
  */
-public class MethodGranularityDependencyBuilder implements  JRipplesDependencyGraphModuleInterface{
+public class MethodGranularityDependencyBuilder implements JRipplesModule {
     private static final Log log = LogFactory.getLog(MethodGranularityDependencyBuilder.class);
     private final JSwingRipplesEIG eig;
+
+    private class AnalysisJob implements RunnableWithProgress {
+        private JRipplesModuleRunner moduleRunner;
+        public AnalysisJob(JRipplesModuleRunner moduleRunner) {
+            this.moduleRunner = moduleRunner;
+        }
+
+        @Override
+        public void run(final TaskProgressMonitor monitor) {
+            monitor.beginTask("Building call graph",10);
+            new Analyzer(eig, monitor, new InteractiveTask.TaskListener() {
+                @Override
+                public void taskSuccessful() {
+                    monitor.done();
+                    monitor.setTaskName("Analysis Successful");
+                    moduleRunner.moduleFinished(); // tells the moduleRunner this thread is done
+                }
+
+                @Override
+                public void taskFailure() {
+                    // report failure peacefully, without notifying the module runner!
+                    // TODO: Should anything happen if this module fails?
+                    monitor.done();
+                }
+            }).start();
+        }
+    }
 
     /**
      * @param eig the eight.
@@ -36,127 +60,34 @@ public class MethodGranularityDependencyBuilder implements  JRipplesDependencyGr
         this.eig = eig;
     }
 
-	private class AnalysisJob implements RunnableWithProgress {
-
-		public boolean canceled=false;
-
-		public AnalysisJob(final Set<IMember> EIGNodes) {
-			if (EIGNodes==null) return;
-			if (EIGNodes.size()==0) return;
-
-			for (final Iterator<IMember> iter=EIGNodes.iterator();iter.hasNext();) {
-				final JSwingRipplesEIGNode EIGnode=(JSwingRipplesEIGNode) iter.next();
-				if (EIGnode.getNodeIMember()!=null) {
-					final JSwingRipplesEIGNode[] refferedNodes=eig.getOutgoingAnyNodeNeighbors(EIGnode);
-					if (refferedNodes!=null)
-					for (int i=0;i<refferedNodes.length;i++) {
-						eig.removeEdge(eig.getEdge(EIGnode, refferedNodes[i]));
-					}
-				 }
-			}
-		}
-
-		/* (non-Javadoc)
-		 * @see org.incha.ui.core.RunnableWithProgress#run(org.incha.ui.core.TaskProgressMonitor)
-		 */
-		@Override
-		public void run(final TaskProgressMonitor monitor) {
+    @Override
+    public void runModuleWithinRunner(JRipplesModuleRunner moduleRunner) {
+        final Window window = JSwingRipplesApplication.getInstance();
+        if (window != null) {
             try {
-                monitor.beginTask("Building call graph",10);
-                final Thread thread = createAnalizer(monitor);
-                thread.start();
-
-                while (thread.isAlive())  {
-                    if (monitor.isCanceled()) {
-                        thread.interrupt();
-                        monitor.setTaskName("Canceled");
-                        canceled=true;
-                        monitor.done();
-                        return;
-                    }
-                    Thread.yield();; //XXX Make this more general
+                AnalysisJob job=new AnalysisJob(moduleRunner);
+                final JSwingRipplesApplication app = JSwingRipplesApplication.getInstance();
+                try {
+                    ModalContext.run(job, false, app.getProgressMonitor());
+                } finally {
+                    app.getProgressMonitor().done();
                 }
-            } finally {
-                monitor.done();
             }
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see org.severe.jripples.defaultmodules.parsers.interfaces.JRipplesDependencyGraphModuleInterface#AnalyzeProject()
-	 */
-	@Override
-    public void AnalyzeProject() {
-
-	//	if (!JRipplesEIG.isLocked())
-		runn(null);
-	}
-
-    /**
-     * @param nodes
-     * @param monitor
-     * @return
-     */
-    protected Analyzer createAnalizer(final TaskProgressMonitor monitor) {
-        return new Analyzer(eig, monitor);
+            catch (final Exception e) {
+                log.error(e);
+            }
+        } else {
+            final NullMonitor monitor=new NullMonitor();
+            AnalysisJob job =new AnalysisJob(moduleRunner);
+            try {
+                job.run(monitor);
+            } catch (final Exception e) {
+                log.error(e);
+            }
+        }
     }
 
-	/* (non-Javadoc)
-	 * @see org.severe.jripples.defaultmodules.parsers.interfaces.JRipplesDependencyGraphModuleInterface#ReAnalyzeProjectAtNodes(java.util.Set)
-	 */
-	@Override
-    public void ReAnalyzeProjectAtNodes(final Set<JSwingRipplesEIGNode> changed_nodes) {
-	}
-	/* (non-Javadoc)
-	 * @see org.severe.jripples.defaultmodules.parsers.interfaces.JRipplesModuleInterface#shutDown(int controllerType)
-	 */
-	@Override
-    public void shutDown(final int controllerType) {
-	}
-
-//	----------------------------------------------------------------------
-	private void runn(final Set<IMember> changed_nodes){
-		AnalysisJob job=null;
-		final Window window = JSwingRipplesApplication.getInstance();
-        if (window != null) {
-
-     		try {
-     			job=new AnalysisJob(changed_nodes);
-     			final JSwingRipplesApplication app = JSwingRipplesApplication.getInstance();
-     			try {
-     			    ModalContext.run(job, false, app.getProgressMonitor());
-     			} finally {
-     			    app.getProgressMonitor().done();
-     			}
-     		}
-     		catch (final Exception e) {
-     			log.error(e);
-     		};
-
-
-        } else {
-        	final NullMonitor monitor=new NullMonitor();
-        	job=new AnalysisJob(changed_nodes);
-        	try {
-        		job.run(monitor);
-        	} catch (final Exception e) {
-     			log.error(e);
-     		};
-        }
-
-        if (job==null) return;
- 		if (job.canceled) {
- 		    JOptionPane.showMessageDialog(JSwingRipplesApplication.getInstance(),
- 		           "Parser analysis was canceled.", "Parsing canceled",
- 		            JOptionPane.ERROR_MESSAGE);
- 		    return ;
- 		}
-	}
-	/* (non-Javadoc)
-	 * @see org.incha.core.jswingripples.JRipplesModuleInterface#initializeStage()
-	 */
-	@Override
-	public void runInAnalize() {
-	    AnalyzeProject();
-	}
+    protected Analyzer createAnalyzer(final TaskProgressMonitor monitor) {
+        return new Analyzer(eig, monitor);
+    }
 }

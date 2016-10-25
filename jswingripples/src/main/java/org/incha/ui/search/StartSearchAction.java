@@ -47,12 +47,12 @@ class StartSearchAction implements ActionListener {
                     //for (String found_word : searcher.getResults()) {
                     	//System.out.println("ADD TO GRAPH THE WORD " + found_word);
                         //addToGraph(found_word);
-                    //}                    
+                    //}
                 } catch (IOException | ParseException e1) {
                     e1.printStackTrace();
                 }
             }
-            showGraph();
+            //showGraph(); This is temporary until the graph works again!
         }
     }
 
@@ -77,36 +77,11 @@ class StartSearchAction implements ActionListener {
     }
     public void showGraph()
     {
-    	System.out.println("SHOWING GRAPH");
-        //NodeSearchBuilder NS = NodeSearchBuilder.getInstance();
-        //NS.setSearch(search);
-        //NS.clearGraph();
-       // NS.setSearch("clone");
-        Graph graph = NodeSearchBuilder.getInstance().getGraph();
-        Viewer v = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
-        v.enableAutoLayout();
-        ViewPanel view =  v.addDefaultView(false);
-        JInternalFrame frame = new JInternalFrame("Search Graph");
-        frame.getContentPane().setLayout(new BorderLayout());
-
-
-        JDesktopPane viewArea = JSwingRipplesApplication.getInstance().getViewArea();
-        frame.setBounds(0, 0, viewArea.getWidth(), viewArea.getHeight());
-        frame.setClosable(true);
-        frame.setMaximizable(true);
-        frame.setVisible(true);
-        frame.setResizable(true);
-        frame.add(view, BorderLayout.CENTER);
-        viewArea.add(frame);
-        frame.moveToFront();
-        System.out.println("GRAPH SHOWN");
-
-    }
-    
-    // Prints received words. For testing purposes only.
-    private void print(List<String> words) {
-        for(String word : words) {
-            System.out.println(word);
-        }
+        Viewer graphViewer =
+                new Viewer(NodeSearchBuilder.getInstance().getGraph(),
+                        Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
+        graphViewer.enableAutoLayout();
+        JSwingRipplesApplication.getInstance().addComponentAsTab(
+                graphViewer.addDefaultView(false), "Search graph");
     }
 }

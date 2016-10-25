@@ -2,7 +2,7 @@ package org.incha.ui.util;
 
 import org.incha.ui.TaskProgressMonitor;
 
-public class NullMonitor implements TaskProgressMonitor {
+public class NullMonitor extends TaskProgressMonitor {
 
     /**
      * Default constructor.

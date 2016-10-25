@@ -3,7 +3,7 @@ package org.incha.ui.util;
 import org.incha.ui.TaskProgressMonitor;
 
 
-public class SubProgressMonitor implements TaskProgressMonitor {
+public class SubProgressMonitor extends TaskProgressMonitor {
     private final TaskProgressMonitor monitor;
     private String taskName;
     private String savedName;
