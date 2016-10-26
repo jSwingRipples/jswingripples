@@ -138,22 +138,6 @@ public class FileOpen {
     }
 
     /**
-     * getter.
-     * @return the initial Content in String.
-     */
-    public String getContent() {
-        return content;
-    }
-
-    /**
-     * getter.
-     * @return the extension of the file.
-     */
-    public String getExtension() {
-        return extension;
-    }
-
-    /**
      * set the syntax to the text.
      * @param syntax the variable of the syntax.
      */
@@ -193,15 +177,8 @@ public class FileOpen {
         text.setText(content);
     }
     
-    /**
-     * true if the document was changed, else false
-     * @return
-     */
-    public boolean getChanged(){    	
-    	return changed;    	
-    }
     
-    public void setChange(){
+    private void setChange(){
     	changed = true;
     	// The listener isn't needed anymore
     	text.getDocument().removeDocumentListener(doclistener);
