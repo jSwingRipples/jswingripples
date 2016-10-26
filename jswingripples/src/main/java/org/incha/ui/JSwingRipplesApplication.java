@@ -80,7 +80,7 @@ public class JSwingRipplesApplication extends JFrame {
             final JPopupMenu menu = new JPopupMenu();
 
             //delete project menu item
-            final JMenuItem delete = new JMenuItem("Delete");
+            final JMenuItem delete = new JMenuItem("Delete Project");
             delete.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
@@ -90,7 +90,7 @@ public class JSwingRipplesApplication extends JFrame {
             menu.add(delete);
 
             //project preferences menu item
-            final JMenuItem prefs = new JMenuItem("Preferences");
+            final JMenuItem prefs = new JMenuItem("Settings");
             prefs.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
@@ -148,15 +148,6 @@ public class JSwingRipplesApplication extends JFrame {
         //file menu
         final JMenu file = new JMenu("File");
         bar.add(file);
-
-        final JMenuItem newProject = new JMenuItem("New Project");
-        newProject.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                createNewProject();
-            }
-        });
-        file.add(newProject);
 
         //Import Project option.
         //Imports a project into the workspace
