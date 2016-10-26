@@ -99,7 +99,7 @@ public class JSwingRipplesApplication extends JFrame {
             });
             menu.add(prefs);
 
-            //start analisics
+            //start analysis
             final JMenuItem startAnalysis = new JMenuItem("Start analysis");
             startAnalysis.addActionListener(new StartAnalysisAction());
             menu.add(startAnalysis);
