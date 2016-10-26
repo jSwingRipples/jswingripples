@@ -18,7 +18,6 @@ public class TextEditor extends JFrame {
 
     private ArrayList<FileOpen> openFiles;
     private static TextEditor instance;
-    private int tab;
     private JTabbedPane jTabbedPane;
 
     private JMenu fileMenu = new JMenu( "File" );
@@ -52,7 +51,7 @@ public class TextEditor extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON2){
-                    openFiles.get(jTabbedPane.indexAtLocation(e.getX(),e.getY())).close(instance,jTabbedPane.indexAtLocation(e.getX(),e.getY()));
+                    openFiles.get(jTabbedPane.indexAtLocation(e.getX(),e.getY())).close(instance);
                 }
                 super.mouseClicked(e);
             }
@@ -105,15 +104,6 @@ public class TextEditor extends JFrame {
     }
 
     /**
-     * Close a Tab in the JTabbedPane.
-     * @param tab the index of the Tab that be close.
-     */
-    public void closeTab(int tab){    	
-        jTabbedPane.remove(tab);
-        openFiles.remove(tab);
-    }
-
-    /**
      * Close the Current tab in the View.
      */
     public void closeSelectedTab(){
@@ -149,7 +139,7 @@ public class TextEditor extends JFrame {
                 	int tabCount = openFiles.size();
                 	for (int tabIndex=tabCount - 1; tabIndex>=0; tabIndex--){
                         try{
-                            openFiles.get((tabIndex)).close(instance, tabIndex);
+                            openFiles.get((tabIndex)).close(instance);
                         }
                         catch (Exception exception)
                         {

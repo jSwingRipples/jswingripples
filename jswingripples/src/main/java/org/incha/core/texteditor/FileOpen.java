@@ -98,35 +98,6 @@ public class FileOpen {
     /**
      * Closer to the File Open.
      * @param frame The TextEditor.
-     * @param tab The index of the tab that would be close.
-     */
-    public void close( TextEditor frame , int tab ) {
-    	if(changed){
-    		int confirm = JOptionPane.showConfirmDialog(
-    				frame ,
-    				path + "\nhas been modified, would you like to save the changes?" ,
-    				"Confirm" ,
-    				JOptionPane.YES_NO_CANCEL_OPTION );
-            if(confirm == JOptionPane.OK_OPTION) {
-                try {
-                    save();                    
-                }
-                catch (Exception e){
-
-                }
-            }
-            else if (confirm == JOptionPane.NO_OPTION){
-            	frame.closeSelectedTab();
-            }
-    	}
-    	else {
-    		frame.closeSelectedTab();
-    	}       
-    }
-
-    /**
-     * Closer to the File Open.
-     * @param frame The TextEditor.
      */
     public void close( TextEditor frame ) {
     	if(changed){
