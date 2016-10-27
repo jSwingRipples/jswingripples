@@ -3,14 +3,13 @@ package org.incha.ui.stats;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.List;
 
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.ModuleConfiguration;
 import org.incha.core.StatisticsManager;
 import org.incha.core.jswingripples.GraphBuilder;
-import org.incha.core.jswingripples.JRipplesModuleInterface;
+import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.NodeSearchBuilder;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.search.Indexer;
@@ -18,12 +17,24 @@ import org.incha.ui.JSwingRipplesApplication;
 import org.incha.ui.jripples.JRipplesDefaultModulesConstants;
 
 public class StartAnalysisAction implements ActionListener {
+	private String projectSelected;
+	
     /**
      * Default constructor.
      */
 	
     public StartAnalysisAction() {
         super();
+        setProjectSelected(null);
+    }
+    
+    /**
+     * Constructor made to launch start analysis dialog with project withProject selected
+     * @param withProject
+     */
+    public StartAnalysisAction(String withProject){
+    	super();
+    	setProjectSelected(withProject);    	
     }
 
     /* (non-Javadoc)
@@ -80,12 +91,18 @@ public class StartAnalysisAction implements ActionListener {
         }
 
         project.setModuleConfiguration(config);
-        final List<JRipplesModuleInterface> m = config.buildModules(eig, project);
-        for (final JRipplesModuleInterface i : m) {
-            i.runInAnalize();
-        }
 
-        StatisticsManager.getInstance().addStatistics(config, eig);
+        new JRipplesModuleRunner(new JRipplesModuleRunner.ModuleRunnerListener() {
+            @Override
+            public void runSuccessful() {
+                StatisticsManager.getInstance().addStatistics(config, eig);
+            }
+
+            @Override
+            public void runFailure() {
+
+            }
+        }).runModules(config.buildModules(eig));
 
         GraphBuilder.getInstance().addEIG(eig);
         GraphBuilder.getInstance().resetGraphs();
@@ -105,8 +122,24 @@ public class StartAnalysisAction implements ActionListener {
             e1.printStackTrace();
         }
     }
+    
+    /**
+     * projectSelected getter
+     * @return projectSelected
+     */
+    protected String getProjectSelected() {
+		return projectSelected;
+	}
 
-    private class GraphBuild implements Runnable
+    /**
+     * projectSelected setter
+     * @param projectSelected
+     */
+	protected void setProjectSelected(String projectSelected) {
+		this.projectSelected = projectSelected;
+	}
+
+	private class GraphBuild implements Runnable
     {
         @Override
         public void run() {

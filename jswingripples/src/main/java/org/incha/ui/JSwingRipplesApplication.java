@@ -77,9 +77,9 @@ public class JSwingRipplesApplication extends JFrame {
         if (path[path.length -1] instanceof JavaProject) {
             final JavaProject project = (JavaProject) path[path.length -1];
             final JPopupMenu menu = new JPopupMenu();
-
+            
             //delete project menu item
-            final JMenuItem delete = new JMenuItem("Delete");
+            final JMenuItem delete = new JMenuItem("Delete Project");
             delete.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
@@ -89,7 +89,7 @@ public class JSwingRipplesApplication extends JFrame {
             menu.add(delete);
 
             //project preferences menu item
-            final JMenuItem prefs = new JMenuItem("Preferences");
+            final JMenuItem prefs = new JMenuItem("Settings");
             prefs.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
@@ -98,9 +98,9 @@ public class JSwingRipplesApplication extends JFrame {
             });
             menu.add(prefs);
 
-            //start analisics
+            //start analysis
             final JMenuItem startAnalysis = new JMenuItem("Start analysis");
-            startAnalysis.addActionListener(new StartAnalysisAction());
+            startAnalysis.addActionListener(new StartAnalysisAction(project.getName()));
             menu.add(startAnalysis);
 
             menu.show(projectsView, e.getX(), e.getY());
@@ -150,17 +150,7 @@ public class JSwingRipplesApplication extends JFrame {
         /* Start: File Menu */
         final JMenu file = new JMenu("File");
         bar.add(file);
-        
-        //File Menu ---> Submenu: New Project
-        final JMenuItem newProject = new JMenuItem("New Project");
-        newProject.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                createNewProject();
-            }
-        });
-        file.add(newProject);
-        
+       
         //File Menu ---> Submenu: Import Project
         final JMenuItem importProject = new JMenuItem("Import Project");
         importProject.addActionListener(new ActionListener() {
@@ -181,8 +171,9 @@ public class JSwingRipplesApplication extends JFrame {
         startAnalysis.addActionListener(new StartAnalysisAction());
         jRipples.add(startAnalysis);
         
-        //JRipples Menu ---> Submenu: Current state - statistics
         jRipples.add(new JSeparator(JSeparator.HORIZONTAL));
+        
+        //JRipples Menu ---> Submenu: Current state - statistics        
         final JMenuItem currentState = new JMenuItem("Current state - statistics");
         currentState.addActionListener(new ShowCurrentStateAction());
         jRipples.add(currentState);
@@ -310,12 +301,23 @@ public class JSwingRipplesApplication extends JFrame {
 //        final JMenuItem saveState = new JMenuItem("Save State");
 //        jRipples.add(saveState);
 //        final JMenuItem loadState = new JMenuItem("Load State");
-//        jRipples.add(loadState);        
+//        jRipples.add(loadState);
+        
         
         /* Start: Help Menu */
         final JMenu Help = new JMenu("Help");
         bar.add(Help);
-        /* Start: Help Menu */
+        
+        //Help Menu ---> Submenu: Help
+        final JMenuItem subHelp = new JMenuItem("Help");        
+        Help.add(subHelp);
+        
+        Help.add(new JSeparator(JSeparator.HORIZONTAL));
+        
+        //Help Menu ---> Submenu: Help
+        final JMenuItem about = new JMenuItem("About");        
+        Help.add(about);
+        /* End: Help Menu */
         
         /* Start: Search Menu */
         SearchMenu searchMenu = new SearchMenu();

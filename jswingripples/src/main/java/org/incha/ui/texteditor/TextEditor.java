@@ -18,7 +18,6 @@ public class TextEditor extends JFrame {
 
     private ArrayList<FileOpen> openFiles;
     private static TextEditor instance;
-    private int tab;
     private JTabbedPane jTabbedPane;
 
     private JMenu fileMenu = new JMenu( "File" );
@@ -52,7 +51,7 @@ public class TextEditor extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON2){
-                    openFiles.get(jTabbedPane.indexAtLocation(e.getX(),e.getY())).close(instance,jTabbedPane.indexAtLocation(e.getX(),e.getY()));
+                    openFiles.get(jTabbedPane.indexAtLocation(e.getX(),e.getY())).close(instance);
                 }
                 super.mouseClicked(e);
             }
@@ -105,23 +104,17 @@ public class TextEditor extends JFrame {
     }
 
     /**
-     * Close a Tab in the JTabbedPane.
-     * @param tab the index of the Tab that be close.
-     */
-    public void closeTab(int tab){
-        jTabbedPane.remove(tab);
-    }
-
-    /**
      * Close the Current tab in the View.
      */
     public void closeSelectedTab(){
-        jTabbedPane.remove(jTabbedPane.getSelectedIndex());
+    	int closedTab = jTabbedPane.getSelectedIndex();
+        jTabbedPane.remove(closedTab);
+        openFiles.remove(closedTab);
     }
 
     /**
      * Constructor.
-     * @param jSwingRipplesApplication in case to be necesary.
+     * @param jSwingRipplesApplication in case to be necessary.
      */
     public TextEditor (JSwingRipplesApplication jSwingRipplesApplication){
         super( "Text Editor" );
@@ -136,30 +129,35 @@ public class TextEditor extends JFrame {
         setVisible( true );
 
         //close option to don't close the program.
-        setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+        setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
         //save files when close the program.
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 if(jTabbedPane.getTabCount()>0)
                 {
-                    int confirm = JOptionPane.showConfirmDialog(instance,"Would you like to save the changes?","Confirm",JOptionPane.YES_NO_OPTION);
-
-                    if(confirm ==0){
-                        for (int i=0;i<jTabbedPane.getTabCount();i++){
-                            try{
-                                openFiles.get((i)).save();
-                            }
-                            catch (Exception exception)
-                            {
-                                exception.printStackTrace();
-                            }
+                	int tabCount = openFiles.size();
+                	for (int tabIndex=tabCount - 1; tabIndex>=0; tabIndex--){
+                        try{
+                            openFiles.get((tabIndex)).close(instance);
                         }
-                        JOptionPane.showMessageDialog(instance,"Saved");
-                    }
+                        catch (Exception exception)
+                        {
+                            exception.printStackTrace();
+                        }
+                    }                                                                    
+                    disposeFrame();  
                 }
-                super.windowClosing(e);
-                instance=null;
+                else { //No tabs open
+                	disposeFrame();
+                }
+                
+            }
+            
+            private void disposeFrame(){
+            	instance=null;
+                setVisible(false);
+                dispose(); 
             }
         });
     }
