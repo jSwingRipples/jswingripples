@@ -103,6 +103,10 @@ public class StartAnalysisDialog extends JDialog {
         south.add(cancel);
         getContentPane().add(south, BorderLayout.SOUTH);
 
+        // select proper project
+        if (startAnalysisCallback.getProjectSelected() != null){        	
+        	projects.setSelectedItem(startAnalysisCallback.getProjectSelected());        	
+        }
         //set up default values
         projectChanged();
     }

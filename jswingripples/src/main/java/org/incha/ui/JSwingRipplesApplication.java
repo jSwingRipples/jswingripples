@@ -78,7 +78,7 @@ public class JSwingRipplesApplication extends JFrame {
         if (path[path.length -1] instanceof JavaProject) {
             final JavaProject project = (JavaProject) path[path.length -1];
             final JPopupMenu menu = new JPopupMenu();
-
+            
             //delete project menu item
             final JMenuItem delete = new JMenuItem("Delete Project");
             delete.addActionListener(new ActionListener() {
@@ -101,7 +101,7 @@ public class JSwingRipplesApplication extends JFrame {
 
             //start analysis
             final JMenuItem startAnalysis = new JMenuItem("Start analysis");
-            startAnalysis.addActionListener(new StartAnalysisAction());
+            startAnalysis.addActionListener(new StartAnalysisAction(project.getName()));
             menu.add(startAnalysis);
 
             menu.show(projectsView, e.getX(), e.getY());
