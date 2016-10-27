@@ -17,12 +17,24 @@ import org.incha.ui.JSwingRipplesApplication;
 import org.incha.ui.jripples.JRipplesDefaultModulesConstants;
 
 public class StartAnalysisAction implements ActionListener {
+	private String projectSelected;
+	
     /**
      * Default constructor.
      */
 	
     public StartAnalysisAction() {
         super();
+        setProjectSelected(null);
+    }
+    
+    /**
+     * Constructor made to launch start analysis dialog with project withProject selected
+     * @param withProject
+     */
+    public StartAnalysisAction(String withProject){
+    	super();
+    	setProjectSelected(withProject);    	
     }
 
     /* (non-Javadoc)
@@ -110,8 +122,24 @@ public class StartAnalysisAction implements ActionListener {
             e1.printStackTrace();
         }
     }
+    
+    /**
+     * projectSelected getter
+     * @return projectSelected
+     */
+    protected String getProjectSelected() {
+		return projectSelected;
+	}
 
-    private class GraphBuild implements Runnable
+    /**
+     * projectSelected setter
+     * @param projectSelected
+     */
+	protected void setProjectSelected(String projectSelected) {
+		this.projectSelected = projectSelected;
+	}
+
+	private class GraphBuild implements Runnable
     {
         @Override
         public void run() {
