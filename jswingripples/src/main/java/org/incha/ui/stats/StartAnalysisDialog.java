@@ -224,6 +224,9 @@ public class StartAnalysisDialog extends JDialog {
      * @return the className
      */
     public String getMainClass() {
+        //TODO Delete this System out
+        System.out.println("SE EJECUTA getMainClass");
+        System.out.println(className.getText());
         return className.getText();
     }
 }

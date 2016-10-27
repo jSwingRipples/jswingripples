@@ -57,8 +57,14 @@ public class StartAnalysisAction implements ActionListener {
 
         final JavaProject project = JavaProjectsModel.getInstance().getProject(projectName);
         final JSwingRipplesEIG eig = new JSwingRipplesEIG(project);
-
         eig.setMainClass(dialog.getMainClass());
+        //TODO Delete this System Out
+        System.out.println(this.getClass().getName()+" eig value:");
+        System.out.println("Project Name:"+ eig.getJavaProject().getName());
+        System.out.println("Project Source:"+ eig.getJavaProject().getSources().size());
+        System.out.println("Project ModuleConfiguration:"+ eig.getJavaProject().getModuleConfiguration());
+        System.out.println("Project Main Class:"+eig.getMainClass());
+        //END
 
         final ModuleConfiguration config = new ModuleConfiguration();
         //module dependency builder
@@ -80,7 +86,9 @@ public class StartAnalysisAction implements ActionListener {
         } else if (JRipplesDefaultModulesConstants.MODULE_CHANGE_PROPAGATION_TITLE.equals(module)) {
             config.setIncrementalChange(ModuleConfiguration.MODULE_CHANGE_PROPAGATION);
         } else if (JRipplesDefaultModulesConstants.MODULE_CONCEPT_LOCATION_TITLE.equals(module)) {
+            System.out.println("Detecto que es modo Concept_Location");
             config.setIncrementalChange(ModuleConfiguration.MODULE_CONCEPT_LOCATION);
+            System.out.println(config);
         } else if (JRipplesDefaultModulesConstants.MODULE_CONCEPT_LOCATION_RELAXED_TITLE.equals(module)) {
             config.setIncrementalChange(ModuleConfiguration.MODULE_CONCEPT_LOCATION_RELAXED);
         }
@@ -89,9 +97,13 @@ public class StartAnalysisAction implements ActionListener {
         if (JRipplesDefaultModulesConstants.MODULE_IMPACT_ANALYSIS_TITLE.equals(module)) {
             config.setAnalysis(ModuleConfiguration.MODULE_IMPACT_ANALYSIS);
         }
-
+        //TODO Delete System out
+        System.out.println("Type of analysis selected:"+config.getIncrementalChange());
+        //END
         project.setModuleConfiguration(config);
-
+        //TODO Delete System out
+        System.out.println("Type of analysis of the project:"+project.getModuleConfiguration().getIncrementalChange());
+        //END
         new JRipplesModuleRunner(new JRipplesModuleRunner.ModuleRunnerListener() {
             @Override
             public void runSuccessful() {
