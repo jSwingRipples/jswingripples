@@ -1,5 +1,6 @@
 package org.incha.ui.stats;
 
+import java.io.File;  //added
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -15,9 +16,14 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JFileChooser; //added
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentEvent; //added
+import javax.swing.event.DocumentListener; //added
+import javax.swing.filechooser.FileFilter; //added
 
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
@@ -25,11 +31,13 @@ import org.incha.core.ModuleConfiguration;
 import org.incha.core.Statistics;
 import org.incha.ui.jripples.JRipplesDefaultModulesConstants;
 
+
 public class StartAnalysisDialog extends JDialog {
     private static final long serialVersionUID = 6788138046337076311L;
     final JComboBox<String> projects;
     final JTextField className = new JTextField(30);
     private StartAnalysisAction startAnalysisCallback;
+    final JButton ok = new JButton("Ok"); // added
     final JComboBox<String> incrementalChange = new JComboBox<String>(new DefaultComboBoxModel<String>(
         new String[]{
             JRipplesDefaultModulesConstants.MODULE_IMPACT_ANALYSIS_TITLE,
@@ -83,8 +91,8 @@ public class StartAnalysisDialog extends JDialog {
         getContentPane().add(center, BorderLayout.CENTER);
 
         //south pane
+        ok.setEnabled(false);
         final JPanel south = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        final JButton ok = new JButton("Ok");
         ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -184,9 +192,72 @@ public class StartAnalysisDialog extends JDialog {
         projects.setEditable(false);
         panel.add(projects);
 
-        //create class name
+ 
+      //create class name
+//        panel.add(new JLabel("Class name:"));
+//        panel.add(className);
+
+ //modified//////////////////////////////////////////////////////////////////////// 
         panel.add(new JLabel("Class name:"));
-        panel.add(className);
+        
+        JPanel panelclassname = new JPanel();
+        panelclassname.setLayout(new FlowLayout(FlowLayout.LEADING,0,0));
+        panelclassname.add(className);
+        
+        className.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if (className.getText().length()==0){
+                    ok.setEnabled(false);
+                }
+                else {
+                    ok.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (className.getText().length()==0){
+                    ok.setEnabled(false);
+                }
+                else {
+                    ok.setEnabled(true);
+                }
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if (className.getText().length()==0){
+                    ok.setEnabled(false);
+                }
+                else {
+                    ok.setEnabled(true);
+                }
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+        
+        JButton btnsearch = new JButton("Buscar");
+        btnsearch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                final JFileChooser chooser = new JFileChooser();
+                //chooser.addChoosableFileFilter(jpegFilter);
+                chooser.setMultiSelectionEnabled(false);
+
+                if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    final File selectedFile = chooser.getSelectedFile();
+                    if (selectedFile != null) {
+                        className.setText(selectedFile.getName());
+                    }
+
+                }
+            }
+        });
+        panelclassname.add(btnsearch);
+        panel.add(panelclassname);
+ ///////////////////////////////////////////////////////////////////////////////
 
         //Incremental change combobox
         panel.add(new JLabel("Incremental Change"));
