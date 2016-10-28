@@ -45,17 +45,31 @@ public class TextEditor extends JFrame {
         extensionMap.put( "XML", SyntaxConstants.SYNTAX_STYLE_XML );
         //add a tab pane to the window.
         jTabbedPane = new JTabbedPane();
-
         //add a click listener to the tab pane, and intersect the mouse location with the tab pane.
         jTabbedPane.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON2){
+                if (SwingUtilities.isMiddleMouseButton(e) && jTabbedPane.getTabCount()>1){
                     openFiles.get(jTabbedPane.indexAtLocation(e.getX(),e.getY())).close(instance);
+                    //System.out.print("mouse clicked");
+                }
+                if(mouseOverTab(e.getX(),e.getY()) && SwingUtilities.isRightMouseButton(e) && jTabbedPane.getTabCount()>1){
+                    final JPopupMenu menu = new JPopupMenu();
+                    final JMenuItem close = new JMenuItem("Close");
+                    close.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(final ActionEvent e) {
+                            openFiles.get(jTabbedPane.getSelectedIndex()).close(instance);
+                        }
+                    });
+                    menu.add(close);
+                    menu.show(jTabbedPane, e.getX(), e.getY());
+
                 }
                 super.mouseClicked(e);
             }
         });
+
         openFiles = new ArrayList<FileOpen>();
         JMenuItem fileSave = new JMenuItem( "Save" );
         JMenuItem revertAll = new JMenuItem( "Revert All" );
@@ -103,11 +117,20 @@ public class TextEditor extends JFrame {
         }
     }
 
+    public boolean mouseOverTab(int x, int y){
+        int tabCount = jTabbedPane.getTabCount();
+        for(int j = 0; j < tabCount; j++)
+            if(jTabbedPane.getBoundsAt(j).contains(x, y)){
+                return true;
+            }
+        return false;
+    }
+
     /**
      * Close the Current tab in the View.
      */
     public void closeSelectedTab(){
-    	int closedTab = jTabbedPane.getSelectedIndex();
+        int closedTab = jTabbedPane.getSelectedIndex();
         jTabbedPane.remove(closedTab);
         openFiles.remove(closedTab);
     }
@@ -136,8 +159,8 @@ public class TextEditor extends JFrame {
             public void windowClosing(WindowEvent e) {
                 if(jTabbedPane.getTabCount()>0)
                 {
-                	int tabCount = openFiles.size();
-                	for (int tabIndex=tabCount - 1; tabIndex>=0; tabIndex--){
+                    int tabCount = openFiles.size();
+                    for (int tabIndex=tabCount - 1; tabIndex>=0; tabIndex--){
                         try{
                             openFiles.get((tabIndex)).close(instance);
                         }
@@ -145,19 +168,19 @@ public class TextEditor extends JFrame {
                         {
                             exception.printStackTrace();
                         }
-                    }                                                                    
-                    disposeFrame();  
+                    }
+                    disposeFrame();
                 }
                 else { //No tabs open
-                	disposeFrame();
+                    disposeFrame();
                 }
-                
+
             }
-            
+
             private void disposeFrame(){
-            	instance=null;
+                instance=null;
                 setVisible(false);
-                dispose(); 
+                dispose();
             }
         });
     }
@@ -173,6 +196,7 @@ public class TextEditor extends JFrame {
             //if found the file open, select this tab.
             if ( file.getPath().equals(filename)){
                 jTabbedPane.setSelectedIndex(openFiles.indexOf(file));
+
                 return;
             }
         }
@@ -185,17 +209,17 @@ public class TextEditor extends JFrame {
 
         /**
          * if need a limit to the files open for any reason use this.
-        if(openFiles.size()<15) {
-            FileOpen newFile = new FileOpen(filename);
-            if (newFile.open()) {
-                openFiles.add(newFile);
-                JScrollPane jScrollPane = new JScrollPane(newFile.getText());
-                jTabbedPane.addTab(newFile.getFileName(), jScrollPane);
-            }
-        }
-        else{
+         if(openFiles.size()<15) {
+         FileOpen newFile = new FileOpen(filename);
+         if (newFile.open()) {
+         openFiles.add(newFile);
+         JScrollPane jScrollPane = new JScrollPane(newFile.getText());
+         jTabbedPane.addTab(newFile.getFileName(), jScrollPane);
+         }
+         }
+         else{
 
-        }**/
+         }**/
 
     }
 
