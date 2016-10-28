@@ -65,6 +65,10 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
         final JSwingRipplesEIGNode[] nodes = eig.getAllNodes();
         //TODO Delete System.out
         System.out.println(this.getClass().getName() +" Nodos:");
+        System.out.println("Cantidad Nodos: "+nodes.length);
+        for(final JSwingRipplesEIGNode node: nodes){
+            System.out.println(node);
+        }
         //END
         if (nodes != null) {
             for (int i = 0; i < nodes.length; i++) {
