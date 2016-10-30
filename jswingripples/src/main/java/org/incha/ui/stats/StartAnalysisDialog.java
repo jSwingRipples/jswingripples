@@ -1,6 +1,6 @@
 package org.incha.ui.stats;
 
-import java.io.File;  //added
+import java.io.File; //added
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -38,6 +38,10 @@ public class StartAnalysisDialog extends JDialog {
     final JTextField className = new JTextField(30);
     private StartAnalysisAction startAnalysisCallback;
     final JButton ok = new JButton("Ok"); // added
+    
+    //This variable have the path of the selected project
+    String pathSelectedProject = ""; // added
+    
     final JComboBox<String> incrementalChange = new JComboBox<String>(new DefaultComboBoxModel<String>(
         new String[]{
             JRipplesDefaultModulesConstants.MODULE_IMPACT_ANALYSIS_TITLE,
@@ -123,9 +127,12 @@ public class StartAnalysisDialog extends JDialog {
      *
      */
     protected void projectChanged() {
+        
         final JavaProject project =
                 JavaProjectsModel.getInstance().getProject((String) projects.getSelectedItem());
-
+        
+        pathSelectedProject = project.getBuildPath().getFirstPath();
+        
         if (project != null) {
             //set current module configuration
 
@@ -193,11 +200,11 @@ public class StartAnalysisDialog extends JDialog {
         panel.add(projects);
 
  
-      //create class name
-//        panel.add(new JLabel("Class name:"));
-//        panel.add(className);
+    //create class name
+    //panel.add(new JLabel("Class name:"));
+    //panel.add(className);
 
- //modified//////////////////////////////////////////////////////////////////////// 
+    //modified//////////////////////////////////////////////////////////////////////// 
         panel.add(new JLabel("Class name:"));
         
         JPanel panelclassname = new JPanel();
@@ -207,34 +214,35 @@ public class StartAnalysisDialog extends JDialog {
         className.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
-                if (className.getText().length()==0){
-                    ok.setEnabled(false);
+                String classname = className.getText();
+                if (classname.length()>5 && classname.substring(classname.length()-5, classname.length()).toUpperCase().equals(".JAVA")){//classname.substring(classname.length()-5, classname.length()).toUpperCase()==".JAVA"){
+                    ok.setEnabled(true);
                 }
                 else {
-                    ok.setEnabled(true);
+                    ok.setEnabled(false);
                 }
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if (className.getText().length()==0){
-                    ok.setEnabled(false);
-                }
-                else {
+                String classname = className.getText();
+                if (classname.length()>5 && classname.substring(classname.length()-5, classname.length()).toUpperCase().equals(".JAVA")){//classname.substring(classname.length()-5, classname.length()).toUpperCase()==".JAVA"){
                     ok.setEnabled(true);
                 }
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                else {
+                    ok.setEnabled(false);
+                }
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if (className.getText().length()==0){
-                    ok.setEnabled(false);
-                }
-                else {
+                String classname = className.getText();
+                if (classname.length()>5 && classname.substring(classname.length()-5, classname.length()).toUpperCase().equals(".JAVA")){//classname.substring(classname.length()-5, classname.length()).toUpperCase()==".JAVA"){
                     ok.setEnabled(true);
                 }
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                else {
+                    ok.setEnabled(false);
+                }
             }
         });
         
@@ -242,7 +250,8 @@ public class StartAnalysisDialog extends JDialog {
         btnsearch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                final JFileChooser chooser = new JFileChooser();
+               
+                final JFileChooser chooser = new JFileChooser(pathSelectedProject);
                 //chooser.addChoosableFileFilter(jpegFilter);
                 chooser.setMultiSelectionEnabled(false);
 
@@ -257,7 +266,7 @@ public class StartAnalysisDialog extends JDialog {
         });
         panelclassname.add(btnsearch);
         panel.add(panelclassname);
- ///////////////////////////////////////////////////////////////////////////////
+       ///////////////////////////////////////////////////////////////////////////////
 
         //Incremental change combobox
         panel.add(new JLabel("Incremental Change"));
