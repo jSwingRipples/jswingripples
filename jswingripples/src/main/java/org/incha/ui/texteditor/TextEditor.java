@@ -51,7 +51,6 @@ public class TextEditor extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isMiddleMouseButton(e) && jTabbedPane.getTabCount()>1){
                     openFiles.get(jTabbedPane.indexAtLocation(e.getX(),e.getY())).close(instance);
-                    //System.out.print("mouse clicked");
                 }
                 if(mouseOverTab(e.getX(),e.getY()) && SwingUtilities.isRightMouseButton(e) && jTabbedPane.getTabCount()>1){
                     final JPopupMenu menu = new JPopupMenu();
@@ -117,9 +116,8 @@ public class TextEditor extends JFrame {
         }
     }
 
-    public boolean mouseOverTab(int x, int y){
-        int tabCount = jTabbedPane.getTabCount();
-        for(int j = 0; j < tabCount; j++)
+    private boolean mouseOverTab(int x, int y){
+        for(int j = 0; j < jTabbedPane.getTabCount(); j++)
             if(jTabbedPane.getBoundsAt(j).contains(x, y)){
                 return true;
             }
@@ -159,8 +157,7 @@ public class TextEditor extends JFrame {
             public void windowClosing(WindowEvent e) {
                 if(jTabbedPane.getTabCount()>0)
                 {
-                    int tabCount = openFiles.size();
-                    for (int tabIndex=tabCount - 1; tabIndex>=0; tabIndex--){
+                    for (int tabIndex=openFiles.size() - 1; tabIndex>=0; tabIndex--){
                         try{
                             openFiles.get((tabIndex)).close(instance);
                         }
