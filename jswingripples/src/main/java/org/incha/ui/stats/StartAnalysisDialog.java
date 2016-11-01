@@ -39,8 +39,7 @@ public class StartAnalysisDialog extends JDialog {
     private StartAnalysisAction startAnalysisCallback;
     final JButton ok = new JButton("Ok"); 
     
-    //This variable have the path of the selected project
-    String pathSelectedProject = ""; 
+    private JavaProject project;
     
     final JComboBox<String> incrementalChange = new JComboBox<String>(new DefaultComboBoxModel<String>(
         new String[]{
@@ -128,10 +127,7 @@ public class StartAnalysisDialog extends JDialog {
      */
     protected void projectChanged() {
         
-        final JavaProject project =
-                JavaProjectsModel.getInstance().getProject((String) projects.getSelectedItem());
-        
-        pathSelectedProject = project.getBuildPath().getFirstPath();
+        project = JavaProjectsModel.getInstance().getProject((String) projects.getSelectedItem());
         
         if (project != null) {
             //set current module configuration
@@ -187,10 +183,12 @@ public class StartAnalysisDialog extends JDialog {
         }
     }
     
-    private void typingClassMainEvent(DocumentEvent e){ 
+    private void verifyMainClassFileExtension(){ 
         final Integer sizeExtension = 5;
         String classname = className.getText();
-            if (classname.length()>sizeExtension && classname.substring(classname.length()-sizeExtension, classname.length()).toUpperCase().equals(".JAVA")){
+            if (classname.length()>sizeExtension && 
+                    classname.substring(classname.length()-sizeExtension, 
+                            classname.length()).toUpperCase().equals(".JAVA")){
                 ok.setEnabled(true);
             }
             else {
@@ -209,12 +207,6 @@ public class StartAnalysisDialog extends JDialog {
         projects.setEditable(false);
         panel.add(projects);
 
- 
-    //create class name
-    //panel.add(new JLabel("Class name:"));
-    //panel.add(className);
-
-    //////////////////////////////////////////////////////////////////////////// 
         panel.add(new JLabel("Class name:"));
         
         JPanel panelclassname = new JPanel();
@@ -224,17 +216,17 @@ public class StartAnalysisDialog extends JDialog {
         className.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
-                typingClassMainEvent(e);
+                verifyMainClassFileExtension();
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                typingClassMainEvent(e);
+                verifyMainClassFileExtension();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                typingClassMainEvent(e);
+                verifyMainClassFileExtension();
             }
         });
         
@@ -243,7 +235,7 @@ public class StartAnalysisDialog extends JDialog {
             @Override
             public void actionPerformed(final ActionEvent e) {
                
-                final JFileChooser chooser = new JFileChooser(pathSelectedProject);
+                final JFileChooser chooser = new JFileChooser(project.getBuildPath().getFirstPath());
                 //chooser.addChoosableFileFilter(jpegFilter);
                 chooser.setMultiSelectionEnabled(false);
 
@@ -258,7 +250,7 @@ public class StartAnalysisDialog extends JDialog {
         });
         panelclassname.add(btnsearch);
         panel.add(panelclassname);
-       ///////////////////////////////////////////////////////////////////////////////
+       
 
         //Incremental change combobox
         panel.add(new JLabel("Incremental Change"));
