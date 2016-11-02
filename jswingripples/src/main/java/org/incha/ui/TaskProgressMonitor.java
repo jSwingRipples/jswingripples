@@ -1,45 +1,73 @@
 package org.incha.ui;
 
-public interface TaskProgressMonitor {
+import org.incha.core.jswingripples.parser.InteractiveTask;
+
+import javax.swing.JPanel;
+import java.awt.LayoutManager;
+import java.util.ArrayList;
+import java.util.Collection;
+
+public abstract class TaskProgressMonitor extends JPanel {
+
+    public Collection<InteractiveTask> threadedTasks = new ArrayList<>();
+
+    public TaskProgressMonitor() {}
+
+    public TaskProgressMonitor(LayoutManager layoutManager) {
+        super(layoutManager);
+    }
+
+    protected void doCancel() {
+        for (InteractiveTask threadedTask : threadedTasks) {
+            if (threadedTask.isAlive() && !threadedTask.isInterrupted()) {
+                // actually kills the thread
+                threadedTask.stop();
+            }
+            threadedTask.getListener().taskFailure();
+        }
+    }
+
+    public void addThreadedTask(InteractiveTask task) {
+        threadedTasks.add(task);
+    }
+
     /**
      * @param name task name.
      */
-    void setTaskName(String name);
+    public abstract void setTaskName(String name);
     /**
      * @return task name.
      */
-    String getTaskName();
+    public abstract String getTaskName();
     /**
      * @param taskName task name.
      * @param max max value.
      */
-    void beginTask(String taskName, int max);
+    public abstract void beginTask(String taskName, int max);
     /**
      * @return maximum value.
      */
-    int getMaximum();
+    public abstract int getMaximum();
     /**
      * @return progress value.
      */
-    int getProgress();
+    public abstract int getProgress();
     /**
      * Notify task finished.
      */
-    void done();
+    public abstract void done();
     /**
      * @return check task canceled.
      */
-    boolean isCanceled();
+    public abstract boolean isCanceled();
     /**
      * @param value sets the task finished.
      */
-    void setCanceled(boolean value);
+    public abstract void setCanceled(boolean value);
     /**
      * @param value new current value.
      */
-    void worked(int value);
-    /**
-     * @param max
-     */
-    void setMaximum(int max);
+    public abstract void worked(int value);
+
+    public abstract void setMaximum(int max);
 }

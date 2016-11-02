@@ -1,9 +1,19 @@
 package org.incha.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Toolkit;
+import org.apache.commons.logging.LogFactory;
+import org.incha.core.JavaProject;
+import org.incha.core.JavaProjectsModel;
+import org.incha.core.StatisticsManager;
+import org.incha.core.search.Searcher;
+import org.incha.ui.search.SearchMenu;
+import org.incha.ui.stats.GraphVisualizationAction;
+import org.incha.ui.stats.ImpactGraphVisualizationAction;
+import org.incha.ui.stats.ShowCurrentStateAction;
+import org.incha.ui.stats.StartAnalysisAction;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -12,51 +22,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import javax.swing.JButton;
-import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
-import javax.swing.JSplitPane;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
-
-import org.apache.commons.logging.LogFactory;
-import org.incha.core.JavaProject;
-import org.incha.core.JavaProjectsModel;
-import org.incha.core.StatisticsManager;
-
-import org.incha.ui.stats.*;
-import org.incha.ui.search.SearchMenu;
-
-import org.incha.ui.stats.GraphVisualizationAction;
-import org.incha.ui.stats.ShowCurrentStateAction;
-import org.incha.ui.stats.StartAnalysisAction;
-
 public class JSwingRipplesApplication extends JFrame {
     private static final long serialVersionUID = 6142679404175274529L;
-
-    /**
-     * The view area
-     */
-    private final JDesktopPane viewArea = new JDesktopPane();
+    private JComponent viewArea;
     private final ProjectsView projectsView;
     private static JSwingRipplesApplication instance;
-    private final ProgressMonitorImpl progressMonitor = new ProgressMonitorImpl();
+    private TaskProgressMonitor progressMonitor;
 
 
-
-    /**
-     * Default constructor.
-     */
-    public JSwingRipplesApplication() {
+    private JSwingRipplesApplication(JComponent viewArea, TaskProgressMonitor progressMonitor) {
         super("JSwingRipples");
-        instance = this;
+        this.viewArea = viewArea;
+        this.progressMonitor = progressMonitor;
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         final JPanel contentPane = new JPanel(new BorderLayout(0, 5));
@@ -83,7 +60,6 @@ public class JSwingRipplesApplication extends JFrame {
         final DefaultController controller = new DefaultController();
         StatisticsManager.getInstance().addStatisticsChangeListener(controller);
 
-
         //create model saver, this class will watch for model
         //and save it when model state changed
         new ModelSaver(JavaProjectsModel.getInstance(), JavaProjectsModel.getModelFile());
@@ -101,9 +77,9 @@ public class JSwingRipplesApplication extends JFrame {
         if (path[path.length -1] instanceof JavaProject) {
             final JavaProject project = (JavaProject) path[path.length -1];
             final JPopupMenu menu = new JPopupMenu();
-
+            
             //delete project menu item
-            final JMenuItem delete = new JMenuItem("Delete");
+            final JMenuItem delete = new JMenuItem("Delete Project");
             delete.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
@@ -113,7 +89,7 @@ public class JSwingRipplesApplication extends JFrame {
             menu.add(delete);
 
             //project preferences menu item
-            final JMenuItem prefs = new JMenuItem("Preferences");
+            final JMenuItem prefs = new JMenuItem("Settings");
             prefs.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
@@ -122,14 +98,15 @@ public class JSwingRipplesApplication extends JFrame {
             });
             menu.add(prefs);
 
-            //start analisics
+            //start analysis
             final JMenuItem startAnalysis = new JMenuItem("Start analysis");
-            startAnalysis.addActionListener(new StartAnalysisAction());
+            startAnalysis.addActionListener(new StartAnalysisAction(project.getName()));
             menu.add(startAnalysis);
 
             menu.show(projectsView, e.getX(), e.getY());
         }
     }
+    
     /**
      * @param project
      */
@@ -161,28 +138,20 @@ public class JSwingRipplesApplication extends JFrame {
         //show frame
         f.setVisible(true);
     }
-
+    
     /**
-     * @return
+     * Method to create Aplication Menu
+     * 
+     * @return 
      */
-    private JMenuBar createMenuBar() {    	
-        final JMenuBar bar = new JMenuBar();       
+    private JMenuBar createMenuBar() {
+        final JMenuBar bar = new JMenuBar();
         
-        //file menu
+        /* Start: File Menu */
         final JMenu file = new JMenu("File");
         bar.add(file);
-
-        final JMenuItem newProject = new JMenuItem("New Project");
-        newProject.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                createNewProject();
-            }
-        });
-        file.add(newProject);
-
-        //Import Project option.
-        //Imports a project into the workspace
+       
+        //File Menu ---> Submenu: Import Project
         final JMenuItem importProject = new JMenuItem("Import Project");
         importProject.addActionListener(new ActionListener() {
             @Override
@@ -191,65 +160,79 @@ public class JSwingRipplesApplication extends JFrame {
             }
         });
         file.add(importProject);
-
-        //JRipples menu
+        /* End: File Menu */
+        
+        /* Start: JRipples Menu */
         final JMenu jRipples = new JMenu("JRipples");
         bar.add(jRipples);
-
+        
+        //JRipples Menu ---> Submenu: Start analysis
         final JMenuItem startAnalysis = new JMenuItem("Start analysis");
         startAnalysis.addActionListener(new StartAnalysisAction());
         jRipples.add(startAnalysis);
-
+        
         jRipples.add(new JSeparator(JSeparator.HORIZONTAL));
+        
+        //JRipples Menu ---> Submenu: Current state - statistics        
         final JMenuItem currentState = new JMenuItem("Current state - statistics");
         currentState.addActionListener(new ShowCurrentStateAction());
         jRipples.add(currentState);
-
-        final JMenuItem currentGraph = new JMenuItem("Current Graph");
         
+        //JRipples Menu ---> Submenu: Current Graph
+        final JMenuItem currentGraph = new JMenuItem("Current Graph");        
         currentGraph.addActionListener(new GraphVisualizationAction());
         jRipples.add(currentGraph);
-
+        
+        //JRipples Menu ---> Submenu: Impact Set Graph
         final JMenuItem impactGraph = new JMenuItem("Impact Set Graph");
         impactGraph.addActionListener(new ImpactGraphVisualizationAction());
         jRipples.add(impactGraph);
+        /* End: JRipples Menu */
         
+        /* Start: Graph Style Menu */
         final JMenu Graph_style = new JMenu("Graph Style");
         bar.add(Graph_style);
         
+        //Graph Style Menu Menu ---> Submenu: Toggle - Node size by rank
         final JMenuItem nodesize = new JMenuItem("Toggle - Node size by rank");
         nodesize.addActionListener(new NodeSizeChangeAction());
         Graph_style.add(nodesize);
         nodesize.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.ALT_MASK));
         
+        //Graph Style Menu Menu ---> Submenu: Bigger Nodes
         final JMenuItem bigger_nodes = new JMenuItem("Bigger Nodes");
         bigger_nodes.addActionListener(new NodeChangeAction(0));
         Graph_style.add(bigger_nodes);
         bigger_nodes.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, ActionEvent.ALT_MASK));
         
+        //Graph Style Menu Menu ---> Submenu: Smaller Nodes
         final JMenuItem smaller_nodes = new JMenuItem("Smaller Nodes");
         smaller_nodes.addActionListener(new NodeChangeAction(1));
         Graph_style.add(smaller_nodes);
         smaller_nodes.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.ALT_MASK));
         
+        //Graph Style Menu Menu ---> Submenu: Toggle - Zoomed text
         final JMenuItem zoomed_text = new JMenuItem("Toggle - Zoomed text");
         zoomed_text.addActionListener(new Zoomed_text_changer());
         Graph_style.add(zoomed_text);
         zoomed_text.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.ALT_MASK));
         
+        //Graph Style Menu Menu ---> Submenu: Bigger text
         final JMenuItem bigger_text = new JMenuItem("Bigger text");
         bigger_text.addActionListener(new Text_size_changer(0));
         Graph_style.add(bigger_text);
         bigger_text.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.ALT_MASK));
         
+        //Graph Style Menu Menu ---> Submenu: Smaller text
         final JMenuItem smaller_text = new JMenuItem("Smaller text");
         smaller_text.addActionListener(new Text_size_changer(1));
         Graph_style.add(smaller_text);
         smaller_text.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, ActionEvent.ALT_MASK));
         
-        
+        //Graph Style Menu Menu ---> Submenu: Colors
         JMenu submenu1 = new JMenu("Colors");
         
+        //Graph Style Menu Menu ---> Submenu: Colors ---> Colors list
         JMenuItem c0 = new JMenuItem("White");
         c0.addActionListener(new NodeColorChangeAction("white"));
         JMenuItem c1 = new JMenuItem("SandyBrown");
@@ -283,8 +266,10 @@ public class JSwingRipplesApplication extends JFrame {
         submenu1.add(c8);
         submenu1.add(c9);
         
+        //Graph Style Menu Menu ---> Submenu: Themes
         JMenu submenu2 = new JMenu("Themes");
         
+        //Graph Style Menu Menu ---> Submenu: Colors ---> Themes list
         JMenuItem t0 = new JMenuItem("Cappuccino");
         t0.addActionListener(new Theme_changer(0));
         
@@ -310,14 +295,35 @@ public class JSwingRipplesApplication extends JFrame {
         submenu2.add(t3);
         submenu2.add(t4);
         submenu2.add(t5);
+        /* End: Graph Style Menu */
 //        final JMenuItem manageStates = new JMenuItem("Manage Statess");
 //        jRipples.add(manageStates);
 //        final JMenuItem saveState = new JMenuItem("Save State");
 //        jRipples.add(saveState);
 //        final JMenuItem loadState = new JMenuItem("Load State");
-//        jRipples.add(loadState);        
+//        jRipples.add(loadState);
         
-        bar.add(new SearchMenu().getSearchPanel());  //Se agrega el menu de búsqueda
+        
+        /* Start: Help Menu */
+        final JMenu Help = new JMenu("Help");
+        bar.add(Help);
+        
+        //Help Menu ---> Submenu: Help
+        final JMenuItem subHelp = new JMenuItem("Help");        
+        Help.add(subHelp);
+        
+        Help.add(new JSeparator(JSeparator.HORIZONTAL));
+        
+        //Help Menu ---> Submenu: Help
+        final JMenuItem about = new JMenuItem("About");        
+        Help.add(about);
+        /* End: Help Menu */
+        
+        /* Start: Search Menu */
+        SearchMenu searchMenu = new SearchMenu();
+        Searcher.getInstance().setSearchMenu(searchMenu);
+        bar.add(searchMenu.getSearchPanel());
+        /* End: Search Menu */
         
         return bar;
     }
@@ -368,7 +374,7 @@ public class JSwingRipplesApplication extends JFrame {
             LogFactory.getLog(JSwingRipplesApplication.class).error("Missing properties file!");
             System.exit(1);
         }
-        final JFrame f = new JSwingRipplesApplication();
+        final JFrame f = JSwingRipplesApplication.getInstance();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //set frame location
@@ -411,7 +417,7 @@ public class JSwingRipplesApplication extends JFrame {
      */
     public static JSwingRipplesApplication getInstance() {
     	if(instance==null){
-    		instance=new JSwingRipplesApplication();
+    		instance = new JSwingRipplesApplication(new JTabbedPane(), new ProgressMonitorImpl());
     	}
         return instance;
     }
@@ -422,10 +428,12 @@ public class JSwingRipplesApplication extends JFrame {
     public TaskProgressMonitor getProgressMonitor() {
         return this.progressMonitor;
     }
-    /**
-     * @return the viewArea
-     */
-    public JDesktopPane getViewArea() {
-        return viewArea;
+
+    public void addComponentAsTab(JComponent component, String tabTitle) {
+        JInternalFrame internalFrame = new JInternalFrame(tabTitle);
+        internalFrame.getContentPane().setLayout(new BorderLayout());
+        internalFrame.getContentPane().add(component);
+        internalFrame.setVisible(true);
+        viewArea.add(internalFrame);
     }
 }

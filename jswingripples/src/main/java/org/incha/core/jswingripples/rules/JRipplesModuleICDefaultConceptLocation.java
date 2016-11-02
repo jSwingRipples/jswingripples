@@ -4,8 +4,6 @@
  */
 package org.incha.core.jswingripples.rules;
 
-import java.awt.Color;
-import java.awt.Image;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -13,6 +11,7 @@ import java.util.Set;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IType;
 import org.incha.core.jswingripples.JRipplesICModuleInterface;
+import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 import org.incha.ui.jripples.EIGStatusMarks;
@@ -49,76 +48,48 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
 
 		} else if (mark.compareTo(EIGStatusMarks.NEXT_VISIT) == 0) {
 			final String marks[] = { EIGStatusMarks.LOCATED, EIGStatusMarks.VISITED_CONTINUE, EIGStatusMarks.VISITED };
-			return (new LinkedHashSet<String>(Arrays.asList(marks)));
+			return (new LinkedHashSet<>(Arrays.asList(marks)));
 		} else if (mark.compareTo(EIGStatusMarks.LOCATED) == 0) {
 			final String marks[] = { EIGStatusMarks.LOCATED};
-			return (new LinkedHashSet<String>(Arrays.asList(marks)));
+			return (new LinkedHashSet<>(Arrays.asList(marks)));
 		} else if (mark.compareTo(EIGStatusMarks.VISITED_CONTINUE) == 0) {
 			final String marks[] = { EIGStatusMarks.LOCATED,EIGStatusMarks.VISITED_CONTINUE};
-			return (new LinkedHashSet<String>(Arrays.asList(marks)));
+			return (new LinkedHashSet<>(Arrays.asList(marks)));
 		} else {
 			return null;
 		}
 	}
-	public JSwingRipplesEIGNode getCurrentNode() {
-		return currentNode;
-	}
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesModuleInterface#shutDown(int controllerType)
-	 */
-	@Override
-    public void shutDown(final int controllerType) {
-	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesICModuleInterface#initializeStage()
-	 */
-	@Override
-    public void InitializeStage() {
-        final JSwingRipplesEIGNode[] nodes = eig.getAllNodes();
+    @Override
+    public void InitializeStage(JRipplesModuleRunner moduleRunner) {
+        JSwingRipplesEIGNode[] nodes = null;
+        do {
+               nodes = eig.getAllNodes();
+        } while (nodes == null);
+
+        
         if (nodes != null) {
             for (int i = 0; i < nodes.length; i++) {
                 nodes[i].setMark(EIGStatusMarks.BLANK);
             }
 
             if (eig.getMainClass() != null) {
-                final JSwingRipplesEIGNode mainType = getType(nodes, eig.getMainClass());
+                final JSwingRipplesEIGNode mainType = getType(nodes);
                 if (mainType != null) {
                     mainType.setMark(EIGStatusMarks.NEXT_VISIT);
                     currentNode = mainType;
                 }
             }
         }
-
+        moduleRunner.moduleFinished();
         eig.getHistory().clear();
-	}
-
-	/**
-     * @param nodes
-     * @param mainClass
-     * @return
-     */
-    private JSwingRipplesEIGNode getType(final JSwingRipplesEIGNode[] nodes, final String mainClass) {
-        for (int i = 0; i < nodes.length; i++) {
-            final IMember member = nodes[i].getNodeIMember();
-            if (member instanceof IType && ((IType) member).getFullyQualifiedName().equals(
-                    eig.getMainClass())) {
-                return nodes[i];
-            }
-        }
-        return null;
     }
-
-    @Override
-    public Set<String> getAllMarks() {
-		final String marks[] = { EIGStatusMarks.LOCATED, EIGStatusMarks.VISITED_CONTINUE, EIGStatusMarks.VISITED,EIGStatusMarks.BLANK ,EIGStatusMarks.NEXT_VISIT};
-		return (new LinkedHashSet<String>(Arrays.asList(marks)));
-
-	}
+/*    @Override
+    public void InitializeStage(JRipplesModuleRunner moduleRunner) {
+        if(!eig.isInitialized()){
+        }
+            
+    }*/
 
 	/*
 	 * (non-Javadoc)
@@ -155,19 +126,22 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
         }
 	}
 
-	@Override
-    public Image getImageDescriptorForMark(final String mark) {
-		return EIGStatusMarks.getImageDescriptorForMark(mark);
-	}
-	@Override
-    public Color getColorForMark(final String mark) {
-		return EIGStatusMarks.getColorForMark(mark);
-	}
-    /* (non-Javadoc)
-     * @see org.incha.core.jswingripples.JRipplesModuleInterface#initializeStage()
-     */
     @Override
-    public void runInAnalize() {
-        InitializeStage();
+    public void runModuleWithinRunner(JRipplesModuleRunner moduleRunner) {
+        InitializeStage(moduleRunner);
+    }
+
+    private JSwingRipplesEIGNode getType(final JSwingRipplesEIGNode[] nodes) {
+        for (int i = 0; i < nodes.length; i++) {
+            final IMember member = nodes[i].getNodeIMember();
+            //Searching for the class main class (full name, with package name)
+            //Example: if the main class of the project Dynamic is called DynamicScope and it belongs
+            //to dynamicscope package, the main class should be called dynamicscope.DynamicScope
+            if (member instanceof IType && ((IType) member).getElementName().equals(
+                    eig.getMainClass().replaceFirst("[.][^.]+$", ""))) {
+                return nodes[i];
+            }
+        }
+        return null;
     }
 }

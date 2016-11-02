@@ -97,4 +97,12 @@ public class BuildPath {
     public JavaProject getProject() {
         return project;
     }
+    
+    //added: return the first path related to the sources
+    public String getFirstPath(){
+        if (!sources.isEmpty()){
+            return sources.get(0).getPath();
+        }
+        return "";
+    } 
 }
