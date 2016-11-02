@@ -62,23 +62,18 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
 
     @Override
     public void InitializeStage(JRipplesModuleRunner moduleRunner) {
-        final JSwingRipplesEIGNode[] nodes = eig.getAllNodes();
-        //TODO Delete System.out
-        System.out.println(this.getClass().getName() +" Nodos:");
-        System.out.println("Cantidad Nodos: "+nodes.length);
-        for(final JSwingRipplesEIGNode node: nodes){
-            System.out.println(node);
-        }
-        //END
+        JSwingRipplesEIGNode[] nodes = null;
+        do {
+               nodes = eig.getAllNodes();
+        } while (nodes == null);
+
+        
         if (nodes != null) {
             for (int i = 0; i < nodes.length; i++) {
                 nodes[i].setMark(EIGStatusMarks.BLANK);
             }
 
             if (eig.getMainClass() != null) {
-                //TODO Delete System.out
-                System.out.println("ENTRE AQUIIIIII");
-                //END
                 final JSwingRipplesEIGNode mainType = getType(nodes);
                 if (mainType != null) {
                     mainType.setMark(EIGStatusMarks.NEXT_VISIT);
@@ -89,7 +84,12 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
         moduleRunner.moduleFinished();
         eig.getHistory().clear();
     }
-
+/*    @Override
+    public void InitializeStage(JRipplesModuleRunner moduleRunner) {
+        if(!eig.isInitialized()){
+        }
+            
+    }*/
 
 	/*
 	 * (non-Javadoc)
@@ -134,14 +134,11 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
     private JSwingRipplesEIGNode getType(final JSwingRipplesEIGNode[] nodes) {
         for (int i = 0; i < nodes.length; i++) {
             final IMember member = nodes[i].getNodeIMember();
-            //TODO Delete this Systme.out
-            System.out.println(member);
-            //END
+            //Searching for the class main class (full name, with package name)
+            //Example: if the main class of the project Dynamic is called DynamicScope and it belongs
+            //to dynamicscope package, the main class should be called dynamicscope.DynamicScope
             if (member instanceof IType && ((IType) member).getFullyQualifiedName().equals(
                     eig.getMainClass())) {
-                //TODO Delete this System.out
-                System.out.println(this.getClass().getName()+" Main Class encontrada como nodo");
-                //END
                 return nodes[i];
             }
         }

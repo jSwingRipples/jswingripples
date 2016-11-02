@@ -3,18 +3,24 @@ package org.incha.ui.stats;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.List;
+import java.util.LinkedList;
 
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.ModuleConfiguration;
 import org.incha.core.StatisticsManager;
 import org.incha.core.jswingripples.GraphBuilder;
+import org.incha.core.jswingripples.JRipplesModule;
 import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.NodeSearchBuilder;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.search.Indexer;
 import org.incha.ui.JSwingRipplesApplication;
 import org.incha.ui.jripples.JRipplesDefaultModulesConstants;
+import org.incha.core.jswingripples.parser.MethodGranularityDependencyBuilder;
+import org.incha.core.jswingripples.parser.*;
+import org.incha.ui.util.NullMonitor;
 
 public class StartAnalysisAction implements ActionListener {
 	private String projectSelected;
@@ -58,13 +64,6 @@ public class StartAnalysisAction implements ActionListener {
         final JavaProject project = JavaProjectsModel.getInstance().getProject(projectName);
         final JSwingRipplesEIG eig = new JSwingRipplesEIG(project);
         eig.setMainClass(dialog.getMainClass());
-        //TODO Delete this System Out
-        System.out.println(this.getClass().getName()+" eig value:");
-        System.out.println("Project Name:"+ eig.getJavaProject().getName());
-        System.out.println("Project Source:"+ eig.getJavaProject().getSources().size());
-        System.out.println("Project ModuleConfiguration:"+ eig.getJavaProject().getModuleConfiguration());
-        System.out.println("Project Main Class:"+eig.getMainClass());
-        //END
 
         final ModuleConfiguration config = new ModuleConfiguration();
         //module dependency builder
@@ -86,9 +85,7 @@ public class StartAnalysisAction implements ActionListener {
         } else if (JRipplesDefaultModulesConstants.MODULE_CHANGE_PROPAGATION_TITLE.equals(module)) {
             config.setIncrementalChange(ModuleConfiguration.MODULE_CHANGE_PROPAGATION);
         } else if (JRipplesDefaultModulesConstants.MODULE_CONCEPT_LOCATION_TITLE.equals(module)) {
-            System.out.println("Detecto que es modo Concept_Location");
             config.setIncrementalChange(ModuleConfiguration.MODULE_CONCEPT_LOCATION);
-            System.out.println(config);
         } else if (JRipplesDefaultModulesConstants.MODULE_CONCEPT_LOCATION_RELAXED_TITLE.equals(module)) {
             config.setIncrementalChange(ModuleConfiguration.MODULE_CONCEPT_LOCATION_RELAXED);
         }
@@ -97,13 +94,9 @@ public class StartAnalysisAction implements ActionListener {
         if (JRipplesDefaultModulesConstants.MODULE_IMPACT_ANALYSIS_TITLE.equals(module)) {
             config.setAnalysis(ModuleConfiguration.MODULE_IMPACT_ANALYSIS);
         }
-        //TODO Delete System out
-        System.out.println("Type of analysis selected:"+config.getIncrementalChange());
-        //END
         project.setModuleConfiguration(config);
-        //TODO Delete System out
-        System.out.println("Type of analysis of the project:"+project.getModuleConfiguration().getIncrementalChange());
-        //END
+        loadDependencyBuilderFirst(config,eig);
+        
         new JRipplesModuleRunner(new JRipplesModuleRunner.ModuleRunnerListener() {
             @Override
             public void runSuccessful() {
@@ -150,6 +143,20 @@ public class StartAnalysisAction implements ActionListener {
 	protected void setProjectSelected(String projectSelected) {
 		this.projectSelected = projectSelected;
 	}
+    
+    protected void loadDependencyBuilderFirst(ModuleConfiguration config, JSwingRipplesEIG eig){
+    for(JRipplesModule mod: config.buildModules(eig)){
+            if(mod.getClass().getName().contains("DependencyBuilder")){
+                Analyzer a = new Analyzer(eig,new NullMonitor());
+                a.start();
+                try{
+                    a.join();
+                }catch(Exception e){
+                    
+                }
+            }
+        }
+    }   
 
 	private class GraphBuild implements Runnable
     {
