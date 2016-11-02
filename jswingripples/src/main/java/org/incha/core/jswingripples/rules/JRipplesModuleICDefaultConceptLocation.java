@@ -137,8 +137,8 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
             //Searching for the class main class (full name, with package name)
             //Example: if the main class of the project Dynamic is called DynamicScope and it belongs
             //to dynamicscope package, the main class should be called dynamicscope.DynamicScope
-            if (member instanceof IType && ((IType) member).getFullyQualifiedName().equals(
-                    eig.getMainClass())) {
+            if (member instanceof IType && ((IType) member).getElementName().equals(
+                    eig.getMainClass().replaceFirst("[.][^.]+$", ""))) {
                 return nodes[i];
             }
         }
