@@ -448,7 +448,7 @@ public class JSwingRipplesApplication extends JFrame {
         btnTabClose.addActionListener(new CloseTabActionHandler(component));
     }
     
-    class CloseTabActionHandler implements ActionListener {
+    private class CloseTabActionHandler implements ActionListener {
         
         private JComponent tabComponent;
 
