@@ -459,12 +459,8 @@ public class JSwingRipplesApplication extends JFrame {
             this.tabComponent = tabComponent;
         }
 
-        public JComponent getTabComponent() {
-            return tabComponent;
-        }
-
         public void actionPerformed(ActionEvent evt) {
-            int index = viewArea.indexOfComponent(getTabComponent());
+            int index = viewArea.indexOfComponent(tabComponent);
             if (index >= 0) {
                 viewArea.removeTabAt(index);
             }
