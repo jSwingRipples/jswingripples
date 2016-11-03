@@ -103,7 +103,4 @@ class StartSearchWorker extends SwingWorker<Void, String> {
         JSwingRipplesApplication.getInstance().addComponentAsTab(
                 graphViewer.addDefaultView(false), "Search graph");
     }
-
-
-
 }

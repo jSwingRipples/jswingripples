@@ -173,11 +173,9 @@ public class Searcher {
         if(results.size() > 0){
             refreshMaxMin();
         }
-
-        // Refresh analysis table
-        //classTreeView.repaint();
     }
 
+    // Refresh analysis table
     public void callRepaint(){
         classTreeView.repaint();
     }
