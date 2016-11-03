@@ -359,38 +359,35 @@ public class JSwingRipplesApplication extends JFrame {
     }
 
     public static void main(final String[] args) {
-        System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
-        //init logging
-        getHome().mkdirs();
-
-        //Properties
-        Properties prop = new Properties();
-        try
-        {
-            InputStream in = JSwingRipplesApplication.class.getClassLoader().getResourceAsStream("project.properties");
-            prop.load(in);
-        } catch (IOException e) {
-            LogFactory.getLog(JSwingRipplesApplication.class).error("Missing properties file!");
-            System.exit(1);
-        }
-        final JFrame f = JSwingRipplesApplication.getInstance();
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //set frame location
-        final Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-        f.setSize(size.width / 2, size.height / 2);
-        f.setLocationByPlatform(true);
-        //LogFactory.getLog(JSwingRipplesApplication.class).debug("Prueba uno");
-        String info = prop.getProperty("project_name") + " version " + prop.getProperty("project_version");
-        LogFactory.getLog(JSwingRipplesApplication.class).info(info);
-        
-        // If called with the protocol args
-        processArgs(args);
-
-        //show frame
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+                //init logging
+                getHome().mkdirs();
+                //Properties
+                Properties prop = new Properties();
+                try
+                {
+                    InputStream in = JSwingRipplesApplication.class.getClassLoader().getResourceAsStream("project.properties");
+                    prop.load(in);
+                } catch (IOException e) {
+                    LogFactory.getLog(JSwingRipplesApplication.class).error("Missing properties file!");
+                    System.exit(1);
+                }
+                final JFrame f = JSwingRipplesApplication.getInstance();
+                f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+                //set frame location
+                final Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+                f.setSize(size.width / 2, size.height / 2);
+                f.setLocationByPlatform(true);
+                //LogFactory.getLog(JSwingRipplesApplication.class).debug("Prueba uno");
+                String info = prop.getProperty("project_name") + " version " + prop.getProperty("project_version");
+                LogFactory.getLog(JSwingRipplesApplication.class).info(info);
+
+                // If called with the protocol args
+                processArgs(args);
                 f.setVisible(true);
             }
         });
