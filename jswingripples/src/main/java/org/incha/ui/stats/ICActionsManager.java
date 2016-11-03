@@ -19,6 +19,7 @@ import org.incha.core.ModuleConfiguration;
 import org.incha.core.jswingripples.JRipplesICModuleInterface;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
+import org.incha.ui.dependency.OpenWithIDEAction;
 import org.incha.ui.dependency.ShowDependencyAction;
 import org.incha.ui.jripples.JRipplesViewsConstants;
 
@@ -94,6 +95,9 @@ public final class ICActionsManager {
         popup.add(new JSeparator(JSeparator.HORIZONTAL));
         popup.add(new SpecificGraphAction("Graph dependencies"));
         popup.add(new JSeparator(JSeparator.HORIZONTAL));
+        popup.add(new OpenWithIDEAction(node));
+        popup.add(new JSeparator(JSeparator.HORIZONTAL));
+        
         popup.add(new UndoAction(eig.getHistory(), "undo", context));
         popup.add(new RedoAction(eig.getHistory(), "redo", context));
         popup.add(new AbstractAction("copy") {
