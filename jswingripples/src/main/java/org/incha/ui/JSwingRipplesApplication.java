@@ -29,9 +29,9 @@ public class JSwingRipplesApplication extends JFrame {
     private static JSwingRipplesApplication instance;
     private TaskProgressMonitor progressMonitor;
 
-    private JSwingRipplesApplication(JTabbedPane viewAreaParameter, TaskProgressMonitor progressMonitor) {
+    private JSwingRipplesApplication(JTabbedPane viewArea, TaskProgressMonitor progressMonitor) {
         super("JSwingRipples");
-        this.viewArea = viewAreaParameter;
+        this.viewArea = viewArea;
         this.progressMonitor = progressMonitor;
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -49,7 +49,7 @@ public class JSwingRipplesApplication extends JFrame {
             }
         });
         
-        final JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, projectsView, viewAreaParameter);
+        final JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, projectsView, viewArea);
         getContentPane().add(pane, BorderLayout.CENTER);
 
         //add progress monitor.
@@ -436,6 +436,8 @@ public class JSwingRipplesApplication extends JFrame {
         panelTabTitle.setOpaque(false);
         JLabel labelTabTitle = new JLabel(tabTitle);
         JButton btnTabClose = new JButton("X");
+        
+        //Position for the component that content the tab title and button
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -443,6 +445,7 @@ public class JSwingRipplesApplication extends JFrame {
         panelTabTitle.add(labelTabTitle, gbc);
         gbc.gridx++;
         gbc.weightx = 0;
+        
         panelTabTitle.add(btnTabClose, gbc);
         viewArea.setTabComponentAt(index, panelTabTitle);
         btnTabClose.addActionListener(new CloseTabActionHandler(component));
