@@ -24,13 +24,12 @@ import java.util.Properties;
 
 public class JSwingRipplesApplication extends JFrame {
     private static final long serialVersionUID = 6142679404175274529L;
-    private JComponent viewArea;
+    private JTabbedPane viewArea;
     private final ProjectsView projectsView;
     private static JSwingRipplesApplication instance;
     private TaskProgressMonitor progressMonitor;
 
-
-    private JSwingRipplesApplication(JComponent viewArea, TaskProgressMonitor progressMonitor) {
+    private JSwingRipplesApplication(JTabbedPane viewArea, TaskProgressMonitor progressMonitor) {
         super("JSwingRipples");
         this.viewArea = viewArea;
         this.progressMonitor = progressMonitor;
@@ -49,7 +48,7 @@ public class JSwingRipplesApplication extends JFrame {
                 handleProjectsViewMouseEvent(e);
             }
         });
-
+        
         final JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, projectsView, viewArea);
         getContentPane().add(pane, BorderLayout.CENTER);
 
@@ -430,10 +429,41 @@ public class JSwingRipplesApplication extends JFrame {
     }
 
     public void addComponentAsTab(JComponent component, String tabTitle) {
-        JInternalFrame internalFrame = new JInternalFrame(tabTitle);
-        internalFrame.getContentPane().setLayout(new BorderLayout());
-        internalFrame.getContentPane().add(component);
-        internalFrame.setVisible(true);
-        viewArea.add(internalFrame);
+        viewArea.addTab(tabTitle, component);
+        viewArea.getTabCount();     
+        int index = viewArea.indexOfComponent(component);        
+        JPanel panelTabTitle = new JPanel(new GridBagLayout());
+        panelTabTitle.setOpaque(false);
+        JLabel labelTabTitle = new JLabel(tabTitle);
+        JButton btnTabClose = new JButton("X");
+        
+        //Position for the component that content the tab title and button
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        panelTabTitle.add(labelTabTitle, gbc);
+        gbc.gridx++;
+        gbc.weightx = 0;
+        
+        panelTabTitle.add(btnTabClose, gbc);
+        viewArea.setTabComponentAt(index, panelTabTitle);
+        btnTabClose.addActionListener(new CloseTabActionHandler(component));
+    }
+    
+    private class CloseTabActionHandler implements ActionListener {
+        
+        private JComponent tabComponent;
+
+        public CloseTabActionHandler(JComponent tabComponent) {
+            this.tabComponent = tabComponent;
+        }
+
+        public void actionPerformed(ActionEvent evt) {
+            int index = viewArea.indexOfComponent(tabComponent);
+            if (index >= 0) {
+                viewArea.removeTabAt(index);
+            }
+        }
     }
 }
