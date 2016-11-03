@@ -176,7 +176,7 @@ public class Searcher {
     }
 
     // Refresh analysis table
-    public void callRepaint(){
+    public void repaintClassTreeView(){
         classTreeView.repaint();
     }
 

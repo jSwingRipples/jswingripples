@@ -20,8 +20,8 @@ public class SearchMenu {
     public JButton getClearButton() {return clearButton;}
 
 	public SearchMenu() {
-		searchPanel = new JPanel();
-		final JTextField searchedWords = new JTextField(15);
+        searchPanel = new JPanel();
+        final JTextField searchedWords = new JTextField(15);
         searchPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
         searchPanel.setLayout(new FlowLayout());
         searchPanel.add(new JLabel("Search:"));

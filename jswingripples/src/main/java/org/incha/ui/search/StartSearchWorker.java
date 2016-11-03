@@ -19,11 +19,9 @@ import java.util.List;
 class StartSearchWorker extends SwingWorker<Void, String> {
     private List<String> words;
     private JTextField searchedWords;
-    private Searcher searcher;    
 
     StartSearchWorker(JTextField searchedWords) {
         this.searchedWords = searchedWords;
-        searcher = Searcher.getInstance();
     }
 
     @Override
@@ -39,7 +37,7 @@ class StartSearchWorker extends SwingWorker<Void, String> {
             for (String word : words) {
                 publish("Searching word: "+word);
                 try {
-                    searcher.search(word);
+                    Searcher.getInstance().search(word);
                     addToGraph();
                     //for (String found_word : searcher.getResults()) {
                     //System.out.println("ADD TO GRAPH THE WORD " + found_word);
@@ -52,7 +50,7 @@ class StartSearchWorker extends SwingWorker<Void, String> {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    searcher.callRepaint();
+                    Searcher.getInstance().repaintClassTreeView();
                 }
             });
 
