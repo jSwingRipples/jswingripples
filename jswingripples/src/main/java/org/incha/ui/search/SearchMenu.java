@@ -3,6 +3,8 @@ package org.incha.ui.search;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class SearchMenu {
 
@@ -19,7 +21,7 @@ public class SearchMenu {
 
 	public SearchMenu() {
 		searchPanel = new JPanel();
-		JTextField searchedWords = new JTextField(15);
+		final JTextField searchedWords = new JTextField(15);
         searchPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
         searchPanel.setLayout(new FlowLayout());
         searchPanel.add(new JLabel("Search:"));
@@ -28,7 +30,12 @@ public class SearchMenu {
         clearButton = new JButton("Clear");
         searchButton.setEnabled(false);
         clearButton.setEnabled(false);
-        searchButton.addActionListener(new StartSearchAction(searchedWords));
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new StartSearchWorker(searchedWords).execute();
+            }
+        });
         clearButton.addActionListener(new ClearSearchAction(searchedWords));
         searchPanel.add(searchButton);
         searchPanel.add(clearButton);

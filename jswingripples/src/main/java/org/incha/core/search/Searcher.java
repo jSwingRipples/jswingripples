@@ -175,6 +175,10 @@ public class Searcher {
         }
 
         // Refresh analysis table
+        //classTreeView.repaint();
+    }
+
+    public void callRepaint(){
         classTreeView.repaint();
     }
 
@@ -194,8 +198,10 @@ public class Searcher {
      * @return the percentage of hits.
      */
     double hitPercentage(String fileName) {
-        return !results.containsKey(fileName) ? -1 : (results.get(fileName) - minFrequency)  * 1.0
-                                                        / (maxFrequency - minFrequency);
+        if (!results.containsKey(fileName)) return -1;
+        int frequency = results.get(fileName);
+        if (frequency >  maxFrequency || frequency < minFrequency) return -1; // file process not finished yet
+        else return (results.get(fileName) - minFrequency)  * 1.0 / (maxFrequency - minFrequency);
     }
 
     /**
