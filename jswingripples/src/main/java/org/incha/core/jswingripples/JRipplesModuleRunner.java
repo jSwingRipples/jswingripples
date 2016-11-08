@@ -19,7 +19,7 @@ public class JRipplesModuleRunner {
         this.listener = listener;
     }
 
-    public void moduleFinished() {
+    public synchronized void moduleFinished() {
         // this method is called by each running module
         if (++modulesFinished == targetModulesRunning) {
             // a module runner run is successful only if all
