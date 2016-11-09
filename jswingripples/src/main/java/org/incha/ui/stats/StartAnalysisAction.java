@@ -57,13 +57,6 @@ public class StartAnalysisAction implements ActionListener {
         if (projectName == null) {
             return;
         }
-        File searchIndexesDirectory = new File(LuceneConstants.INDEX_DIRECTORY_PATH);
-        if(searchIndexesDirectory.exists() && searchIndexesDirectory.isDirectory()){
-            for (File f: searchIndexesDirectory.listFiles()){
-                f.delete();
-            }
-            searchIndexesDirectory.delete();
-        }
         final JavaProject project = JavaProjectsModel.getInstance().getProject(projectName);
         final JSwingRipplesEIG eig = new JSwingRipplesEIG(project);
 

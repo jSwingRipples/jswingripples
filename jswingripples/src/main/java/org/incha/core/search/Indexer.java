@@ -53,6 +53,7 @@ public class Indexer {
      * @throws IOException
      */
     private IndexWriter openWriter() throws IOException {
+        deleteOldIndex();
         // Directory that will contain indexes
         Directory indexDirectory = FSDirectory.open(new File(LuceneConstants.INDEX_DIRECTORY_PATH));
 
@@ -61,6 +62,16 @@ public class Indexer {
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36, analyzer);
         indexWriterConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
         return new IndexWriter(indexDirectory, indexWriterConfig);
+    }
+
+    private void deleteOldIndex() {
+        File searchIndexesDirectory = new File(LuceneConstants.INDEX_DIRECTORY_PATH);
+        if(searchIndexesDirectory.exists() && searchIndexesDirectory.isDirectory()){
+            for (File f: searchIndexesDirectory.listFiles()){
+                f.delete();
+            }
+            searchIndexesDirectory.delete();
+        }
     }
 
     /**
