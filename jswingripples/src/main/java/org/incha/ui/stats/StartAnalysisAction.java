@@ -2,8 +2,10 @@ package org.incha.ui.stats;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 
+import org.apache.lucene.store.FSDirectory;
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.ModuleConfiguration;
@@ -13,6 +15,7 @@ import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.NodeSearchBuilder;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.search.Indexer;
+import org.incha.core.search.LuceneConstants;
 import org.incha.ui.JSwingRipplesApplication;
 import org.incha.ui.jripples.JRipplesDefaultModulesConstants;
 
@@ -54,12 +57,17 @@ public class StartAnalysisAction implements ActionListener {
         if (projectName == null) {
             return;
         }
-
+        File searchIndexesDirectory = new File(LuceneConstants.INDEX_DIRECTORY_PATH);
+        if(searchIndexesDirectory.exists() && searchIndexesDirectory.isDirectory()){
+            for (File f: searchIndexesDirectory.listFiles()){
+                f.delete();
+            }
+            searchIndexesDirectory.delete();
+        }
         final JavaProject project = JavaProjectsModel.getInstance().getProject(projectName);
         final JSwingRipplesEIG eig = new JSwingRipplesEIG(project);
 
         eig.setMainClass(dialog.getMainClass());
-
         final ModuleConfiguration config = new ModuleConfiguration();
         //module dependency builder
         String module = (String) dialog.dependencyGraph.getSelectedItem();
