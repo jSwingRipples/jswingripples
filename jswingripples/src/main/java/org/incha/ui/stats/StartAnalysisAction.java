@@ -139,12 +139,4 @@ public class StartAnalysisAction implements ActionListener {
 	protected void setProjectSelected(String projectSelected) {
 		this.projectSelected = projectSelected;
 	}
-
-	private class GraphBuild implements Runnable
-    {
-        @Override
-        public void run() {
-            GraphBuilder.getInstance().prepareGraphs();
-        }
-    }
 }

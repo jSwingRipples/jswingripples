@@ -46,7 +46,7 @@ public class Indexer {
         }
         return instance;
     }
-    
+
     /**
      * Creates an index of all files in the project.
      * @param eig the eig of the java project being indexed.
@@ -135,6 +135,4 @@ public class Indexer {
             writer.addDocument(document);
         }
     }
-
-
 }
