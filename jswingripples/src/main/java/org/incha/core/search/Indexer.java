@@ -46,6 +46,20 @@ public class Indexer {
         }
         return instance;
     }
+    
+    /**
+     * Creates an index of all files in the project.
+     * @param eig the eig of the java project being indexed.
+     * @throws IOException
+     */
+    public void indexEIG(JSwingRipplesEIG eig) throws IOException {
+        IndexWriter writer = openWriter();
+        for (JSwingRipplesEIGNode node : eig.getAllNodes()) {
+            File file = new File(node.getNodeIMember().getCompilationUnit().getPath().toString());
+            if (validFileFilter.accept(file)) indexFile(file, writer);
+        }
+        closeWriter(writer);
+    }
 
     /**
      * Creates a new IndexWriter object for creating and maintaining indexes.
@@ -122,17 +136,5 @@ public class Indexer {
         }
     }
 
-    /**
-     * Creates an index of all files in the project.
-     * @param eig the eig of the java project being indexed.
-     * @throws IOException
-     */
-    public void indexEIG(JSwingRipplesEIG eig) throws IOException {
-        IndexWriter writer = openWriter();
-        for (JSwingRipplesEIGNode node : eig.getAllNodes()) {
-            File file = new File(node.getNodeIMember().getCompilationUnit().getPath().toString());
-            if (validFileFilter.accept(file)) indexFile(file, writer);
-        }
-        closeWriter(writer);
-    }
+
 }
