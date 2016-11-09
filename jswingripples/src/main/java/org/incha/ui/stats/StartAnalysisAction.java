@@ -103,7 +103,6 @@ public class StartAnalysisAction implements ActionListener {
                 try {
                     NodeSearchBuilder.getInstance().addEIG(eig);
                 } catch (CloneNotSupportedException e2) {
-                    // TODO Auto-generated catch block
                     e2.printStackTrace();
                 }
                 // Set search indexer current project.

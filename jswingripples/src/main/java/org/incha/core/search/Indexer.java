@@ -58,7 +58,7 @@ public class Indexer {
             File file = new File(node.getNodeIMember().getCompilationUnit().getPath().toString());
             if (validFileFilter.accept(file)) indexFile(file, writer);
         }
-        closeWriter(writer);
+        writer.close();
     }
 
     /**
@@ -86,14 +86,6 @@ public class Indexer {
             }
             searchIndexesDirectory.delete();
         }
-    }
-
-    /**
-     * Close the received writer.
-     * @throws IOException
-     */
-    private void closeWriter(IndexWriter writer) throws IOException {
-        writer.close();
     }
 
     /**
