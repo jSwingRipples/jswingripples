@@ -242,21 +242,12 @@ public class Searcher {
     public Map<String, Integer> getResults() {
     	return results;
     }
-
-    public List<String> getResultsList() { return resultsList; }
     
     /**
      * Return a list of the lines where the words were found
      */
     public List<Object []> getResInfo() {
     	return res_information;
-    }
-    
-    /**
-     * Deletes the elements of the list res_information
-     */
-    public void clearResInfo() {
-    	res_information.clear();
     }
     
     /**
