@@ -48,11 +48,26 @@ public class Indexer {
     }
 
     /**
+     * Creates an index of all files in the project.
+     * @param eig the eig of the java project being indexed.
+     * @throws IOException
+     */
+    public void indexEIG(JSwingRipplesEIG eig) throws IOException {
+        IndexWriter writer = openWriter();
+        for (JSwingRipplesEIGNode node : eig.getAllNodes()) {
+            File file = new File(node.getNodeIMember().getCompilationUnit().getPath().toString());
+            if (validFileFilter.accept(file)) indexFile(file, writer);
+        }
+        writer.close();
+    }
+
+    /**
      * Creates a new IndexWriter object for creating and maintaining indexes.
      * @return the new IndexWriter.
      * @throws IOException
      */
     private IndexWriter openWriter() throws IOException {
+        deleteOldIndex();
         // Directory that will contain indexes
         Directory indexDirectory = FSDirectory.open(new File(LuceneConstants.INDEX_DIRECTORY_PATH));
 
@@ -63,12 +78,14 @@ public class Indexer {
         return new IndexWriter(indexDirectory, indexWriterConfig);
     }
 
-    /**
-     * Close the received writer.
-     * @throws IOException
-     */
-    private void closeWriter(IndexWriter writer) throws IOException {
-        writer.close();
+    private void deleteOldIndex() {
+        File searchIndexesDirectory = new File(LuceneConstants.INDEX_DIRECTORY_PATH);
+        if(searchIndexesDirectory.exists() && searchIndexesDirectory.isDirectory()){
+            for (File f: searchIndexesDirectory.listFiles()){
+                f.delete();
+            }
+            searchIndexesDirectory.delete();
+        }
     }
 
     /**
@@ -109,19 +126,5 @@ public class Indexer {
             Document document = createDocument(file);
             writer.addDocument(document);
         }
-    }
-
-    /**
-     * Creates an index of all files in the project.
-     * @param eig the eig of the java project being indexed.
-     * @throws IOException
-     */
-    public void indexEIG(JSwingRipplesEIG eig) throws IOException {
-        IndexWriter writer = openWriter();
-        for (JSwingRipplesEIGNode node : eig.getAllNodes()) {
-            File file = new File(node.getNodeIMember().getCompilationUnit().getPath().toString());
-            if (validFileFilter.accept(file)) indexFile(file, writer);
-        }
-        closeWriter(writer);
     }
 }

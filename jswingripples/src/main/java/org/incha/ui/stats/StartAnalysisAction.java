@@ -2,8 +2,10 @@ package org.incha.ui.stats;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 
+import org.apache.lucene.store.FSDirectory;
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.ModuleConfiguration;
@@ -13,6 +15,7 @@ import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.NodeSearchBuilder;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.search.Indexer;
+import org.incha.core.search.LuceneConstants;
 import org.incha.ui.JSwingRipplesApplication;
 import org.incha.ui.jripples.JRipplesDefaultModulesConstants;
 
@@ -54,12 +57,10 @@ public class StartAnalysisAction implements ActionListener {
         if (projectName == null) {
             return;
         }
-
         final JavaProject project = JavaProjectsModel.getInstance().getProject(projectName);
         final JSwingRipplesEIG eig = new JSwingRipplesEIG(project);
 
         eig.setMainClass(dialog.getMainClass());
-
         final ModuleConfiguration config = new ModuleConfiguration();
         //module dependency builder
         String module = (String) dialog.dependencyGraph.getSelectedItem();
@@ -95,6 +96,11 @@ public class StartAnalysisAction implements ActionListener {
         new JRipplesModuleRunner(new JRipplesModuleRunner.ModuleRunnerListener() {
             @Override
             public void runSuccessful() {
+                try {
+                    Indexer.getInstance().indexEIG(eig);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
                 StatisticsManager.getInstance().addStatistics(config, eig);
             }
 
@@ -104,23 +110,7 @@ public class StartAnalysisAction implements ActionListener {
             }
         }).runModules(config.buildModules(eig));
 
-        GraphBuilder.getInstance().addEIG(eig);
-        GraphBuilder.getInstance().resetGraphs();
-        Thread t = new Thread(new GraphBuild());
-        t.start();
-        eig.addJRipplesEIGListener(GraphBuilder.getInstance());
-        try {
-            NodeSearchBuilder.getInstance().addEIG(eig);
-        } catch (CloneNotSupportedException e2) {
-            // TODO Auto-generated catch block
-            e2.printStackTrace();
-        }
-        // Set search indexer current project.
-        try {
-            Indexer.getInstance().indexEIG(eig);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+
     }
     
     /**
@@ -138,12 +128,4 @@ public class StartAnalysisAction implements ActionListener {
 	protected void setProjectSelected(String projectSelected) {
 		this.projectSelected = projectSelected;
 	}
-
-	private class GraphBuild implements Runnable
-    {
-        @Override
-        public void run() {
-            GraphBuilder.getInstance().prepareGraphs();
-        }
-    }
 }
