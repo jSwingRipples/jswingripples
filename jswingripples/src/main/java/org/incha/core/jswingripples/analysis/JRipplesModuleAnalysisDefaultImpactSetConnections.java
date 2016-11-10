@@ -24,8 +24,8 @@ import org.incha.ui.jripples.EIGStatusMarks;
  * @author Maksym Petrenko
  *
  */
-public class JRipplesModuleAnalysisDefaultImpactSetConnections implements
-		JRipplesAnalysisModuleInterface, JSwingRipplesEIGListener {
+public class JRipplesModuleAnalysisDefaultImpactSetConnections extends JRipplesAnalysisModuleInterface
+		                                                       implements JSwingRipplesEIGListener {
 
 
 	private Set<JSwingRipplesEIGNode> impact_set = new HashSet<JSwingRipplesEIGNode>();

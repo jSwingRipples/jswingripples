@@ -20,7 +20,7 @@ import org.incha.ui.jripples.EIGStatusMarks;
  * @author Maksym Petrenko
  *
  */
-public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleInterface {
+public class JRipplesModuleICDefaultConceptLocation extends JRipplesICModuleInterface {
 	private JSwingRipplesEIGNode currentNode = null;
 	private final JSwingRipplesEIG eig;
 

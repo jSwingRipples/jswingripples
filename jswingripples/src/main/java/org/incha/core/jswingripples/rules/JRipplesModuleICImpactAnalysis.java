@@ -22,8 +22,7 @@ import org.incha.ui.jripples.EIGStatusMarks;
  * @author Maksym Petrenko
  *
  */
-public class JRipplesModuleICImpactAnalysis implements
-		JRipplesICModuleInterface {
+public class JRipplesModuleICImpactAnalysis extends JRipplesICModuleInterface {
     private static final Log log = LogFactory.getLog(JRipplesModuleICImpactAnalysis.class);
 //algorithm
 //1. Identify all members or parents at specified granularity

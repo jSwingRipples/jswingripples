@@ -22,8 +22,7 @@ import org.incha.ui.jripples.EIGStatusMarks;
  * @author Maksym Petrenko
  *
  */
-public class JRipplesModuleICChangePropagation implements
-		JRipplesICModuleInterface {
+public class JRipplesModuleICChangePropagation extends JRipplesICModuleInterface {
     private static final Log log = LogFactory.getLog(JRipplesModuleICChangePropagation.class);
     private final JSwingRipplesEIG eig;
 

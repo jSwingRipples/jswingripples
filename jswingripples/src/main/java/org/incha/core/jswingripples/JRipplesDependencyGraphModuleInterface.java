@@ -9,10 +9,9 @@ package org.incha.core.jswingripples;
  * @author Maksym Petrenko
  *
  */
-public interface JRipplesDependencyGraphModuleInterface extends
-		JRipplesModule {
+public abstract class JRipplesDependencyGraphModuleInterface extends JRipplesModule {
 	/**
 	 * Called to calculate a dependency graph for all nodes in the JRipple EIG. Typically is called upon EIG initialization.
 	 */
-	void AnalyzeProject();
+	public abstract void AnalyzeProject();
 }
