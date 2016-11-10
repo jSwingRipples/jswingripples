@@ -87,12 +87,13 @@ public class ModuleConfiguration {
     public List<JRipplesModule> buildModules(final JSwingRipplesEIG eig) {
         final List<JRipplesModule> modules = new LinkedList<>();
 
-        modules.add(createDependencyBuilderModule(eig));
-        modules.add(createIncrementalChangeModule(eig));
+        modules.add(createDependencyBuilderModule(eig).withPriority(JRipplesModule.Priority.HIGH));
+        modules.add(createIncrementalChangeModule(eig).withPriority(JRipplesModule.Priority.LOW));
 
         //analysis
         if (isAnalysisDefaultImpactSetConnections()) {
-            modules.add(new JRipplesModuleAnalysisDefaultImpactSetConnections(eig));
+            modules.add(new JRipplesModuleAnalysisDefaultImpactSetConnections(eig)
+                            .withPriority(JRipplesModule.Priority.LOW));
         }
 
 

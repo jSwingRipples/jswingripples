@@ -108,9 +108,7 @@ public class StartAnalysisAction implements ActionListener {
             public void runFailure() {
 
             }
-        }).runModules(config.buildModules(eig));
-
-
+        }).runModulesWithPriority(config.buildModules(eig));
     }
     
     /**
