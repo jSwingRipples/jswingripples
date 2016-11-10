@@ -96,16 +96,6 @@ public class StartAnalysisAction implements ActionListener {
         new JRipplesModuleRunner(new JRipplesModuleRunner.ModuleRunnerListener() {
             @Override
             public void runSuccessful() {
-                GraphBuilder.getInstance().addEIG(eig);
-                GraphBuilder.getInstance().resetGraphs();
-                GraphBuilder.getInstance().prepareGraphs();
-                eig.addJRipplesEIGListener(GraphBuilder.getInstance());
-                try {
-                    NodeSearchBuilder.getInstance().addEIG(eig);
-                } catch (CloneNotSupportedException e2) {
-                    e2.printStackTrace();
-                }
-                // Set search indexer current project.
                 try {
                     Indexer.getInstance().indexEIG(eig);
                 } catch (IOException e1) {
