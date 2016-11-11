@@ -6,6 +6,10 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.lucene.store.FSDirectory;
+import org.eclipse.jdt.core.IPackageDeclaration;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.core.JavaModel;
+import org.incha.compiler.dom.JavaDomBuilder;
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.ModuleConfiguration;
@@ -60,7 +64,15 @@ public class StartAnalysisAction implements ActionListener {
         final JavaProject project = JavaProjectsModel.getInstance().getProject(projectName);
         final JSwingRipplesEIG eig = new JSwingRipplesEIG(project);
 
-        eig.setMainClass(dialog.getMainClass());
+        String packageName;
+        try {
+            if ( (packageName = getPackage(dialog.getMainClass())) != null) {
+                eig.setMainClass(packageName + "." + dialog.getMainClass().getName().replace(".java", ""));
+            }
+        } catch (JavaModelException e) {
+            e.printStackTrace();
+        }
+
         final ModuleConfiguration config = new ModuleConfiguration();
         //module dependency builder
         String module = (String) dialog.dependencyGraph.getSelectedItem();
@@ -126,4 +138,14 @@ public class StartAnalysisAction implements ActionListener {
 	protected void setProjectSelected(String projectSelected) {
 		this.projectSelected = projectSelected;
 	}
+
+    private String getPackage(File file) throws JavaModelException {
+        JavaDomBuilder builder = new JavaDomBuilder(file.getAbsolutePath());
+        for (IPackageDeclaration declaration : builder.build(file).getPackageDeclarations()) {
+            if (declaration.getElementName() != null) {
+                return declaration.getElementName();
+            }
+        }
+        return null;
+    }
 }

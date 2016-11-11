@@ -122,11 +122,11 @@ public class JRipplesModuleICDefaultConceptLocation extends JRipplesICModuleInte
     }
 
     private JSwingRipplesEIGNode getType(final JSwingRipplesEIGNode[] nodes) {
-        for (int i = 0; i < nodes.length; i++) {
-            final IMember member = nodes[i].getNodeIMember();
+        for (JSwingRipplesEIGNode node : nodes) {
+            final IMember member = node.getNodeIMember();
             if (member instanceof IType && ((IType) member).getFullyQualifiedName().equals(
                     eig.getMainClass())) {
-                return nodes[i];
+                return node;
             }
         }
         return null;
