@@ -10,7 +10,7 @@ import java.util.Set;
 
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IType;
-import org.incha.core.jswingripples.JRipplesICModuleInterface;
+import org.incha.core.jswingripples.JRipplesICModule;
 import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
@@ -20,7 +20,7 @@ import org.incha.ui.jripples.EIGStatusMarks;
  * @author Maksym Petrenko
  *
  */
-public class JRipplesModuleICDefaultConceptLocation extends JRipplesICModuleInterface {
+public class JRipplesModuleICDefaultConceptLocation extends JRipplesICModule {
 	private JSwingRipplesEIGNode currentNode = null;
 	private final JSwingRipplesEIG eig;
 
@@ -35,7 +35,7 @@ public class JRipplesModuleICDefaultConceptLocation extends JRipplesICModuleInte
     /*
 	 * (non-Javadoc)
 	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesICModuleInterface#GetAvailableRulesForMark(java.lang.String)
+	 * @see org.severe.jripples.modules.interfaces.JRipplesICModule#GetAvailableRulesForMark(java.lang.String)
 	 */
 	@Override
     public Set<String> GetAvailableRulesForMark(final String mark) {
@@ -84,7 +84,7 @@ public class JRipplesModuleICDefaultConceptLocation extends JRipplesICModuleInte
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesICModuleInterface#ApplyRuleAtNode(java.lang.String,
+	 * @see org.severe.jripples.modules.interfaces.JRipplesICModule#ApplyRuleAtNode(java.lang.String,
 	 *      java.lang.String)
 	 */
 	@Override

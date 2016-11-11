@@ -13,7 +13,7 @@ import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
  * @author Maksym Petrenko
  *
  */
-public abstract class JRipplesICModuleInterface extends JRipplesModule {
+public abstract class JRipplesICModule extends JRipplesModule {
 
 	public abstract void InitializeStage(JRipplesModuleRunner moduleRunner);
 	/**
