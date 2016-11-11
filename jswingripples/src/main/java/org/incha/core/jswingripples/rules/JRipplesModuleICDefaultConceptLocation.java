@@ -21,7 +21,6 @@ import org.incha.ui.jripples.EIGStatusMarks;
  *
  */
 public class JRipplesModuleICDefaultConceptLocation extends JRipplesICModule {
-	private JSwingRipplesEIGNode currentNode = null;
 	private final JSwingRipplesEIG eig;
 
 	/**
@@ -72,7 +71,6 @@ public class JRipplesModuleICDefaultConceptLocation extends JRipplesICModule {
                 final JSwingRipplesEIGNode mainType = getMainClassNode(nodes);
                 if (mainType != null) {
                     mainType.setMark(EIGStatusMarks.NEXT_VISIT);
-                    currentNode = mainType;
                 }
             }
         }
@@ -89,7 +87,6 @@ public class JRipplesModuleICDefaultConceptLocation extends JRipplesICModule {
 	 */
 	@Override
     public void ApplyRuleAtNode(final String rule, final JSwingRipplesEIGNode node, final int granularity) {
-        currentNode=node;
         if (rule.compareTo(EIGStatusMarks.LOCATED) == 0) {
             CommonEIGRules.assignMarkToNodeAndParents(eig, node,EIGStatusMarks.LOCATED);
         } else if (rule.compareTo(EIGStatusMarks.VISITED_CONTINUE) == 0) {
