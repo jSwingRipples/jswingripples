@@ -69,7 +69,7 @@ public class JRipplesModuleICDefaultConceptLocation extends JRipplesICModule {
             }
 
             if (eig.getMainClass() != null) {
-                final JSwingRipplesEIGNode mainType = getType(nodes);
+                final JSwingRipplesEIGNode mainType = getMainClassNode(nodes);
                 if (mainType != null) {
                     mainType.setMark(EIGStatusMarks.NEXT_VISIT);
                     currentNode = mainType;
@@ -121,11 +121,10 @@ public class JRipplesModuleICDefaultConceptLocation extends JRipplesICModule {
         InitializeStage(moduleRunner);
     }
 
-    private JSwingRipplesEIGNode getType(final JSwingRipplesEIGNode[] nodes) {
+    private JSwingRipplesEIGNode getMainClassNode(final JSwingRipplesEIGNode[] nodes) {
         for (JSwingRipplesEIGNode node : nodes) {
             final IMember member = node.getNodeIMember();
-            if (member instanceof IType && ((IType) member).getFullyQualifiedName().equals(
-                    eig.getMainClass())) {
+            if (member instanceof IType && ((IType) member).getFullyQualifiedName().equals(eig.getMainClass())) {
                 return node;
             }
         }
