@@ -98,7 +98,12 @@ public class StartAnalysisDialog extends JDialog {
         ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                doOk();
+                try {
+                    doOk();
+                } catch (StartAnalysisAction.AnalysisFailedException ex) {
+                    // TODO: how to notify the user?
+                    ex.printStackTrace();
+                }
             }
         });
         south.add(ok);
@@ -278,7 +283,7 @@ public class StartAnalysisDialog extends JDialog {
     /**
      *
      */
-    protected void doOk() {
+    protected void doOk() throws StartAnalysisAction.AnalysisFailedException {
         dispose();
         startAnalysisCallback.startAnalysis(this);
     }

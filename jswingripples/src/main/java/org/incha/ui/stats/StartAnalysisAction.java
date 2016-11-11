@@ -24,6 +24,9 @@ import org.incha.ui.JSwingRipplesApplication;
 import org.incha.ui.jripples.JRipplesDefaultModulesConstants;
 
 public class StartAnalysisAction implements ActionListener {
+    public class AnalysisFailedException extends Exception {
+        public AnalysisFailedException(String message) { super(message); }
+    }
 	private String projectSelected;
 	
     /**
@@ -56,7 +59,7 @@ public class StartAnalysisAction implements ActionListener {
         dialog.setVisible(true);
     }
 
-    public void startAnalysis(StartAnalysisDialog dialog) {
+    public void startAnalysis(StartAnalysisDialog dialog) throws AnalysisFailedException {
         final String projectName = (String) dialog.projects.getSelectedItem();
         if (projectName == null) {
             return;
@@ -66,13 +69,12 @@ public class StartAnalysisAction implements ActionListener {
 
         String packageName;
         try {
-            if ( (packageName = getPackage(dialog.getMainClass())) != null) {
+            if ((packageName = getPackage(dialog.getMainClass())) != null) {
                 eig.setMainClass(packageName + "." + dialog.getMainClass().getName().replace(".java", ""));
             }
         } catch (JavaModelException e) {
-            e.printStackTrace();
+            throw new AnalysisFailedException("Could not retrieve main class package");
         }
-
         final ModuleConfiguration config = new ModuleConfiguration();
         //module dependency builder
         String module = (String) dialog.dependencyGraph.getSelectedItem();
