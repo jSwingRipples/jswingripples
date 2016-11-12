@@ -21,9 +21,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.DocumentEvent; 
-import javax.swing.event.DocumentListener; 
-import javax.swing.filechooser.FileFilter; 
+import javax.swing.event.DocumentEvent;
 
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
@@ -34,9 +32,10 @@ import org.incha.ui.jripples.JRipplesDefaultModulesConstants;
 
 public class StartAnalysisDialog extends JDialog {
     private static final long serialVersionUID = 6788138046337076311L;
+    private File mainClassFile;
+    private StartAnalysisAction startAnalysisCallback;
     final JComboBox<String> projects;
     final JTextField className = new JTextField(30);
-    private StartAnalysisAction startAnalysisCallback;
     final JButton ok = new JButton("Ok"); 
     
     private JavaProject project;
@@ -99,7 +98,12 @@ public class StartAnalysisDialog extends JDialog {
         ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                doOk();
+                try {
+                    doOk();
+                } catch (StartAnalysisAction.AnalysisFailedException ex) {
+                    // TODO: how to notify the user?
+                    ex.printStackTrace();
+                }
             }
         });
         south.add(ok);
@@ -242,9 +246,9 @@ public class StartAnalysisDialog extends JDialog {
                 if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                     final File selectedFile = chooser.getSelectedFile();
                     if (selectedFile != null) {
+                        mainClassFile = selectedFile;
                         className.setText(selectedFile.getName());
                     }
-
                 }
             }
         });
@@ -279,7 +283,7 @@ public class StartAnalysisDialog extends JDialog {
     /**
      *
      */
-    protected void doOk() {
+    protected void doOk() throws StartAnalysisAction.AnalysisFailedException {
         dispose();
         startAnalysisCallback.startAnalysis(this);
     }
@@ -287,7 +291,7 @@ public class StartAnalysisDialog extends JDialog {
     /**
      * @return the className
      */
-    public String getMainClass() {
-        return className.getText();
+    public File getMainClass() {
+        return mainClassFile;
     }
 }

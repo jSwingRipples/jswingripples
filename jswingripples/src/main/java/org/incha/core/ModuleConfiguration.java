@@ -3,7 +3,7 @@ package org.incha.core;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.incha.core.jswingripples.JRipplesICModuleInterface;
+import org.incha.core.jswingripples.JRipplesICModule;
 import org.incha.core.jswingripples.JRipplesModule;
 import org.incha.core.jswingripples.analysis.JRipplesModuleAnalysisDefaultImpactSetConnections;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
@@ -87,12 +87,13 @@ public class ModuleConfiguration {
     public List<JRipplesModule> buildModules(final JSwingRipplesEIG eig) {
         final List<JRipplesModule> modules = new LinkedList<>();
 
-        modules.add(createDependencyBuilderModule(eig));
-        modules.add(createIncrementalChangeModule(eig));
+        modules.add(createDependencyBuilderModule(eig).withPriority(JRipplesModule.Priority.HIGH));
+        modules.add(createIncrementalChangeModule(eig).withPriority(JRipplesModule.Priority.LOW));
 
         //analysis
         if (isAnalysisDefaultImpactSetConnections()) {
-            modules.add(new JRipplesModuleAnalysisDefaultImpactSetConnections(eig));
+            modules.add(new JRipplesModuleAnalysisDefaultImpactSetConnections(eig)
+                            .withPriority(JRipplesModule.Priority.LOW));
         }
 
 
@@ -110,7 +111,7 @@ public class ModuleConfiguration {
      * @param eig
      * @return
      */
-    public JRipplesICModuleInterface createIncrementalChangeModule(
+    public JRipplesICModule createIncrementalChangeModule(
             final JSwingRipplesEIG eig) {
         return createIncrementalChangeModule(getIncrementalChange(), eig);
     }
@@ -143,7 +144,7 @@ public class ModuleConfiguration {
      * @param eig
      * @return
      */
-    public static JRipplesICModuleInterface createIncrementalChangeModule(
+    public static JRipplesICModule createIncrementalChangeModule(
             final int type, final JSwingRipplesEIG eig) {
         switch (type) {
             case MODULE_IMPACT_ANALYSIS:

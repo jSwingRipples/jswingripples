@@ -26,7 +26,7 @@ public class JRipplesModuleICConceptLocationRelaxed extends JRipplesModuleICDefa
     /*
 	 * (non-Javadoc)
 	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesICModuleInterface#GetAvailableRulesForMark(java.lang.String)
+	 * @see org.severe.jripples.modules.interfaces.JRipplesICModule#GetAvailableRulesForMark(java.lang.String)
 	 */
 	@Override
     public Set<String> GetAvailableRulesForMark(final String mark) {

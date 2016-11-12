@@ -9,11 +9,11 @@ package org.incha.core.jswingripples;
  * @author Maksym Petrenko
 
  */
-public interface JRipplesAnalysisModuleInterface extends JRipplesModule {
+public abstract class JRipplesAnalysisModule extends JRipplesModule {
 
 	/**
 	 * Called to calculate estimations for all nodes in the JRipple EIG. Typically is called upon EIG initialization.
 	 */
-	void AnalyzeProjectWithinModuleRunner(JRipplesModuleRunner moduleRunner);
+	public abstract void AnalyzeProjectWithinModuleRunner(JRipplesModuleRunner moduleRunner);
 }
 

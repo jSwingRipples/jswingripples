@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.incha.core.ModuleConfiguration;
-import org.incha.core.jswingripples.JRipplesAnalysisModuleInterface;
+import org.incha.core.jswingripples.JRipplesAnalysisModule;
 import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGEdge;
@@ -24,8 +24,8 @@ import org.incha.ui.jripples.EIGStatusMarks;
  * @author Maksym Petrenko
  *
  */
-public class JRipplesModuleAnalysisDefaultImpactSetConnections implements
-		JRipplesAnalysisModuleInterface, JSwingRipplesEIGListener {
+public class JRipplesModuleAnalysisDefaultImpactSetConnections extends JRipplesAnalysisModule
+		                                                       implements JSwingRipplesEIGListener {
 
 
 	private Set<JSwingRipplesEIGNode> impact_set = new HashSet<JSwingRipplesEIGNode>();

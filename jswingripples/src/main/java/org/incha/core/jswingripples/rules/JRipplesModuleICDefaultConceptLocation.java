@@ -10,7 +10,7 @@ import java.util.Set;
 
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IType;
-import org.incha.core.jswingripples.JRipplesICModuleInterface;
+import org.incha.core.jswingripples.JRipplesICModule;
 import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
@@ -20,8 +20,7 @@ import org.incha.ui.jripples.EIGStatusMarks;
  * @author Maksym Petrenko
  *
  */
-public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleInterface {
-	private JSwingRipplesEIGNode currentNode = null;
+public class JRipplesModuleICDefaultConceptLocation extends JRipplesICModule {
 	private final JSwingRipplesEIG eig;
 
 	/**
@@ -35,7 +34,7 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
     /*
 	 * (non-Javadoc)
 	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesICModuleInterface#GetAvailableRulesForMark(java.lang.String)
+	 * @see org.severe.jripples.modules.interfaces.JRipplesICModule#GetAvailableRulesForMark(java.lang.String)
 	 */
 	@Override
     public Set<String> GetAvailableRulesForMark(final String mark) {
@@ -69,10 +68,9 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
             }
 
             if (eig.getMainClass() != null) {
-                final JSwingRipplesEIGNode mainType = getType(nodes);
+                final JSwingRipplesEIGNode mainType = getMainClassNode(nodes);
                 if (mainType != null) {
                     mainType.setMark(EIGStatusMarks.NEXT_VISIT);
-                    currentNode = mainType;
                 }
             }
         }
@@ -84,12 +82,11 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesICModuleInterface#ApplyRuleAtNode(java.lang.String,
+	 * @see org.severe.jripples.modules.interfaces.JRipplesICModule#ApplyRuleAtNode(java.lang.String,
 	 *      java.lang.String)
 	 */
 	@Override
     public void ApplyRuleAtNode(final String rule, final JSwingRipplesEIGNode node, final int granularity) {
-        currentNode=node;
         if (rule.compareTo(EIGStatusMarks.LOCATED) == 0) {
             CommonEIGRules.assignMarkToNodeAndParents(eig, node,EIGStatusMarks.LOCATED);
         } else if (rule.compareTo(EIGStatusMarks.VISITED_CONTINUE) == 0) {
@@ -121,12 +118,11 @@ public class JRipplesModuleICDefaultConceptLocation implements JRipplesICModuleI
         InitializeStage(moduleRunner);
     }
 
-    private JSwingRipplesEIGNode getType(final JSwingRipplesEIGNode[] nodes) {
-        for (int i = 0; i < nodes.length; i++) {
-            final IMember member = nodes[i].getNodeIMember();
-            if (member instanceof IType && ((IType) member).getFullyQualifiedName().equals(
-                    eig.getMainClass())) {
-                return nodes[i];
+    private JSwingRipplesEIGNode getMainClassNode(final JSwingRipplesEIGNode[] nodes) {
+        for (JSwingRipplesEIGNode node : nodes) {
+            final IMember member = node.getNodeIMember();
+            if (member instanceof IType && ((IType) member).getFullyQualifiedName().equals(eig.getMainClass())) {
+                return node;
             }
         }
         return null;

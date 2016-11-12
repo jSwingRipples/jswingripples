@@ -21,7 +21,7 @@ import org.incha.ui.util.RunnableWithProgress;
  * @author Maksym Petrenko
  *
  */
-public class MethodGranularityDependencyBuilder implements JRipplesModule {
+public class MethodGranularityDependencyBuilder extends JRipplesModule {
     private static final Log log = LogFactory.getLog(MethodGranularityDependencyBuilder.class);
     private final JSwingRipplesEIG eig;
 

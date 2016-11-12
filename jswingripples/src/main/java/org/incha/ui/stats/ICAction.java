@@ -10,7 +10,7 @@ import javax.swing.Action;
 import org.eclipse.jdt.core.IJavaElement;
 import org.incha.compiler.dom.JavaDomUtils;
 import org.incha.core.ModuleConfiguration;
-import org.incha.core.jswingripples.JRipplesICModuleInterface;
+import org.incha.core.jswingripples.JRipplesICModule;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 import org.incha.core.jswingripples.eig.history.CompoundUndoAction;
 import org.incha.core.jswingripples.eig.history.UndoAction;
@@ -75,7 +75,7 @@ class ICAction extends AbstractAction {
     public void actionPerformed(final ActionEvent e) {
         if (fromNode != null) {
             final ModuleConfiguration cfg = fromNode.getEig().getJavaProject().getModuleConfiguration();
-            final JRipplesICModuleInterface module = cfg.createIncrementalChangeModule(fromNode.getEig());
+            final JRipplesICModule module = cfg.createIncrementalChangeModule(fromNode.getEig());
 
             final UndoActionsBuilder undoCreater = new UndoActionsBuilder();
             fromNode.getEig().addJRipplesEIGListener(undoCreater);

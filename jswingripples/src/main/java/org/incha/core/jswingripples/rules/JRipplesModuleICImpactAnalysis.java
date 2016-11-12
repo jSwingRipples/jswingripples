@@ -4,8 +4,6 @@
  */
 package org.incha.core.jswingripples.rules;
 
-import java.awt.Color;
-import java.awt.Image;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -13,7 +11,7 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.incha.core.jswingripples.JRipplesICModuleInterface;
+import org.incha.core.jswingripples.JRipplesICModule;
 import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
@@ -22,8 +20,7 @@ import org.incha.ui.jripples.EIGStatusMarks;
  * @author Maksym Petrenko
  *
  */
-public class JRipplesModuleICImpactAnalysis implements
-		JRipplesICModuleInterface {
+public class JRipplesModuleICImpactAnalysis extends JRipplesICModule {
     private static final Log log = LogFactory.getLog(JRipplesModuleICImpactAnalysis.class);
 //algorithm
 //1. Identify all members or parents at specified granularity
@@ -42,7 +39,7 @@ public class JRipplesModuleICImpactAnalysis implements
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesICModuleInterface#GetAvailableRulesForMark(java.lang.String)
+	 * @see org.severe.jripples.modules.interfaces.JRipplesICModule#GetAvailableRulesForMark(java.lang.String)
 	 */
 	@Override
     public Set<String> GetAvailableRulesForMark(final String mark) {
@@ -115,7 +112,7 @@ public class JRipplesModuleICImpactAnalysis implements
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesICModuleInterface#ApplyRuleAtNode(java.lang.String,
+	 * @see org.severe.jripples.modules.interfaces.JRipplesICModule#ApplyRuleAtNode(java.lang.String,
 	 *      java.lang.String)
 	 */
 	@Override

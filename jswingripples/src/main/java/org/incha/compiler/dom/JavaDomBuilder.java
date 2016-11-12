@@ -74,7 +74,7 @@ public class JavaDomBuilder {
      * @param file
      * @return the type
      */
-    protected ICompilationUnit build(final File file) {
+    public ICompilationUnit build(final File file) {
         final SimpleCompilationUnit u = new SimpleCompilationUnit(javaProject, file);
 
         final SourceElementParser sourceParser = new SourceElementParser(null, new DefaultProblemFactory(),

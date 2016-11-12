@@ -6,6 +6,10 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.lucene.store.FSDirectory;
+import org.eclipse.jdt.core.IPackageDeclaration;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.core.JavaModel;
+import org.incha.compiler.dom.JavaDomBuilder;
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.ModuleConfiguration;
@@ -20,6 +24,9 @@ import org.incha.ui.JSwingRipplesApplication;
 import org.incha.ui.jripples.JRipplesDefaultModulesConstants;
 
 public class StartAnalysisAction implements ActionListener {
+    public class AnalysisFailedException extends Exception {
+        public AnalysisFailedException(String message) { super(message); }
+    }
 	private String projectSelected;
 	
     /**
@@ -52,7 +59,7 @@ public class StartAnalysisAction implements ActionListener {
         dialog.setVisible(true);
     }
 
-    public void startAnalysis(StartAnalysisDialog dialog) {
+    public void startAnalysis(StartAnalysisDialog dialog) throws AnalysisFailedException {
         final String projectName = (String) dialog.projects.getSelectedItem();
         if (projectName == null) {
             return;
@@ -60,7 +67,14 @@ public class StartAnalysisAction implements ActionListener {
         final JavaProject project = JavaProjectsModel.getInstance().getProject(projectName);
         final JSwingRipplesEIG eig = new JSwingRipplesEIG(project);
 
-        eig.setMainClass(dialog.getMainClass());
+        String packageName;
+        try {
+            if ((packageName = getPackage(dialog.getMainClass())) != null) {
+                eig.setMainClass(packageName + "." + dialog.getMainClass().getName().replace(".java", ""));
+            }
+        } catch (JavaModelException e) {
+            throw new AnalysisFailedException("Could not retrieve main class package");
+        }
         final ModuleConfiguration config = new ModuleConfiguration();
         //module dependency builder
         String module = (String) dialog.dependencyGraph.getSelectedItem();
@@ -108,9 +122,7 @@ public class StartAnalysisAction implements ActionListener {
             public void runFailure() {
 
             }
-        }).runModules(config.buildModules(eig));
-
-
+        }).runModulesWithPriority(config.buildModules(eig));
     }
     
     /**
@@ -128,4 +140,14 @@ public class StartAnalysisAction implements ActionListener {
 	protected void setProjectSelected(String projectSelected) {
 		this.projectSelected = projectSelected;
 	}
+
+    private String getPackage(File file) throws JavaModelException {
+        JavaDomBuilder builder = new JavaDomBuilder(file.getAbsolutePath());
+        for (IPackageDeclaration declaration : builder.build(file).getPackageDeclarations()) {
+            if (declaration.getElementName() != null) {
+                return declaration.getElementName();
+            }
+        }
+        return null;
+    }
 }

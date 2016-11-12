@@ -13,9 +13,9 @@ import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
  * @author Maksym Petrenko
  *
  */
-public interface JRipplesICModuleInterface extends JRipplesModule {
+public abstract class JRipplesICModule extends JRipplesModule {
 
-	void InitializeStage(JRipplesModuleRunner moduleRunner);
+	public abstract void InitializeStage(JRipplesModuleRunner moduleRunner);
 	/**
 	 * Returns a set of marks (names of propagation rules), available for a node with the supplied current mark. This is called to determine which propagation rules can still be applied to a particular node and display this rules in GUI.
 	 * @param mark
@@ -23,7 +23,7 @@ public interface JRipplesICModuleInterface extends JRipplesModule {
 	 * @return
 	 * 	a set of marks (of type String)
 	 */
-	Set<String> GetAvailableRulesForMark(String mark);
+	public abstract Set<String> GetAvailableRulesForMark(String mark);
 	/**
 	 * Applies the selected propagation rule at the selected node.
 	 * @param rule
@@ -33,7 +33,7 @@ public interface JRipplesICModuleInterface extends JRipplesModule {
 	 * @param granularity
 	 * granularity at which the rule is applied
 	 */
-	void ApplyRuleAtNode(String rule, JSwingRipplesEIGNode node, int granularity);
+	public abstract void ApplyRuleAtNode(String rule, JSwingRipplesEIGNode node, int granularity);
 	/**
 	 * Applies the selected propagation rule at the selected node using the particular dependency instead of the whole dependency graph.
 	 * @param rule
@@ -44,5 +44,5 @@ public interface JRipplesICModuleInterface extends JRipplesModule {
 	 * node, to which the rule propagates
 
 	 */
-	void ApplyRuleAtNode(String rule, JSwingRipplesEIGNode nodeFrom, JSwingRipplesEIGNode nodeTo);
+	public abstract void ApplyRuleAtNode(String rule, JSwingRipplesEIGNode nodeFrom, JSwingRipplesEIGNode nodeTo);
 }
