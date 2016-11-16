@@ -52,7 +52,8 @@ public class TextEditor extends JFrame {
                 if (SwingUtilities.isMiddleMouseButton(e) && jTabbedPane.getTabCount()>1){
                     openFiles.get(jTabbedPane.indexAtLocation(e.getX(),e.getY())).close(instance);
                 }
-                if(mouseOverTab(e.getX(),e.getY()) && SwingUtilities.isRightMouseButton(e) && jTabbedPane.getTabCount()>1){
+                if(jTabbedPane.indexAtLocation(e.getX(),e.getY()) != -1 && SwingUtilities.isRightMouseButton(e)
+                        && jTabbedPane.getTabCount()>1){
                     final JPopupMenu menu = new JPopupMenu();
                     final JMenuItem close = new JMenuItem("Close");
                     close.addActionListener(new ActionListener() {
@@ -114,14 +115,6 @@ public class TextEditor extends JFrame {
                 }
             });
         }
-    }
-
-    private boolean mouseOverTab(int x, int y){
-        for(int j = 0; j < jTabbedPane.getTabCount(); j++)
-            if(jTabbedPane.getBoundsAt(j).contains(x, y)){
-                return true;
-            }
-        return false;
     }
 
     /**
