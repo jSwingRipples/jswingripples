@@ -32,25 +32,7 @@ public class JSwingRipplesApplication extends JFrame {
         this.viewArea = viewArea;
         this.progressMonitor = progressMonitor;
 
-        viewArea.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if((SwingUtilities.isRightMouseButton(e) || SwingUtilities.isMiddleMouseButton(e))
-                        && viewArea.indexAtLocation(e.getX(),e.getY()) != -1){
-                    final JPopupMenu menu = new JPopupMenu();
-                    final JMenuItem close = new JMenuItem("Close");
-                    close.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(final ActionEvent e) {
-                            viewArea.removeTabAt(viewArea.getSelectedIndex());
-                        }
-                    });
-                    menu.add(close);
-                    menu.show(viewArea, e.getX(), e.getY());
-                }
-                super.mouseClicked(e);
-            }
-        });
+        addJTabbedPaneMouseListener(viewArea);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         final JPanel contentPane = new JPanel(new BorderLayout(0, 5));
@@ -445,6 +427,28 @@ public class JSwingRipplesApplication extends JFrame {
 
     public void addComponentAsTab(JComponent component, String tabTitle) {
         viewArea.addTab(tabTitle, component);
+    }
+
+    private void addJTabbedPaneMouseListener(JTabbedPane pane){
+        pane.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if((SwingUtilities.isRightMouseButton(e) || SwingUtilities.isMiddleMouseButton(e))
+                        && viewArea.indexAtLocation(e.getX(),e.getY()) != -1){
+                    final JPopupMenu menu = new JPopupMenu();
+                    final JMenuItem close = new JMenuItem("Close");
+                    close.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(final ActionEvent e) {
+                            viewArea.removeTabAt(viewArea.getSelectedIndex());
+                        }
+                    });
+                    menu.add(close);
+                    menu.show(viewArea, e.getX(), e.getY());
+                }
+                super.mouseClicked(e);
+            }
+        });
     }
 
 }

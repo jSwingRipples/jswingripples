@@ -46,29 +46,7 @@ public class TextEditor extends JFrame {
         //add a tab pane to the window.
         jTabbedPane = new JTabbedPane();
         //add a click listener to the tab pane, and intersect the mouse location with the tab pane.
-        jTabbedPane.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isMiddleMouseButton(e) && jTabbedPane.getTabCount()>1){
-                    openFiles.get(jTabbedPane.indexAtLocation(e.getX(),e.getY())).close(instance);
-                }
-                if(jTabbedPane.indexAtLocation(e.getX(),e.getY()) != -1 && SwingUtilities.isRightMouseButton(e)
-                        && jTabbedPane.getTabCount()>1){
-                    final JPopupMenu menu = new JPopupMenu();
-                    final JMenuItem close = new JMenuItem("Close");
-                    close.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(final ActionEvent e) {
-                            openFiles.get(jTabbedPane.getSelectedIndex()).close(instance);
-                        }
-                    });
-                    menu.add(close);
-                    menu.show(jTabbedPane, e.getX(), e.getY());
-
-                }
-                super.mouseClicked(e);
-            }
-        });
+        addJTabbedPaneMouseListener(jTabbedPane);
 
         openFiles = new ArrayList<FileOpen>();
         JMenuItem fileSave = new JMenuItem( "Save" );
@@ -213,6 +191,31 @@ public class TextEditor extends JFrame {
 
     }
 
+    private void addJTabbedPaneMouseListener(final JTabbedPane pane){
+        pane.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isMiddleMouseButton(e) && pane.getTabCount()>1){
+                    openFiles.get(pane.indexAtLocation(e.getX(),e.getY())).close(instance);
+                }
+                if(pane.indexAtLocation(e.getX(),e.getY()) != -1 && SwingUtilities.isRightMouseButton(e)
+                        && pane.getTabCount()>1){
+                    final JPopupMenu menu = new JPopupMenu();
+                    final JMenuItem close = new JMenuItem("Close");
+                    close.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(final ActionEvent e) {
+                            openFiles.get(pane.getSelectedIndex()).close(instance);
+                        }
+                    });
+                    menu.add(close);
+                    menu.show(pane, e.getX(), e.getY());
+
+                }
+                super.mouseClicked(e);
+            }
+        });
+    }
     /**
      * Instance the TextEditor.
      * @return the only instance to the TextEditor.
