@@ -14,9 +14,7 @@ import org.incha.ui.stats.StartAnalysisAction;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,10 +27,12 @@ public class JSwingRipplesApplication extends JFrame {
     private static JSwingRipplesApplication instance;
     private TaskProgressMonitor progressMonitor;
 
-    private JSwingRipplesApplication(JTabbedPane viewArea, TaskProgressMonitor progressMonitor) {
+    private JSwingRipplesApplication(final JTabbedPane viewArea, TaskProgressMonitor progressMonitor) {
         super("JSwingRipples");
         this.viewArea = viewArea;
         this.progressMonitor = progressMonitor;
+
+        addJTabbedPaneMouseListener(viewArea);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         final JPanel contentPane = new JPanel(new BorderLayout(0, 5));
@@ -427,40 +427,28 @@ public class JSwingRipplesApplication extends JFrame {
 
     public void addComponentAsTab(JComponent component, String tabTitle) {
         viewArea.addTab(tabTitle, component);
-        viewArea.getTabCount();     
-        int index = viewArea.indexOfComponent(component);        
-        JPanel panelTabTitle = new JPanel(new GridBagLayout());
-        panelTabTitle.setOpaque(false);
-        JLabel labelTabTitle = new JLabel(tabTitle);
-        JButton btnTabClose = new JButton("X");
-        
-        //Position for the component that content the tab title and button
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1;
-        panelTabTitle.add(labelTabTitle, gbc);
-        gbc.gridx++;
-        gbc.weightx = 0;
-        
-        panelTabTitle.add(btnTabClose, gbc);
-        viewArea.setTabComponentAt(index, panelTabTitle);
-        btnTabClose.addActionListener(new CloseTabActionHandler(component));
     }
-    
-    private class CloseTabActionHandler implements ActionListener {
-        
-        private JComponent tabComponent;
 
-        public CloseTabActionHandler(JComponent tabComponent) {
-            this.tabComponent = tabComponent;
-        }
-
-        public void actionPerformed(ActionEvent evt) {
-            int index = viewArea.indexOfComponent(tabComponent);
-            if (index >= 0) {
-                viewArea.removeTabAt(index);
+    private void addJTabbedPaneMouseListener(JTabbedPane pane){
+        pane.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if((SwingUtilities.isRightMouseButton(e) || SwingUtilities.isMiddleMouseButton(e))
+                        && viewArea.indexAtLocation(e.getX(),e.getY()) != -1){
+                    final JPopupMenu menu = new JPopupMenu();
+                    final JMenuItem close = new JMenuItem("Close");
+                    close.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(final ActionEvent e) {
+                            viewArea.removeTabAt(viewArea.getSelectedIndex());
+                        }
+                    });
+                    menu.add(close);
+                    menu.show(viewArea, e.getX(), e.getY());
+                }
+                super.mouseClicked(e);
             }
-        }
+        });
     }
+
 }
