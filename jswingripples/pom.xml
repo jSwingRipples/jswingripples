@@ -11,6 +11,12 @@
 	</properties>
 
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.kohsuke/github-api -->
+		<dependency>
+			<groupId>org.kohsuke</groupId>
+			<artifactId>github-api</artifactId>
+			<version>1.79</version>
+		</dependency>
 		<!-- logging -->
 		<dependency>
 			<groupId>log4j</groupId>
