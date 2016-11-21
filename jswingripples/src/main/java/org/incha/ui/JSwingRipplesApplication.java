@@ -425,7 +425,7 @@ public class JSwingRipplesApplication extends JFrame {
     }
 
     public void addComponentAsTab(JComponent component, String tabTitle) {
-        this.tabbedAreaCount += 1;
+        this.tabbedAreaCount++;
         viewArea.addTab(tabTitle, component);
     }
 
@@ -441,7 +441,7 @@ public class JSwingRipplesApplication extends JFrame {
                         @Override
                         public void actionPerformed(final ActionEvent e) {
                             viewArea.removeTabAt(viewArea.getSelectedIndex());
-                            tabbedAreaCount -= 1;
+                            tabbedAreaCount--;
                             if(tabbedAreaCount == 0){
                                 JMenuBar mb = getJMenuBar();
                                 searchMenu.getClearButton().setEnabled(false);
