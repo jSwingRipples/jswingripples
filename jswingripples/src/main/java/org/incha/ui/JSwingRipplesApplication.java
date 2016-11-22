@@ -327,16 +327,6 @@ public class JSwingRipplesApplication extends JFrame {
     }
 
     /**
-     * Creates new project.
-     */
-    protected void createNewProject() {
-        final JavaProject project = NewProjectWizard.showDialog(this);
-        if (project != null) {
-            JavaProjectsModel.getInstance().addProject(project);
-        }
-    }
-
-    /**
      * Import a project from a path.
      */
     protected void importProject(){
@@ -385,25 +375,9 @@ public class JSwingRipplesApplication extends JFrame {
                 String info = prop.getProperty("project_name") + " version " + prop.getProperty("project_version");
                 LogFactory.getLog(JSwingRipplesApplication.class).info(info);
 
-                // If called with the protocol args
-                processArgs(args);
                 f.setVisible(true);
             }
         });
-    }
-    
-    private static void processArgs(final String[] args) {
-    	if (args.length != 0) {
-    		JavaProjectsModel javaProjectsModel = JavaProjectsModel.getInstance();
-    		JavaProject project = javaProjectsModel.getProjectByName(args[0]);
-    		if (project == null) {
-    			project = new JavaProject(args[0]);
-    			javaProjectsModel.addProject(project);
-    		}
-    		for (int argNumber = 1; argNumber < args.length; argNumber++) {
-    			project.getBuildPath().addSource(new File(args[argNumber]));
-    		}
-    	}
     }
 
     /**
@@ -443,7 +417,6 @@ public class JSwingRipplesApplication extends JFrame {
                             viewArea.removeTabAt(viewArea.getSelectedIndex());
                             tabbedAreaCount--;
                             if(tabbedAreaCount == 0){
-                                JMenuBar mb = getJMenuBar();
                                 searchMenu.getClearButton().setEnabled(false);
                                 searchMenu.getSearchButton().setEnabled(false);
                             }
