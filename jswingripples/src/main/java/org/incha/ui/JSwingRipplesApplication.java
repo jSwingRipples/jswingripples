@@ -1,6 +1,7 @@
 package org.incha.ui;
 
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.jgit.api.Git;
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.StatisticsManager;
@@ -158,6 +159,15 @@ public class JSwingRipplesApplication extends JFrame {
             }
         });
         file.add(importProject);
+
+        final JMenuItem importProjectGithub = new JMenuItem("Import Project from GitHub");
+        importProjectGithub.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                importProjectGithub();
+            }
+        });
+        file.add(importProjectGithub);
         /* End: File Menu */
         
         /* Start: JRipples Menu */
@@ -327,16 +337,6 @@ public class JSwingRipplesApplication extends JFrame {
     }
 
     /**
-     * Creates new project.
-     */
-    protected void createNewProject() {
-        final JavaProject project = NewProjectWizard.showDialog(this);
-        if (project != null) {
-            JavaProjectsModel.getInstance().addProject(project);
-        }
-    }
-
-    /**
      * Import a project from a path.
      */
     protected void importProject(){
@@ -348,6 +348,13 @@ public class JSwingRipplesApplication extends JFrame {
         }
 
 
+    }
+    protected void importProjectGithub(){
+        final JavaProject project = NewProjectWizard.showDialog(this);
+        if (project != null) {
+            if(JavaProjectsModel.getInstance().addProject(project)) {
+            }
+        }
     }
 
     /**
