@@ -1,6 +1,5 @@
 package org.incha.ui;
 
-import org.graphstream.graph.Graph;
 import org.incha.core.search.Searcher;
 import org.incha.ui.search.SearchMenu;
 import org.incha.ui.stats.GraphVisualizationAction;
@@ -11,24 +10,28 @@ import org.incha.ui.stats.StartAnalysisAction;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 public class MainMenuBar {
-    private final JSwingRipplesApplication context;
-    private final JMenuBar bar;
+    private JSwingRipplesApplication context;
+    private JMenuBar bar;
     private SearchMenu searchMenu;
 
-    public static JMenuBar create(JSwingRipplesApplication context) {
-        return new MainMenuBar(context).bar;
-    }
-
-    private MainMenuBar(final JSwingRipplesApplication context) {
+    public MainMenuBar(JSwingRipplesApplication context) {
         this.context = context;
         bar = new JMenuBar();
         bar.add(createFileMenu());
         bar.add(createjRipplesMenu());
         bar.add(createHelpMenu());
         bar.add(createSearchPanel());
+    }
+
+
+    public SearchMenu getSearchMenu() {
+        return searchMenu;
+    }
+
+    public JMenuBar getJBar() {
+        return bar;
     }
 
     private JMenu createFileMenu() {
@@ -94,6 +97,4 @@ public class MainMenuBar {
         Searcher.getInstance().setSearchMenu(searchMenu);
         return searchMenu.getSearchPanel();
     }
-
-
 }

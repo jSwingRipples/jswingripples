@@ -23,9 +23,8 @@ import java.util.Properties;
 public class JSwingRipplesApplication extends JFrame {
     private static final long serialVersionUID = 6142679404175274529L;
     private JTabbedPane viewArea;
-    private int tabbedAreaCount = 0;
-    private SearchMenu searchMenu;
     private final ProjectsView projectsView;
+    private final MainMenuBar mainMenuBar;
     private static JSwingRipplesApplication instance;
     private TaskProgressMonitor progressMonitor;
 
@@ -38,7 +37,9 @@ public class JSwingRipplesApplication extends JFrame {
         final JPanel contentPane = new JPanel(new BorderLayout(0, 5));
         setContentPane(contentPane);
         contentPane.setBorder(new EmptyBorder(2, 2, 2, 2));
-        setJMenuBar(MainMenuBar.create(this));
+
+        mainMenuBar = new MainMenuBar(this);
+        setJMenuBar(mainMenuBar.getJBar());
 
         projectsView = new ProjectsView(JavaProjectsModel.getInstance());
         projectsView.addProjectsViewMouseListener(new ProjectsViewMouseListener() {
@@ -210,7 +211,6 @@ public class JSwingRipplesApplication extends JFrame {
     }
 
     public void addComponentAsTab(JComponent component, String tabTitle) {
-        this.tabbedAreaCount++;
         viewArea.addTab(tabTitle, component);
     }
 
@@ -226,10 +226,9 @@ public class JSwingRipplesApplication extends JFrame {
                         @Override
                         public void actionPerformed(final ActionEvent e) {
                             viewArea.removeTabAt(viewArea.getSelectedIndex());
-                            tabbedAreaCount--;
-                            if(tabbedAreaCount == 0){
-                                searchMenu.getClearButton().setEnabled(false);
-                                searchMenu.getSearchButton().setEnabled(false);
+                            if(viewArea.getTabCount() == 0){
+                                mainMenuBar.getSearchMenu().getClearButton().setEnabled(false);
+                                mainMenuBar.getSearchMenu().getSearchButton().setEnabled(false);
                             }
                         }
                     });
