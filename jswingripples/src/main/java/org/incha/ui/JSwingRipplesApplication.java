@@ -91,7 +91,7 @@ public class JSwingRipplesApplication extends JFrame {
             prefs.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
-                    showProjectSettinsEditor(project);
+                    showProjectSettingsEditor(project);
                 }
             });
             menu.add(prefs);
@@ -108,7 +108,7 @@ public class JSwingRipplesApplication extends JFrame {
     /**
      * @param project
      */
-    protected void showProjectSettinsEditor(final JavaProject project) {
+    protected void showProjectSettingsEditor(final JavaProject project) {
         final JFrame f = new JFrame("Project Settings");
         f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         f.getContentPane().setLayout(new BorderLayout(0, 5));
