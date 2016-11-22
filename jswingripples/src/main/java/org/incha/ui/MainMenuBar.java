@@ -11,12 +11,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainMenuBar {
-    private JSwingRipplesApplication context;
     private JMenuBar bar;
     private SearchMenu searchMenu;
 
     public MainMenuBar(JSwingRipplesApplication context) {
-        this.context = context;
         bar = new JMenuBar();
         bar.add(createFileMenu());
         bar.add(createjRipplesMenu());
@@ -42,7 +40,7 @@ public class MainMenuBar {
         importProject.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                context.importProject();
+                JSwingRipplesApplication.getInstance().importProject();
             }
         });
         file.add(importProject);
