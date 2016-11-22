@@ -210,8 +210,17 @@ public class JSwingRipplesApplication extends JFrame {
         return this.progressMonitor;
     }
 
+    public MainMenuBar getMainMenuBar() {
+        return mainMenuBar;
+    }
+
     public void addComponentAsTab(JComponent component, String tabTitle) {
         viewArea.addTab(tabTitle, component);
+    }
+
+    public void enableSearchMenuButtons() {
+        mainMenuBar.getSearchMenu().getSearchButton().setEnabled(true);
+        mainMenuBar.getSearchMenu().getClearButton().setEnabled(true);
     }
 
     private void addJTabbedPaneMouseListener(JTabbedPane pane){

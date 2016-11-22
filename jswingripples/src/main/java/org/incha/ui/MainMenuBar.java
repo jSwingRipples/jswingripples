@@ -1,6 +1,5 @@
 package org.incha.ui;
 
-import org.incha.core.search.Searcher;
 import org.incha.ui.search.SearchMenu;
 import org.incha.ui.stats.GraphVisualizationAction;
 import org.incha.ui.stats.ImpactGraphVisualizationAction;
@@ -94,7 +93,6 @@ public class MainMenuBar {
 
     private JPanel createSearchPanel() {
         searchMenu = new SearchMenu();
-        Searcher.getInstance().setSearchMenu(searchMenu);
         return searchMenu.getSearchPanel();
     }
 }
