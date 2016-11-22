@@ -14,7 +14,7 @@ public class MainMenuBar {
     private JMenuBar bar;
     private SearchMenu searchMenu;
 
-    public MainMenuBar(JSwingRipplesApplication context) {
+    public MainMenuBar() {
         bar = new JMenuBar();
         bar.add(createFileMenu());
         bar.add(createjRipplesMenu());

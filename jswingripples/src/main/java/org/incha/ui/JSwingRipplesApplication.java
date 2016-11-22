@@ -38,7 +38,7 @@ public class JSwingRipplesApplication extends JFrame {
         setContentPane(contentPane);
         contentPane.setBorder(new EmptyBorder(2, 2, 2, 2));
 
-        mainMenuBar = new MainMenuBar(this);
+        mainMenuBar = new MainMenuBar();
         setJMenuBar(mainMenuBar.getJBar());
 
         projectsView = new ProjectsView(JavaProjectsModel.getInstance());
