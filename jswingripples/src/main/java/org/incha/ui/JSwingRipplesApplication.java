@@ -1,7 +1,6 @@
 package org.incha.ui;
 
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.jgit.api.Git;
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.StatisticsManager;
@@ -353,8 +352,43 @@ public class JSwingRipplesApplication extends JFrame {
         final JavaProject project = NewProjectWizard.showDialog(this);
         if (project != null) {
             if(JavaProjectsModel.getInstance().addProject(project)) {
+                showSettingsGitHub(project);
             }
         }
+    }
+
+    private void showSettingsGitHub(JavaProject project) {
+        final JFrame f = new JFrame("Clone From GitHub");
+        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        f.getContentPane().setLayout(new BorderLayout(0, 5));
+
+        final GitHubSettings view = new GitHubSettings(project);
+        f.getContentPane().add(view, BorderLayout.CENTER);
+
+        //add ok button
+        final JPanel south = new JPanel(new FlowLayout());
+        final JButton ok = new JButton("Ok");
+        ok.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                try {
+                    view.handleOk();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                f.dispose();
+            }
+        });
+        south.add(ok);
+        f.getContentPane().add(south, BorderLayout.SOUTH);
+
+        //set frame location
+        final Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        f.setSize(size.width / 2, size.height / 2);
+        f.setLocationRelativeTo(this);
+
+        //show frame
+        f.setVisible(true);
     }
 
     /**
