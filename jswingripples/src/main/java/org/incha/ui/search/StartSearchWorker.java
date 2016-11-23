@@ -55,7 +55,7 @@ class StartSearchWorker extends SwingWorker<Void, String> {
                 }
             });
 
-            //showGraph(); This is temporary until the graph works again!
+            // This is temporary until the graph works again!
         }
         return null;
     }
@@ -64,6 +64,7 @@ class StartSearchWorker extends SwingWorker<Void, String> {
     protected void done() {
         JSwingRipplesApplication.getInstance().getProgressMonitor().setTaskName("Search finished");
         JSwingRipplesApplication.getInstance().repaint();
+        showGraph();
     }
 
     @Override

@@ -19,10 +19,10 @@ import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 import org.incha.ui.JSwingRipplesApplication;
 import org.incha.utils.FileVisitor;
 import org.incha.utils.IoUtils;
+import java.util.regex.Matcher;
 
 public class OpenWithIDEAction extends AbstractAction {
     private static final long serialVersionUID = 6537463394107510663L;
-    File fileToOpen;
     /**
      * Node.
      */
@@ -42,33 +42,15 @@ public class OpenWithIDEAction extends AbstractAction {
      */
     @Override
     public void actionPerformed(final ActionEvent e) {
-        String classNameParam = node.getFullName();
-        JavaProject project = node.getEig().getJavaProject();
-        final String localFilename = classNameParam.replace(".", File.separator ) + ".java";
-        final List<File> sources = project.getBuildPath().getSources();
-        for (final File file : sources) {
-            try {
-                IoUtils.visitTo(file, new FileVisitor() {
-                    @Override
-                    public void exit(final File t) throws IOException {
-                    }
-                    @Override
-                    public boolean enter(final File t) throws IOException {
-                        if (t.isFile() && t.getPath().contains(localFilename)) {
-                            fileToOpen = t;
-                        }
-                        return true;
-                    }
-                });
-            } catch (IOException ex) {
-                Logger.getLogger(OpenWithIDEAction.class.getName()).log(Level.SEVERE, null, ex);
+        try{
+            File f = new File(node.getAbsolutePath().replaceAll("/", Matcher.quoteReplacement(File.separator)));
+            if (!editFile(f)){
+                if (!openFile(f)){
+                    JOptionPane.showMessageDialog(null, "It is not possible to open the file with the default editor.");
+                }
             }
-        }
-        
-        if (!editFile(fileToOpen)){
-            if (!openFile(fileToOpen)){
-                JOptionPane.showMessageDialog(null, "It is not possible to open the file with the default editor.");
-            }
+        } catch (Exception ex){
+            ex.printStackTrace();
         }
         
     }
