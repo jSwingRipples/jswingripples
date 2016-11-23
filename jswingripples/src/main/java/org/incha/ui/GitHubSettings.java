@@ -16,7 +16,7 @@ import org.eclipse.jgit.api.Git;
  * Created by constanzafierro on 22-11-16.
  */
 public class GitHubSettings extends JPanel {
-    private JTextField url = new JTextField(30);
+    private JTextField url = new JTextField(20);
     private JButton select = new JButton("Select");
     private SourcesEditor sourcesEditor;
     private File path;
@@ -49,8 +49,6 @@ public class GitHubSettings extends JPanel {
         });
         center.add(select,BorderLayout.EAST);
         add(center, BorderLayout.CENTER);
-
-
     }
     public void setDir(File f){
         this.path = f;
@@ -68,12 +66,37 @@ public class GitHubSettings extends JPanel {
         }
         // then clone
         //System.out.println("Cloning from " + remoteUrl + " to " + localPath);
-        Git result = Git.cloneRepository()
-                .setURI(remoteUrl)
-                .setDirectory(localPath)
-                .call();
+        try{
+            Git.cloneRepository()
+                    .setURI(remoteUrl)
+                    .setDirectory(localPath)
+                    .call();
+            sourcesEditor.addFileToProject(localPath);
+            //System.out.println("Having repository: " + result.getRepository().getDirectory());
+        }
+        catch (org.eclipse.jgit.api.errors.JGitInternalException e){
+            windowConnectionError();
+        }
         // Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
-        //System.out.println("Having repository: " + result.getRepository().getDirectory());
-        sourcesEditor.addFileToProject(localPath);
+
     }
+
+    private void windowConnectionError() {
+        final JDialog dialog = new JDialog();
+        JPanel panel = new JPanel(new BorderLayout());
+        JLabel error = new JLabel("Connection error, please check internet", JLabel.CENTER);
+        JButton ok = new JButton("Ok");
+        ok.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dialog.dispose();
+            }
+        });
+        panel.add(error, BorderLayout.CENTER);
+        panel.add(ok, BorderLayout.EAST);
+        dialog.setContentPane(panel);
+        dialog.pack();
+        dialog.setVisible(true);
+    }
+
 }
