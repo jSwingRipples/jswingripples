@@ -67,11 +67,6 @@ public class Searcher {
     private int minFrequency;
 
     /**
-     * Reference to SearchMenu in UI.
-     */
-    private SearchMenu searchMenu;
-
-    /**
      * Returns the current instance.
      * @return the current Indexer instance.
      */
@@ -108,17 +103,7 @@ public class Searcher {
      * @param classTreeView the current class view.
      */
     public void setClassTreeView(ClassTreeView classTreeView) {
-        searchMenu.getSearchButton().setEnabled(true);
-        searchMenu.getClearButton().setEnabled(true);
         this.classTreeView = classTreeView;
-    }
-
-    /**
-     * Sets SearchMenu reference.
-     * @param searchMenu Search Menu in UI.
-     */
-    public void setSearchMenu(SearchMenu searchMenu) {
-        this.searchMenu = searchMenu;
     }
 
     /**

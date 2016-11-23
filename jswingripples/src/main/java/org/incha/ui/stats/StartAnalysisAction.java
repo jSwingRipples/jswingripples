@@ -112,6 +112,7 @@ public class StartAnalysisAction implements ActionListener {
             public void runSuccessful() {
                 try {
                     Indexer.getInstance().indexEIG(eig);
+                    JSwingRipplesApplication.getInstance().enableSearchMenuButtons();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
