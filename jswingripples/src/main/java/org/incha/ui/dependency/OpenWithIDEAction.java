@@ -44,7 +44,7 @@ public class OpenWithIDEAction extends AbstractAction {
     public void actionPerformed(final ActionEvent e) {
         String classNameParam = node.getFullName();
         JavaProject project = node.getEig().getJavaProject();
-        final String localfilename = classNameParam.replace(".", File.separator ) + ".java";
+        final String localFilename = classNameParam.replace(".", File.separator ) + ".java";
         final List<File> sources = project.getBuildPath().getSources();
         for (final File file : sources) {
             try {
@@ -54,7 +54,7 @@ public class OpenWithIDEAction extends AbstractAction {
                     }
                     @Override
                     public boolean enter(final File t) throws IOException {
-                        if (t.isFile() && t.getPath().indexOf(localfilename)!=-1) {
+                        if (t.isFile() && t.getPath().contains(localFilename)) {
                             fileToOpen = t;
                         }
                         return true;
@@ -64,15 +64,12 @@ public class OpenWithIDEAction extends AbstractAction {
                 Logger.getLogger(OpenWithIDEAction.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        System.out.println(fileToOpen.getPath());
+        
         if (!editFile(fileToOpen)){
             if (!openFile(fileToOpen)){
                 JOptionPane.showMessageDialog(null, "It is not possible to open the file with the default editor.");
             }
         }
-        //Desktop.getDesktop().edit(fileToOpen);
-            //Runtime.getRuntime().exec("open "+fileToOpen.getPath());
-            //Desktop.edit(fileToOpen);
         
     }
     
@@ -102,7 +99,7 @@ public class OpenWithIDEAction extends AbstractAction {
         }
 
         Desktop desktop = Desktop.getDesktop();
-        if (!desktop.isSupported(Desktop.Action.EDIT)) {
+        if (!desktop.isSupported(Desktop.Action.OPEN)) {
           return false;
         }
 
