@@ -1,6 +1,9 @@
 package org.incha.ui;
 
 
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.InvalidRemoteException;
+import org.eclipse.jgit.api.errors.TransportException;
 import org.incha.core.JavaProject;
 
 import javax.swing.*;
@@ -19,7 +22,7 @@ public class GitSettings extends JPanel {
     private JTextField url = new JTextField(20);
     private JButton select = new JButton("Select");
     private SourcesEditor sourcesEditor;
-    private File path;
+    private File selectedFile;
     private String remoteUrl;
 
     public GitSettings(JavaProject project){
@@ -51,40 +54,42 @@ public class GitSettings extends JPanel {
         add(center, BorderLayout.CENTER);
     }
     private void setDir(File f){
-        this.path = f;
+        this.selectedFile = f;
     }
     void handleOk() throws IOException {
         remoteUrl = url.getText();
-        File localPath = null;
+        File fileForRepository;
         try {
-            localPath = File.createTempFile("GiHubProject", "", path);
-        } catch (IOException e) {
-            e.printStackTrace();
+            fileForRepository = File.createTempFile("GiHubProject", "", selectedFile);
+            if (!fileForRepository.delete()) {
+                throw new IOException("Could not delete temporary file " + fileForRepository);
+            }
         }
-        if(!localPath.delete()) {
-            throw new IOException("Could not delete temporary file " + localPath);
+        catch (IOException e){
+            windowError("Problems creating file, please try again");
+            return;
         }
         // then clone
-        //System.out.println("Cloning from " + remoteUrl + " to " + localPath);
         try{
             Git.cloneRepository()
                     .setURI(remoteUrl)
-                    .setDirectory(localPath)
+                    .setDirectory(fileForRepository)
                     .call();
-            sourcesEditor.addFileToProject(localPath);
-            //System.out.println("Having repository: " + result.getRepository().getDirectory());
+            sourcesEditor.addFileToProject(fileForRepository);
         }
-        catch (org.eclipse.jgit.api.errors.JGitInternalException e){
-            windowConnectionError();
+        catch (org.eclipse.jgit.api.errors.TransportException e){
+            windowError("Connection error, please check internet");
+        } catch (GitAPIException e) {
+            e.printStackTrace();
         }
         // Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
 
     }
 
-    private void windowConnectionError() {
+    private void windowError(String message) {
         final JDialog dialog = new JDialog();
         JPanel panel = new JPanel(new BorderLayout());
-        JLabel error = new JLabel("Connection error, please check internet", JLabel.CENTER);
+        JLabel error = new JLabel(message, JLabel.CENTER);
         JButton ok = new JButton("Ok");
         ok.addActionListener(new ActionListener() {
             @Override
