@@ -360,7 +360,7 @@ public class JSwingRipplesApplication extends JFrame {
     private void showSettingsGitHub(JavaProject project) {
         final JFrame f = new JFrame("Clone From GitHub");
         f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        f.getContentPane().setLayout(new BorderLayout(0, 5));
+        f.getContentPane().setLayout(new BorderLayout(0, 3));
 
         final GitHubSettings view = new GitHubSettings(project);
         f.getContentPane().add(view, BorderLayout.CENTER);
@@ -384,7 +384,7 @@ public class JSwingRipplesApplication extends JFrame {
 
         //set frame location
         final Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-        f.setSize(size.width / 2, size.height / 2);
+        f.setSize(2*size.width / 5, 2*size.height / 5);
         f.setLocationRelativeTo(this);
 
         //show frame
