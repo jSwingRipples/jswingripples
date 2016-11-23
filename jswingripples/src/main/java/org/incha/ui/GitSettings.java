@@ -46,15 +46,12 @@ public class GitSettings extends JPanel {
                 File f = sourcesEditor.selectFile();
                 if(f!=null) {
                     selected.setText(f.toString());
-                    setDir(f);
+                    selectedFile = f;
                 }
             }
         });
         center.add(select,BorderLayout.EAST);
         add(center, BorderLayout.CENTER);
-    }
-    private void setDir(File f){
-        this.selectedFile = f;
     }
     void handleOk() throws IOException {
         remoteUrl = url.getText();
