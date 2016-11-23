@@ -173,7 +173,7 @@ public class JSwingRipplesApplication extends JFrame {
         f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         f.getContentPane().setLayout(new BorderLayout(0, 3));
 
-        final GitHubSettings view = new GitHubSettings(project);
+        final GitSettings view = new GitSettings(project);
         f.getContentPane().add(view, BorderLayout.CENTER);
 
         //add ok button

@@ -15,14 +15,14 @@ import org.eclipse.jgit.api.Git;
 /**
  * Created by constanzafierro on 22-11-16.
  */
-public class GitHubSettings extends JPanel {
+public class GitSettings extends JPanel {
     private JTextField url = new JTextField(20);
     private JButton select = new JButton("Select");
     private SourcesEditor sourcesEditor;
     private File path;
     private String remoteUrl;
 
-    public GitHubSettings(JavaProject project){
+    public GitSettings(JavaProject project){
         super(new BorderLayout());
         sourcesEditor = new SourcesEditor(project);
         //url
@@ -50,10 +50,10 @@ public class GitHubSettings extends JPanel {
         center.add(select,BorderLayout.EAST);
         add(center, BorderLayout.CENTER);
     }
-    public void setDir(File f){
+    private void setDir(File f){
         this.path = f;
     }
-    public void handleOk() throws IOException {
+    void handleOk() throws IOException {
         remoteUrl = url.getText();
         File localPath = null;
         try {
