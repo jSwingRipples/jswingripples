@@ -4,11 +4,6 @@ import org.apache.commons.logging.LogFactory;
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.StatisticsManager;
-import org.incha.core.search.Searcher;
-import org.incha.ui.search.SearchMenu;
-import org.incha.ui.stats.GraphVisualizationAction;
-import org.incha.ui.stats.ImpactGraphVisualizationAction;
-import org.incha.ui.stats.ShowCurrentStateAction;
 import org.incha.ui.stats.StartAnalysisAction;
 
 import javax.swing.*;
@@ -148,8 +143,18 @@ public class JSwingRipplesApplication extends JFrame {
                 new ImportSource(project);
             }
         }
+    }
 
-
+    /**
+     * Import project from a url in github
+     */
+    protected void importProjectGithub(){
+        final JavaProject project = NewProjectWizard.showDialog(this);
+        if (project != null) {
+            if(JavaProjectsModel.getInstance().addProject(project)) {
+                new GitSettings(project);
+            }
+        }
     }
 
     /**
