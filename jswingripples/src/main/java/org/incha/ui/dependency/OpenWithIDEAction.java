@@ -43,55 +43,21 @@ public class OpenWithIDEAction extends AbstractAction {
     @Override
     public void actionPerformed(final ActionEvent e) {
         try{
-            File f = new File(node.getAbsolutePath().replaceAll("/", Matcher.quoteReplacement(File.separator)));
-            if (!editFile(f)){
-                if (!openFile(f)){
-                    JOptionPane.showMessageDialog(null, "It is not possible to open the file with the default editor.");
-                }
+            
+            File file = new File(node.getAbsolutePath().replaceAll("/", Matcher.quoteReplacement(File.separator)));
+            Desktop desktop = Desktop.getDesktop();
+            if (!Desktop.isDesktopSupported()) {
+                JOptionPane.showMessageDialog(null, "It is not possible to open the file with the default editor.");
             }
+            
+            if (desktop.isSupported(Desktop.Action.EDIT)) {
+                desktop.edit(file);
+            } else if (desktop.isSupported(Desktop.Action.OPEN)){
+                desktop.edit(file);
+            }
+            
         } catch (Exception ex){
-            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "It is not possible to open the file with the default editor.");
         }
-        
-    }
-    
-    public boolean editFile(final File file) {
-        if (!Desktop.isDesktopSupported()) {
-          return false;
-        }
-
-        Desktop desktop = Desktop.getDesktop();
-        if (!desktop.isSupported(Desktop.Action.EDIT)) {
-          return false;
-        }
-
-        try {
-          desktop.edit(file);
-        } catch (IOException e) {
-          // Log an error
-          return false;
-        }
-
-        return true;
-    }
-    
-    public boolean openFile(final File file) {
-        if (!Desktop.isDesktopSupported()) {
-          return false;
-        }
-
-        Desktop desktop = Desktop.getDesktop();
-        if (!desktop.isSupported(Desktop.Action.OPEN)) {
-          return false;
-        }
-
-        try {
-          desktop.open(file);
-        } catch (IOException e) {
-          // Log an error
-          return false;
-        }
-
-        return true;
     }
 }
