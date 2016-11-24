@@ -14,13 +14,14 @@ import java.io.IOException;
 import org.eclipse.jgit.api.Git;
 
 
-public class GitSettings extends JPanel {
+class GitSettings extends JPanel {
+
     private JTextField url = new JTextField(20);
     private JButton select = new JButton("Select");
     private SourcesEditor sourcesEditor;
     private final JFrame principalFrame;
 
-    public GitSettings(JavaProject project){
+    GitSettings(JavaProject project){
         sourcesEditor = new SourcesEditor(project);
 
         principalFrame = new JFrame("Clone From GitHub");
@@ -119,8 +120,8 @@ public class GitSettings extends JPanel {
             e.printStackTrace();
         }
     }
-}
 
-class SelectedFileHolder{
-    File file;
+    private class SelectedFileHolder{
+        File file;
+    }
 }
