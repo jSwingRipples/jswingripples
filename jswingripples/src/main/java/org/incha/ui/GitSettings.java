@@ -18,26 +18,24 @@ public class GitSettings extends JPanel {
     private JTextField url = new JTextField(20);
     private JButton select = new JButton("Select");
     private SourcesEditor sourcesEditor;
-    private File selectedFile;
-    private String remoteUrl;
-    private final JFrame f;
+    private final JFrame principalFrame;
 
     public GitSettings(JavaProject project){
         sourcesEditor = new SourcesEditor(project);
 
-        f = new JFrame("Clone From GitHub");
-        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        f.getContentPane().setLayout(new BorderLayout(0, 3));
+        principalFrame = new JFrame("Clone From GitHub");
+        principalFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        principalFrame.getContentPane().setLayout(new BorderLayout(0, 3));
 
         JPanel view = fieldsPanel();
-        f.getContentPane().add(view, BorderLayout.CENTER);
+        principalFrame.getContentPane().add(view, BorderLayout.CENTER);
 
         //set frame location
         final Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-        f.setSize(2*size.width / 5, 2*size.height / 5);
-        f.setLocationRelativeTo(JSwingRipplesApplication.getInstance());
+        principalFrame.setSize(2*size.width / 5, 2*size.height / 5);
+        principalFrame.setLocationRelativeTo(JSwingRipplesApplication.getInstance());
         //show frame
-        f.setVisible(true);
+        principalFrame.setVisible(true);
     }
 
     private JPanel fieldsPanel() {
@@ -54,13 +52,14 @@ public class GitSettings extends JPanel {
         final JLabel selected = new JLabel("", JLabel.LEFT);
         center.add(dirSelect,BorderLayout.WEST);
         center.add(selected);
+        final SelectedFileHolder holder = new SelectedFileHolder();
         select.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 File f = sourcesEditor.selectFile();
                 if(f!=null) {
                     selected.setText(f.toString());
-                    selectedFile = f;
+                    holder.file = f;
                 }
             }
         });
@@ -73,11 +72,11 @@ public class GitSettings extends JPanel {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 try {
-                    handleOk();
+                    handleOk(holder.file);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-                f.dispose();
+                principalFrame.dispose();
             }
         });
         okPanel.add(ok);
@@ -85,10 +84,10 @@ public class GitSettings extends JPanel {
         return panel;
     }
 
-    void handleOk() throws IOException {
-        remoteUrl = url.getText();
+    private void handleOk(File selectedFile) throws IOException {
+        String remoteUrl = url.getText();
         if (selectedFile == null || remoteUrl.equals("")) {
-            JOptionPane.showMessageDialog(f, "You must enter an url and the path to clone the repository."
+            JOptionPane.showMessageDialog(principalFrame, "You must enter an url and the path to clone the repository."
                     , "Inane error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -100,7 +99,7 @@ public class GitSettings extends JPanel {
                 throw new IOException("Could not delete temporary file " + fileForRepository);
             }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(f, "Problems creating file, please try again."
+            JOptionPane.showMessageDialog(principalFrame, "Problems creating file, please try again."
                     , "Inane error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -112,12 +111,16 @@ public class GitSettings extends JPanel {
                     .call();
             sourcesEditor.addFileToProject(fileForRepository);
         }catch (org.eclipse.jgit.api.errors.TransportException e) {
-            JOptionPane.showMessageDialog(f, "Connection error, please check internet.",
+            JOptionPane.showMessageDialog(principalFrame, "Connection error, please check internet.",
                     "Inane error", JOptionPane.ERROR_MESSAGE);
         } catch (org.eclipse.jgit.api.errors.InvalidRemoteException c){
-            JOptionPane.showMessageDialog(f, "Incorrect url.", "Inane error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(principalFrame, "Incorrect url.", "Inane error", JOptionPane.ERROR_MESSAGE);
         }catch (GitAPIException e) {
             e.printStackTrace();
         }
     }
+}
+
+class SelectedFileHolder{
+    File file;
 }
