@@ -4,11 +4,6 @@ import org.apache.commons.logging.LogFactory;
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
 import org.incha.core.StatisticsManager;
-import org.incha.core.search.Searcher;
-import org.incha.ui.search.SearchMenu;
-import org.incha.ui.stats.GraphVisualizationAction;
-import org.incha.ui.stats.ImpactGraphVisualizationAction;
-import org.incha.ui.stats.ShowCurrentStateAction;
 import org.incha.ui.stats.StartAnalysisAction;
 
 import javax.swing.*;
@@ -148,8 +143,6 @@ public class JSwingRipplesApplication extends JFrame {
                 new ImportSource(project);
             }
         }
-
-
     }
 
     /**
@@ -159,47 +152,9 @@ public class JSwingRipplesApplication extends JFrame {
         final JavaProject project = NewProjectWizard.showDialog(this);
         if (project != null) {
             if(JavaProjectsModel.getInstance().addProject(project)) {
-                showSettingsGitHub(project);
+                new GitSettings(project);
             }
         }
-    }
-
-    /**
-     * Creates window to receive url and directory of github project
-     * @param project to handle the sources
-     */
-    private void showSettingsGitHub(JavaProject project) {
-        final JFrame f = new JFrame("Clone From GitHub");
-        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        f.getContentPane().setLayout(new BorderLayout(0, 3));
-
-        final GitSettings view = new GitSettings(project);
-        f.getContentPane().add(view, BorderLayout.CENTER);
-
-        //add ok button
-        final JPanel south = new JPanel(new FlowLayout());
-        final JButton ok = new JButton("Ok");
-        ok.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                try {
-                    view.handleOk();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                f.dispose();
-            }
-        });
-        south.add(ok);
-        f.getContentPane().add(south, BorderLayout.SOUTH);
-
-        //set frame location
-        final Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-        f.setSize(2*size.width / 5, 2*size.height / 5);
-        f.setLocationRelativeTo(this);
-
-        //show frame
-        f.setVisible(true);
     }
 
     /**
