@@ -168,10 +168,8 @@ public abstract class AbstractBuildPathEditor extends JPanel {
         //create file chooser
         final JFileChooser chooser = createFileChooser();
 
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            final File f = chooser.getSelectedFile();
-            return f;
-        }
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+            return chooser.getSelectedFile();
         return null;
     }
     /**
