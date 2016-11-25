@@ -1,11 +1,10 @@
 package org.incha.ui.stats;
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-
 import org.incha.core.jswingripples.eig.history.History;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class RedoAction extends AbstractAction {
     private static final long serialVersionUID = 1416226650246264539L;

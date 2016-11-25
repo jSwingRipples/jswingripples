@@ -4,8 +4,6 @@
  */
 package org.incha.core.jswingripples.rules;
 
-import java.awt.Color;
-import java.awt.Image;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -13,7 +11,8 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.incha.core.jswingripples.JRipplesICModuleInterface;
+import org.incha.core.jswingripples.JRipplesICModule;
+import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 import org.incha.ui.jripples.EIGStatusMarks;
@@ -21,8 +20,7 @@ import org.incha.ui.jripples.EIGStatusMarks;
  * @author Maksym Petrenko
  *
  */
-public class JRipplesModuleICImpactAnalysis implements
-		JRipplesICModuleInterface {
+public class JRipplesModuleICImpactAnalysis extends JRipplesICModule {
     private static final Log log = LogFactory.getLog(JRipplesModuleICImpactAnalysis.class);
 //algorithm
 //1. Identify all members or parents at specified granularity
@@ -41,7 +39,7 @@ public class JRipplesModuleICImpactAnalysis implements
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesICModuleInterface#GetAvailableRulesForMark(java.lang.String)
+	 * @see org.severe.jripples.modules.interfaces.JRipplesICModule#GetAvailableRulesForMark(java.lang.String)
 	 */
 	@Override
     public Set<String> GetAvailableRulesForMark(final String mark) {
@@ -63,22 +61,9 @@ public class JRipplesModuleICImpactAnalysis implements
 			return null;
 		}
 	}
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesModuleInterface#shutDown(int controllerType)
-	 */
-	@Override
-    public void shutDown(final int controllerType) {
-	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesICModuleInterface#initializeStage()
-	 */
 	@Override
-    public void InitializeStage() {
+	public void InitializeStage(JRipplesModuleRunner moduleRunner) {
 		final JSwingRipplesEIGNode[] nodes = eig.getAllNodes();
 		final Set<JSwingRipplesEIGNode> locatedMemberNodes = new LinkedHashSet<JSwingRipplesEIGNode>();
 		final Set<JSwingRipplesEIGNode> locatedTopNodes = new LinkedHashSet<JSwingRipplesEIGNode>();
@@ -88,7 +73,7 @@ public class JRipplesModuleICImpactAnalysis implements
 					nodes[i].setMark(EIGStatusMarks.BLANK);
 				else {
 					if (!nodes[i].isTop()) locatedMemberNodes.add(nodes[i]);
-						else locatedTopNodes.add(nodes[i]);
+					else locatedTopNodes.add(nodes[i]);
 				}
 			}
 			//Process members first
@@ -110,12 +95,7 @@ public class JRipplesModuleICImpactAnalysis implements
 
 		}
 		eig.getHistory().clear();
-	}
-
-	@Override
-    public Set<String> getAllMarks() {
-		final String marks[] = { EIGStatusMarks.IMPACTED, EIGStatusMarks.VISITED_CONTINUE, EIGStatusMarks.VISITED,EIGStatusMarks.BLANK ,EIGStatusMarks.NEXT_VISIT};
-		return (new LinkedHashSet<String>(Arrays.asList(marks)));
+		moduleRunner.moduleFinished();
 	}
 
 	@Override
@@ -132,7 +112,7 @@ public class JRipplesModuleICImpactAnalysis implements
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesICModuleInterface#ApplyRuleAtNode(java.lang.String,
+	 * @see org.severe.jripples.modules.interfaces.JRipplesICModule#ApplyRuleAtNode(java.lang.String,
 	 *      java.lang.String)
 	 */
 	@Override
@@ -145,18 +125,7 @@ public class JRipplesModuleICImpactAnalysis implements
 	}
 
 	@Override
-    public Image getImageDescriptorForMark(final String mark) {
-		return EIGStatusMarks.getImageDescriptorForMark(mark);
+	public void runModuleWithinRunner(JRipplesModuleRunner moduleRunner) {
+		InitializeStage(moduleRunner);
 	}
-	@Override
-    public Color getColorForMark(final String mark) {
-		return EIGStatusMarks.getColorForMark(mark);
-	}
-    /* (non-Javadoc)
-     * @see org.incha.core.jswingripples.JRipplesModuleInterface#initializeStage()
-     */
-    @Override
-    public void runInAnalize() {
-        InitializeStage();
-    }
 }

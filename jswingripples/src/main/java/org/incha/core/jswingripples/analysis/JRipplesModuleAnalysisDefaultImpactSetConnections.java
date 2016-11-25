@@ -11,7 +11,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.incha.core.ModuleConfiguration;
-import org.incha.core.jswingripples.JRipplesAnalysisModuleInterface;
+import org.incha.core.jswingripples.JRipplesAnalysisModule;
+import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGEdge;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGEvent;
@@ -23,8 +24,8 @@ import org.incha.ui.jripples.EIGStatusMarks;
  * @author Maksym Petrenko
  *
  */
-public class JRipplesModuleAnalysisDefaultImpactSetConnections implements
-		JRipplesAnalysisModuleInterface, JSwingRipplesEIGListener {
+public class JRipplesModuleAnalysisDefaultImpactSetConnections extends JRipplesAnalysisModule
+		                                                       implements JSwingRipplesEIGListener {
 
 
 	private Set<JSwingRipplesEIGNode> impact_set = new HashSet<JSwingRipplesEIGNode>();
@@ -36,16 +37,12 @@ public class JRipplesModuleAnalysisDefaultImpactSetConnections implements
         super();
         this.eig = eig;
     }
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesAnalysisModuleInterface#AnalyzeProject(java.lang.String)
-	 */
+
 	@Override
-    public void AnalyzeProject() {
+	public void AnalyzeProjectWithinModuleRunner(JRipplesModuleRunner moduleRunner) {
 		if (isConceptLocationModuleUsed()) {
 			return;
-	    }
+		}
 
 		boolean dirty=!impact_set.isEmpty();
 
@@ -54,17 +51,18 @@ public class JRipplesModuleAnalysisDefaultImpactSetConnections implements
 		final JSwingRipplesEIGNode[] nodes=eig.getAllNodes();
 		if (nodes.length==0) return;
 
-        for (int i=0;i<nodes.length;i++) {
+		for (int i=0;i<nodes.length;i++) {
 			final JSwingRipplesEIGNode node = nodes[i];
 			final String mark=node.getMark();
 			if ((mark.compareTo(EIGStatusMarks.CHANGED)==0) || (mark.compareTo(EIGStatusMarks.IMPACTED)==0)) {
-							if (impact_set.add(node))  dirty=true;
-							if (impact_set.addAll(Arrays.asList(eig.getNodeMembers(node))))  dirty=true;
+				if (impact_set.add(node))  dirty=true;
+				if (impact_set.addAll(Arrays.asList(eig.getNodeMembers(node))))  dirty=true;
 			}
 		}
 
 		if (dirty)
 			calculateCouplingAndUpdateNodes();
+		moduleRunner.moduleFinished();
 	}
     /**
      * @return
@@ -73,49 +71,6 @@ public class JRipplesModuleAnalysisDefaultImpactSetConnections implements
         return eig.getJavaProject().getModuleConfiguration().getIncrementalChange()
 		        == ModuleConfiguration.MODULE_CONCEPT_LOCATION;
     }
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesAnalysisModuleInterface#ReAnalyzeProjectAtNodes(java.util.Set)
-	 */
-	@Override
-    public void ReAnalyzeProjectAtNodes(final Set<JSwingRipplesEIGNode> changed_nodes) {
-		if (isConceptLocationModuleUsed())
-			return;
-
-		boolean dirty=false;
-
-		final JSwingRipplesEIGNode[] nodes=eig.getAllNodes();
-		if (nodes.length==0) return;
-
-		for (int i=0;i<nodes.length;i++) {
-			final JSwingRipplesEIGNode node = nodes[i];
-			final String mark=node.getMark();
-			if ((mark.compareTo(EIGStatusMarks.CHANGED)==0) || (mark.compareTo(EIGStatusMarks.IMPACTED)==0)) {
-							if (impact_set.add(node))  dirty=true;
-							if (impact_set.addAll(Arrays.asList(eig.getNodeMembers(node))))  dirty=true;
-			} else {
-				if (impact_set.remove(node))  dirty=true;
-				if (impact_set.removeAll(Arrays.asList(eig.getNodeMembers(node))))  dirty=true;
-				if ((mark.compareTo(EIGStatusMarks.VISITED_CONTINUE)==0) || (mark.compareTo(EIGStatusMarks.NEXT_VISIT)==0))
-					dirty=true;
-			}
-
-		}
-
-		if (dirty)
-			calculateCouplingAndUpdateNodes();
-	}
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesModuleInterface#shutDown(int controllerType)
-	 */
-	@Override
-    public void shutDown(final int controllerType) {
-	    eig.removeJRipplesEIGListener(this);
-	}
 
 	@Override
     public void jRipplesEIGChanged(final JSwingRipplesEIGEvent event) {
@@ -217,11 +172,9 @@ public class JRipplesModuleAnalysisDefaultImpactSetConnections implements
 		if (oldProbability==null) oldProbability="";
 		if (oldProbability.compareTo(newProbability)!=0) node.setProbability(newProbability);
 	}
-	/* (non-Javadoc)
-	 * @see org.incha.core.jswingripples.JRipplesModuleInterface#runInAnalize()
-	 */
+
 	@Override
-	public void runInAnalize() {
-	    AnalyzeProject();
+	public void runModuleWithinRunner(JRipplesModuleRunner moduleRunner) {
+		AnalyzeProjectWithinModuleRunner(moduleRunner);
 	}
 }

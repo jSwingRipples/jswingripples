@@ -1,5 +1,6 @@
 package org.incha.ui.stats;
 
+import java.io.File; 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -15,9 +16,12 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JFileChooser; 
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentEvent;
 
 import org.incha.core.JavaProject;
 import org.incha.core.JavaProjectsModel;
@@ -25,11 +29,17 @@ import org.incha.core.ModuleConfiguration;
 import org.incha.core.Statistics;
 import org.incha.ui.jripples.JRipplesDefaultModulesConstants;
 
+
 public class StartAnalysisDialog extends JDialog {
     private static final long serialVersionUID = 6788138046337076311L;
+    private File mainClassFile;
+    private StartAnalysisAction startAnalysisCallback;
     final JComboBox<String> projects;
     final JTextField className = new JTextField(30);
-    private boolean isOk;
+    final JButton ok = new JButton("Ok"); 
+    
+    private JavaProject project;
+    
     final JComboBox<String> incrementalChange = new JComboBox<String>(new DefaultComboBoxModel<String>(
         new String[]{
             JRipplesDefaultModulesConstants.MODULE_IMPACT_ANALYSIS_TITLE,
@@ -40,12 +50,6 @@ public class StartAnalysisDialog extends JDialog {
             JRipplesDefaultModulesConstants.MODULE_CONCEPT_LOCATION_RELAXED_TITLE
         }
     ));
-//    JComboBox<String> presentation = new JComboBox<String>(new DefaultComboBoxModel<String>(
-//        new String[]{
-//            JRipplesDefaultModulesConstants.MODULE_VIEW_HIERARCHY_TITLE,
-//            JRipplesDefaultModulesConstants.MODULE_VIEW_TREE_TITLE
-//        }
-//    ));
     JComboBox<String> analysis = new JComboBox<String>(new DefaultComboBoxModel<String>(
         new String[]{
             JRipplesDefaultModulesConstants.MODULE_IMPACT_ANALYSIS_TITLE
@@ -61,8 +65,9 @@ public class StartAnalysisDialog extends JDialog {
     /**
      * Default constructor.
      */
-    public StartAnalysisDialog(final Window owner) {
+    public StartAnalysisDialog(final Window owner, final StartAnalysisAction callback) {
         super(owner);
+        startAnalysisCallback = callback;
         setModal(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout(0, 5));
@@ -88,12 +93,17 @@ public class StartAnalysisDialog extends JDialog {
         getContentPane().add(center, BorderLayout.CENTER);
 
         //south pane
+        ok.setEnabled(false);
         final JPanel south = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        final JButton ok = new JButton("Ok");
         ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                doOk();
+                try {
+                    doOk();
+                } catch (StartAnalysisAction.AnalysisFailedException ex) {
+                    // TODO: how to notify the user?
+                    ex.printStackTrace();
+                }
             }
         });
         south.add(ok);
@@ -108,6 +118,10 @@ public class StartAnalysisDialog extends JDialog {
         south.add(cancel);
         getContentPane().add(south, BorderLayout.SOUTH);
 
+        // select proper project
+        if (startAnalysisCallback.getProjectSelected() != null){        	
+        	projects.setSelectedItem(startAnalysisCallback.getProjectSelected());        	
+        }
         //set up default values
         projectChanged();
     }
@@ -116,9 +130,9 @@ public class StartAnalysisDialog extends JDialog {
      *
      */
     protected void projectChanged() {
-        final String projectName = (String) projects.getSelectedItem();
-        final JavaProject project = JavaProjectsModel.getInstance().getProject(projectName);
-
+        
+        project = JavaProjectsModel.getInstance().getProject((String) projects.getSelectedItem());
+        
         if (project != null) {
             //set current module configuration
 
@@ -172,7 +186,19 @@ public class StartAnalysisDialog extends JDialog {
             }
         }
     }
-
+    
+    private void verifyMainClassFileExtension(){ 
+        final Integer sizeExtension = 5;
+        String classname = className.getText();
+            if (classname.length()>sizeExtension && 
+                    classname.substring(classname.length()-sizeExtension, 
+                            classname.length()).toUpperCase().equals(".JAVA")){
+                ok.setEnabled(true);
+            }
+            else {
+                ok.setEnabled(false);
+            }
+    }
     /**
      * @return
      */
@@ -185,9 +211,50 @@ public class StartAnalysisDialog extends JDialog {
         projects.setEditable(false);
         panel.add(projects);
 
-        //create class name
         panel.add(new JLabel("Class name:"));
-        panel.add(className);
+        
+        JPanel panelclassname = new JPanel();
+        panelclassname.setLayout(new FlowLayout(FlowLayout.LEADING,0,0));
+        panelclassname.add(className);
+        
+        className.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                verifyMainClassFileExtension();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                verifyMainClassFileExtension();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                verifyMainClassFileExtension();
+            }
+        });
+        
+        JButton btnsearch = new JButton("Browse");
+        btnsearch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+               
+                final JFileChooser chooser = new JFileChooser(project.getBuildPath().getFirstPath());
+                //chooser.addChoosableFileFilter(jpegFilter);
+                chooser.setMultiSelectionEnabled(false);
+
+                if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    final File selectedFile = chooser.getSelectedFile();
+                    if (selectedFile != null) {
+                        mainClassFile = selectedFile;
+                        className.setText(selectedFile.getName());
+                    }
+                }
+            }
+        });
+        panelclassname.add(btnsearch);
+        panel.add(panelclassname);
+       
 
         //Incremental change combobox
         panel.add(new JLabel("Incremental Change"));
@@ -211,27 +278,20 @@ public class StartAnalysisDialog extends JDialog {
      *
      */
     protected void doCancel() {
-        isOk = false;
         dispose();
     }
     /**
      *
      */
-    protected void doOk() {
-        isOk = true;
+    protected void doOk() throws StartAnalysisAction.AnalysisFailedException {
         dispose();
+        startAnalysisCallback.startAnalysis(this);
     }
 
     /**
-     * @return the isOk
-     */
-    public boolean isOk() {
-        return isOk;
-    }
-    /**
      * @return the className
      */
-    public String getMainClass() {
-        return className.getText();
+    public File getMainClass() {
+        return mainClassFile;
     }
 }

@@ -14,6 +14,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.incha.ui.classview.ClassTreeView;
+import org.incha.ui.search.SearchMenu;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -101,7 +102,9 @@ public class Searcher {
      * Set current class view.
      * @param classTreeView the current class view.
      */
-    public void setClassTreeView(ClassTreeView classTreeView) { this.classTreeView = classTreeView; }
+    public void setClassTreeView(ClassTreeView classTreeView) {
+        this.classTreeView = classTreeView;
+    }
 
     /**
      * Searches the indexes in the Directory.
@@ -152,9 +155,13 @@ public class Searcher {
         }
 
         // Update files with most/least search term occurrences
-        refreshMaxMin();
+        if(results.size() > 0){
+            refreshMaxMin();
+        }
+    }
 
-        // Refresh analysis table
+    // Refresh analysis table
+    public void repaintClassTreeView(){
         classTreeView.repaint();
     }
 
@@ -174,8 +181,10 @@ public class Searcher {
      * @return the percentage of hits.
      */
     double hitPercentage(String fileName) {
-        return !results.containsKey(fileName) ? -1 : (results.get(fileName) - minFrequency)  * 1.0
-                                                        / (maxFrequency - minFrequency);
+        if (!results.containsKey(fileName)) return -1;
+        int frequency = results.get(fileName);
+        if (frequency >  maxFrequency || frequency < minFrequency) return -1; // file process not finished yet
+        else return (results.get(fileName) - minFrequency)  * 1.0 / (maxFrequency - minFrequency);
     }
 
     /**
@@ -218,21 +227,12 @@ public class Searcher {
     public Map<String, Integer> getResults() {
     	return results;
     }
-
-    public List<String> getResultsList() { return resultsList; }
     
     /**
      * Return a list of the lines where the words were found
      */
     public List<Object []> getResInfo() {
     	return res_information;
-    }
-    
-    /**
-     * Deletes the elements of the list res_information
-     */
-    public void clearResInfo() {
-    	res_information.clear();
     }
     
     /**

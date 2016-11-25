@@ -2,6 +2,7 @@ package org.incha.core.jswingripples;
 
 import org.apache.commons.logging.LogFactory;
 import org.graphstream.graph.Graph;
+import org.graphstream.graph.IdAlreadyInUseException;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.DefaultGraph;
 import org.graphstream.graph.implementations.MultiGraph;
@@ -135,40 +136,24 @@ public class GraphBuilder implements JSwingRipplesEIGListener{
             return;
         size = 40;
         text_size = 15;
-        //resetGraphs();
         JSwingRipplesEIGNode[] eigNodes = eig.getAllNodes();
         JSwingRipplesEIGEdge[] eigEdges = eig.getAllEdges();
 
-        final TaskProgressMonitor monitor = JSwingRipplesApplication.getInstance().getProgressMonitor();
-        monitor.beginTask("Building graph: Adding nodes.", eigNodes.length);
         for ( int i = 0; i < eigNodes.length; i++ ) {
             JSwingRipplesEIGNode node = eigNodes[i];
-            monitor.worked(i);
-            monitor.setTaskName("Adding node " + node.getShortName());
             if (graph.getNode(node.getFullName()) == null) {
-                Node n = graph.addNode(node.getFullName());
-                n.addAttribute("label", node.getShortName());
+                    Node n = graph.addNode(node.getFullName());
+                    n.addAttribute("label", node.getShortName());
             }
         }
-        monitor.done();
-
-        monitor.beginTask("Building graph: Adding edges.", eigEdges.length);
         for ( int i = 0; i < eigEdges.length; i++ )
         {
             JSwingRipplesEIGEdge edge = eigEdges[i];
-            monitor.worked(i);
             String eid = edge.getFromNode().getFullName() + " -> " + edge.getToNode().getFullName();
-            monitor.setTaskName("Adding edge " + eid);
             if ( graph.getEdge(eid) == null){
                 graph.addEdge(eid, edge.getFromNode().getFullName(), edge.getToNode().getFullName(), true);
             }
         }
-        
-       
-
-        
-        
-        monitor.done();
     }
 
     public Graph getDependencyGraph() { return graph; }

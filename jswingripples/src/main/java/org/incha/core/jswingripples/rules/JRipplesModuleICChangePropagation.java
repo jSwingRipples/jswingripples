@@ -4,8 +4,6 @@
  */
 package org.incha.core.jswingripples.rules;
 
-import java.awt.Color;
-import java.awt.Image;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -13,7 +11,8 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.incha.core.jswingripples.JRipplesICModuleInterface;
+import org.incha.core.jswingripples.JRipplesICModule;
+import org.incha.core.jswingripples.JRipplesModuleRunner;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIG;
 import org.incha.core.jswingripples.eig.JSwingRipplesEIGNode;
 import org.incha.ui.jripples.EIGStatusMarks;
@@ -21,8 +20,7 @@ import org.incha.ui.jripples.EIGStatusMarks;
  * @author Maksym Petrenko
  *
  */
-public class JRipplesModuleICChangePropagation implements
-		JRipplesICModuleInterface {
+public class JRipplesModuleICChangePropagation extends JRipplesICModule {
     private static final Log log = LogFactory.getLog(JRipplesModuleICChangePropagation.class);
     private final JSwingRipplesEIG eig;
 
@@ -36,7 +34,7 @@ public class JRipplesModuleICChangePropagation implements
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesICModuleInterface#GetAvailableRulesForMark(java.lang.String)
+	 * @see org.severe.jripples.modules.interfaces.JRipplesICModule#GetAvailableRulesForMark(java.lang.String)
 	 */
 	@Override
     public Set<String> GetAvailableRulesForMark(final String mark) {
@@ -58,22 +56,9 @@ public class JRipplesModuleICChangePropagation implements
 			return null;
 		}
 	}
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesModuleInterface#shutDown(int controllerType)
-	 */
-	@Override
-    public void shutDown(final int controllerType) {
-	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesICModuleInterface#initializeStage()
-	 */
-	@Override
-    public void InitializeStage() {
+    @Override
+    public void InitializeStage(JRipplesModuleRunner moduleRunner) {
         final JSwingRipplesEIGNode[] nodes = eig.getAllNodes();
         final Set<JSwingRipplesEIGNode> impactedMemberNodes = new LinkedHashSet<JSwingRipplesEIGNode>();
         final Set<JSwingRipplesEIGNode> impactedTopNodes = new LinkedHashSet<JSwingRipplesEIGNode>();
@@ -82,8 +67,8 @@ public class JRipplesModuleICChangePropagation implements
                 if ((nodes[i].getMark().compareTo(EIGStatusMarks.LOCATED) != 0) && (nodes[i].getMark().compareTo(EIGStatusMarks.IMPACTED) != 0) && (nodes[i].getMark().compareTo(EIGStatusMarks.CHANGED) != 0))
                     nodes[i].setMark(EIGStatusMarks.BLANK);
                 else
-                    if (!nodes[i].isTop()) impactedMemberNodes.add(nodes[i]);
-                    else impactedTopNodes.add(nodes[i]);
+                if (!nodes[i].isTop()) impactedMemberNodes.add(nodes[i]);
+                else impactedTopNodes.add(nodes[i]);
             }
             //          Process members first
             for (final Iterator<JSwingRipplesEIGNode> iter = impactedMemberNodes.iterator(); iter.hasNext();) {
@@ -103,20 +88,14 @@ public class JRipplesModuleICChangePropagation implements
             }
 
         }
-
         eig.getHistory().clear();
-	}
-
-	@Override
-    public Set<String> getAllMarks() {
-		final String marks[] = { EIGStatusMarks.CHANGED, EIGStatusMarks.VISITED_CONTINUE, EIGStatusMarks.VISITED,EIGStatusMarks.BLANK ,EIGStatusMarks.NEXT_VISIT};
-		return (new LinkedHashSet<String>(Arrays.asList(marks)));
-	}
+        moduleRunner.moduleFinished();
+    }
 
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.severe.jripples.modules.interfaces.JRipplesICModuleInterface#ApplyRuleAtNode(java.lang.String,
+	 * @see org.severe.jripples.modules.interfaces.JRipplesICModule#ApplyRuleAtNode(java.lang.String,
 	 *      java.lang.String)
 	 */
 	@Override
@@ -140,20 +119,8 @@ public class JRipplesModuleICChangePropagation implements
         }
 	}
 
-	@Override
-    public  Image getImageDescriptorForMark(final String mark) {
-		return EIGStatusMarks.getImageDescriptorForMark(mark);
-	}
-
-	@Override
-    public Color getColorForMark(final String mark) {
-		return EIGStatusMarks.getColorForMark(mark);
-	}
-	/* (non-Javadoc)
-	 * @see org.incha.core.jswingripples.JRipplesModuleInterface#initializeStage()
-	 */
-	@Override
-	public void runInAnalize() {
-	    InitializeStage();
-	}
+    @Override
+    public void runModuleWithinRunner(JRipplesModuleRunner moduleRunner) {
+        InitializeStage(moduleRunner);
+    }
 }
