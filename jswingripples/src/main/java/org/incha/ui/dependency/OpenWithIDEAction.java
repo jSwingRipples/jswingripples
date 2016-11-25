@@ -23,9 +23,6 @@ import java.util.regex.Matcher;
 
 public class OpenWithIDEAction extends AbstractAction {
     private static final long serialVersionUID = 6537463394107510663L;
-    /**
-     * Node.
-     */
     private final JSwingRipplesEIGNode node;
 
     /**
@@ -34,7 +31,11 @@ public class OpenWithIDEAction extends AbstractAction {
     public OpenWithIDEAction(final JSwingRipplesEIGNode node) {
         super("Open with Editor");
         this.node = node;
-        //this.enabled = false;
+    }
+    
+    
+    public void showErrorMessage(){
+        JOptionPane.showMessageDialog(null, "It is not possible to open the file with the default editor.");
     }
 
     /* (non-Javadoc)
@@ -47,7 +48,7 @@ public class OpenWithIDEAction extends AbstractAction {
             File file = new File(node.getAbsolutePath().replaceAll("/", Matcher.quoteReplacement(File.separator)));
             Desktop desktop = Desktop.getDesktop();
             if (!Desktop.isDesktopSupported()) {
-                JOptionPane.showMessageDialog(null, "It is not possible to open the file with the default editor.");
+                showErrorMessage();
             }
             
             if (desktop.isSupported(Desktop.Action.EDIT)) {
@@ -57,7 +58,7 @@ public class OpenWithIDEAction extends AbstractAction {
             }
             
         } catch (Exception ex){
-            JOptionPane.showMessageDialog(null, "It is not possible to open the file with the default editor.");
+            showErrorMessage();
         }
     }
 }
