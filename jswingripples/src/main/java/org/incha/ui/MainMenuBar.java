@@ -44,6 +44,14 @@ public class MainMenuBar {
             }
         });
         file.add(importProject);
+        final JMenuItem importProjectGithub = new JMenuItem("Import Project from GitHub");
+        importProjectGithub.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                JSwingRipplesApplication.getInstance().importProjectGithub();
+            }
+        });
+        file.add(importProjectGithub);
         return file;
     }
 
